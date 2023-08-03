@@ -5,8 +5,6 @@ const ChatContext = createContext();
 const socket = io.connect("http://localhost:3001");
 
 function ChatProvider ({ children }) {
-
-
   // DEFINTIONS
 
   // ROOOMS
@@ -44,7 +42,9 @@ function ChatProvider ({ children }) {
   function getAll () {
     fetch('http://localhost:3001/chatrooms')
     .then((res) => res.json())
-    .then((data) => setChatrooms(data))
+    .then((data) => {console.log(data); 
+      setChatrooms(data)})
+  
     .catch((err) => console.error(err));
   }
 
@@ -198,8 +198,8 @@ function ChatProvider ({ children }) {
 
   // GET ALL 
 
-  useEffect(() => {
-    getAll();
+  useEffect(() => { 
+      getAll();
   }, [])
 
   // POSITIONS
