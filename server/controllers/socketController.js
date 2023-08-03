@@ -1,4 +1,4 @@
-import { Chatroom } from '../models/Chatroom';
+import { Chatroom } from '../models/Chatroom.js';
 import { io } from '../server.js';
 
 io.on("connection", (socket) => {
