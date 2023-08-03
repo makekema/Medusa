@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
-import socketIO from 'socket.io';
+import { Server } from 'socket.io';
 import { router } from './router.js';
 
 const app = express();
@@ -22,7 +22,7 @@ app.listen(PORT, () => {
 
 const socketServer = http.createServer(app);
 
-const io = socketIO(socketServer, {
+const io = new Server(socketServer, {
   cors: {
     origin: "http://localhost:3000",
     methods: ['GET', 'POST'],
