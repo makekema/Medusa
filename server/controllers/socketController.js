@@ -1,9 +1,10 @@
-const io = require('../connect.js');
-const Chatroom = require('../models/Chatroom');
-
+import { Chatroom } from '../models/Chatroom';
+import { io } from '../server.js';
 
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
+
+  /* send message */
 
   socket.on("send_message", (data) => {
     console.log('message from frontend', data)
@@ -11,12 +12,16 @@ io.on("connection", (socket) => {
     console.log('message to room:', data.room)
   });
 
+  /* create room */
+
   socket.on("create_room", async(roomName) => {
     const chatroom = new Chatroom({name: roomName});
     await chatroom.save();
     console.log(`New chatroom created: ${roomName}`)
     io.emit("update_chatrooms", await Chatroom.find({}))
   })
+
+  /* join room */
 
   socket.on("join_room", async (data) => {
     const chatroom = await Chatroom.findOne({name: data.name});
@@ -43,7 +48,9 @@ io.on("connection", (socket) => {
       console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`)
     }
   })
-   
+
+  /* leave room */
+
   socket.on("leave_room", async (roomName) => {
     console.log(roomName)
     socket.leave(roomName);
@@ -73,6 +80,8 @@ io.on("connection", (socket) => {
       }
     }
   });
+
+  /* disconnect */
 
   socket.on("disconnect", async () => {
     const chatrooms = await Chatroom.find({ usernames: socket.id });

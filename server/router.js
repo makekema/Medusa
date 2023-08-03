@@ -1,12 +1,10 @@
-const router = require('express').Router();
+import express from 'express';
+import { createChatroom, findChatrooms } from './controllers/chatrooms.js';
 
-const { createChatroom, findChatrooms } =
-require('./controllers/chatrooms.js');
-
+const router = express.Router();
 
 router.post('/chatrooms', createChatroom);
 
 router.get('/chatrooms', findChatrooms);
 
-
-module.exports = router;
+export { router };

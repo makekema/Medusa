@@ -1,10 +1,10 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, "../../.env") });
+import path from 'path';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 
-const mongoose = require('mongoose');
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const connectionString = process.env.DB_CONNECTION_STRING;
-
 
 mongoose.connect(connectionString, {
   useNewUrlParser: true,
@@ -17,5 +17,4 @@ mongoose.connect(connectionString, {
     console.error('MongoDB connection error:', error);
   });
 
-  
-  module.exports = mongoose;
+export { mongoose };

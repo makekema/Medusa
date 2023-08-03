@@ -1,7 +1,6 @@
-const Chatroom = require('../models/Chatroom');
+import { Chatroom } from '../models/Chatroom';
 
-
-async function createChatroom (req, res, next) {
+const createChatroom = async (req, res, next) => {
   try {
     const { name } = req.body;
     const chatroom = new Chatroom({ name });
@@ -12,7 +11,7 @@ async function createChatroom (req, res, next) {
   }
 }
 
-async function findChatrooms (req, res, next) {
+const findChatrooms = async (req, res, next) => {
   try {
     const chatrooms = await Chatroom.find({});
     res.status(200).json(chatrooms);
@@ -21,5 +20,4 @@ async function findChatrooms (req, res, next) {
   }
 }
 
-
-module.exports = { createChatroom, findChatrooms };
+export { createChatroom, findChatrooms };
