@@ -28,6 +28,9 @@ body {
 
 }
 
+form {
+  display: flex;
+}
 
 .App {
   display: flex;

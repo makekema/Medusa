@@ -11,7 +11,7 @@ import {
 } from "./helper";
 
 const ChatContext = createContext();
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect('http://localhost:3001');
 
 function ChatProvider ({ children }) {
   const [chatrooms, setChatrooms] = useState([]);
@@ -61,7 +61,7 @@ function ChatProvider ({ children }) {
     });
 
     return () => {
-      socket.off("update_chatrooms");
+      socket.off('update_chatrooms');
     };
   }, []);
 
@@ -97,12 +97,7 @@ function ChatProvider ({ children }) {
     isSelectorVisible,
   };
 
-  return (
-    < ChatContext.Provider value={value} >
-      {children}
-    </ ChatContext.Provider>
-  );
+  return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 }
 
 export { ChatContext, ChatProvider };
-

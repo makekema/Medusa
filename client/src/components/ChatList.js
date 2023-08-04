@@ -1,25 +1,26 @@
-import Chat from "./Messaging";
-import { ChatContext } from "../context/ChatContext";
-import { useContext } from "react";
+import { ChatContext } from '../context/ChatContext';
+import React, { useContext } from 'react';
+import { ChatBox } from './ChatBox';
 
 function ChatList ({ handleBackgroundColor }) {
-
   const { userRoomList, socket } = useContext(ChatContext);
+
 
   return (
     <>
       <div>
         {userRoomList.rooms?.map((room) => (
           <div className="ChatList" key={room.name}>
-            <Chat room={room.name} socket={socket} handleBackgroundColor={handleBackgroundColor}></Chat>
+            <ChatBox
+              key={room._id}
+              room={room.name}
+              socket={socket}
+              handleBackgroundColor={handleBackgroundColor}></ChatBox>
           </div>
         ))}
       </div>
     </>
   );
-
 }
 
 export default ChatList;
-
-

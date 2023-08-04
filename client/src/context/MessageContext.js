@@ -1,16 +1,13 @@
-import { createContext, useEffect, useState } from "react";
-import { ChatContext } from "./ChatContext";
-import { useContext } from "react";
+import { createContext, useEffect, useState } from 'react';
+import { ChatContext } from './ChatContext';
+import { useContext } from 'react';
 
 const MessageContext = createContext();
-
 function MessageProvider ({ children }) {
-
   const { socket } = useContext(ChatContext);
-  const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
 
-  const sendMessage = async (room) => {
+  const sendMessage = async (room, message) => {
     if (room !== "") {
       const messageData = {
         user: socket.id,
@@ -24,7 +21,6 @@ function MessageProvider ({ children }) {
         await socket.emit("send_message", messageData);
         console.log('message sent:', messageData);
         setMessageList((list) => [...list, messageData]);
-        setMessage("");
       }
     }
   };
@@ -36,6 +32,7 @@ function MessageProvider ({ children }) {
       const messageData = {
         ...data,
         sender: data.user === socket.id ? "me" : "other"
+
       };
       setMessageList((list) => [...list, messageData]);
       console.log('messageList', messageList);
@@ -46,24 +43,24 @@ function MessageProvider ({ children }) {
       const messageData = {
         user: socket.id,
         room: data.room,
-        message: "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ",
-        time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-        sender: "me",
+        message:
+          'Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about. ',
+        time:
+          new Date(Date.now()).getHours() +
+          ':' +
+          new Date(Date.now()).getMinutes(),
+        sender: 'me',
         socketId: socket.id,
       };
       setMessageList((list) => [...list, messageData]);
     });
 
     return () => {
-      socket.off("receive_message");
-      socket.off("joined_empty_room");
+      socket.off('receive_message');
+      socket.off('joined_empty_room');
     };
-
   }, []);
-
   const value = {
-    message,
-    setMessage,
     messageList,
     setMessageList,
     sendMessage,
