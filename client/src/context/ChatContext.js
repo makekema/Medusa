@@ -14,24 +14,26 @@ const ChatContext = createContext();
 const socket = io.connect("http://localhost:3001");
 
 function ChatProvider ({ children }) {
-  const [roomName, setRoomName] = useState("");
   const [chatrooms, setChatrooms] = useState([]);
   const [userRoomList, setUserRoomList] = useState({ socketId: socket.id, rooms: [] });
-
-  const room = createNewRoom(roomName, socket.id);
 
   // SELECTOR
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
 
   // FUNCTIONS
-  const joinRoom = () => {
+  const joinRoom = (roomName) => {
+    console.log("🚀 ~ file: ChatContext.js:28 ~ joinRoom ~ roomName:", roomName);
     if (roomName !== "") {
-      if (isUserAlreadyInTheRoom(userRoomList, roomName)) return console.log("You are already in this room");
+      if (isUserAlreadyInTheRoom(userRoomList, roomName)) {
+        console.log("You are already in this room");
+        return;
+      }
 
       if (!chatroomExists(chatrooms, roomName)) {
         socket.emit("create_room", roomName);
       }
+      const room = createNewRoom(roomName, socket.id);
       socket.emit("join_room", roomName);
 
       setUserRoomList((prevRoomList) => {
@@ -82,8 +84,6 @@ function ChatProvider ({ children }) {
 
   const value = {
     socket,
-    roomName,
-    setRoomName,
     chatrooms,
     setChatrooms,
     userRoomList,

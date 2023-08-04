@@ -1,46 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 import { ChatContext } from "./ChatContext";
 import { useContext } from "react";
-import { createNewRoom } from "./helper";
 
 const MessageContext = createContext();
 
 function MessageProvider ({ children }) {
 
-  const { socket, setRoomName, userRoomList, setUserRoomList } = useContext(ChatContext);
-
-  // DEFINITIONS
-
+  const { socket } = useContext(ChatContext);
   const [message, setMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-
-
-  // MESSAGE FUNCTIONALITY
-
-  function handleRoomButtonClick (roomName) {
-    const existingRoom = userRoomList.rooms?.some((r) => r.name === roomName);
-    if (existingRoom) {
-      console.log("You are already in this room.");
-      return;
-    }
-
-    setRoomName(roomName);
-    const room = createNewRoom(roomName, socket.id);
-    console.log("Room Data from RoomList:", room);
-    socket.emit("join_room", room);
-
-    setUserRoomList((prevRoomList) => {
-      const updatedRooms = [
-        ...prevRoomList.rooms, room,
-      ];
-      const updatedRoomList = { ...prevRoomList };
-      updatedRoomList.rooms = [...updatedRooms];
-      console.log('roomList: ', updatedRoomList);
-      return updatedRoomList;
-    });
-
-  }
-
 
   const sendMessage = async (room) => {
     if (room !== "") {
@@ -61,9 +29,7 @@ function MessageProvider ({ children }) {
     }
   };
 
-  // USE EFFECTS
-  // RECEIVE MESSAGE & JOIN EMPTY ROOM
-
+  // Sockets
   useEffect(() => {
     socket.on("receive_message", (data) => {
       console.log('message received', data);
@@ -95,20 +61,12 @@ function MessageProvider ({ children }) {
 
   }, []);
 
-
-  // TEST LOGS
-
-  // useEffect(() => {
-  //   console.log('messageList:', messageList);
-  // }, [messageList]);
-
   const value = {
     message,
     setMessage,
     messageList,
     setMessageList,
     sendMessage,
-    handleRoomButtonClick
   };
 
   return (

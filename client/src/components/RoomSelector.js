@@ -3,8 +3,9 @@ import { ChatContext } from "../context/ChatContext";
 import ChatList from "./ChatList";
 
 function RoomSelector ({ handleBackgroundColor }) {
+  const [roomName, setRoomName] = useState('');
 
-  const { setRoomName, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible } = useContext(ChatContext);
+  const { joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible } = useContext(ChatContext);
 
   const handleJoinRoom = () => {
     setSelectorVisible(false);

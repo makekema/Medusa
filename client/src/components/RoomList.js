@@ -4,14 +4,15 @@ import { MessageContext } from "../context/MessageContext";
 
 
 function RoomList ({ handleBackgroundColor }) {
-  const { chatrooms, setSelectorClosed, setSelectorVisible } = useContext(ChatContext);
-  const { handleRoomButtonClick } = useContext(MessageContext);
+  const { chatrooms, setSelectorClosed, setSelectorVisible, joinRoom } = useContext(ChatContext);
+  // const { handleRoomButtonClick } = useContext(MessageContext);
 
 
 
 
   const handleButtonClick = (roomName) => {
-    handleRoomButtonClick(roomName);
+    // handleRoomButtonClick(roomName);
+    joinRoom(roomName);
     toggleSelector(roomName);
     handleBackgroundColor();
     console.log('I was executed handleBf');
@@ -28,11 +29,10 @@ function RoomList ({ handleBackgroundColor }) {
       <div className="RoomList" >
         <div>
           {chatrooms.map((chatroom) => {
-            const roomName = chatroom.name;
             return (
               <button className="RoomButton"
                 key={chatroom._id}
-                onClick={() => handleButtonClick(roomName)}
+                onClick={() => handleButtonClick(chatroom.name)}
               >
                 {chatroom.name}
               </button>
