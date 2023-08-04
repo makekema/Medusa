@@ -6,11 +6,11 @@ import {
   calculateTop,
   getRandomColor,
 } from '../helperFunctions';
-import { CloseButton } from './CloseButton';
 import ChatInput from './ChatInput';
+import ChatBoxHeader from './ChatBoxHeader';
 
 export default function ChatBox({ room, socket }) {
-  const { setMessage, messageList, sendMessage } = useContext(MessageContext); //, message
+  const { messageList, sendMessage } = useContext(MessageContext); //, message
   const { leaveRoom, handleBackgroundColor } = useContext(ChatContext);
   const [colorMap, setColorMap] = useState({});
   const [color, setColor] = useState(
@@ -83,7 +83,7 @@ export default function ChatBox({ room, socket }) {
   function handleMouseUp() {
     setIsDragging(false);
   }
-  
+
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -101,12 +101,7 @@ export default function ChatBox({ room, socket }) {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}>
-        <div className='ChatBar'>
-          <div className='Room'>{room}</div>
-          <button class='LeaveButton' onClick={handleLeaveRoom}>
-            <CloseButton />
-          </button>
-        </div>
+        <ChatBoxHeader name={room} leaveRoom={handleLeaveRoom} />
 
         <div className='ChatWindow'>
           <div className='MessageWrapper'>
@@ -132,7 +127,6 @@ export default function ChatBox({ room, socket }) {
           </div>
 
           <ChatInput sendMessage={handleSendMessage} />
-          
         </div>
       </div>
     </>
