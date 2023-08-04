@@ -1,3 +1,4 @@
+import { Socket } from 'socket.io';
 import { io } from '../server.js';
 
 import {
@@ -9,27 +10,27 @@ import {
 } from './socketHandlers.js';
 
 
-io.on("connection", (socket) => {
+io.on("connection", (socket: Socket) => {
   console.log(`User Connected: ${socket.id}`);
 
 
-  socket.on("send_message", (data) => {
+  socket.on("send_message", (data: any) => {
     handleMessage(data);
   });
 
 
-  socket.on("create_room", async (roomName) => {
+  socket.on("create_room", async (roomName: string) => {
     const chatrooms = await handleCreateRoom(roomName);
     io.emit("update_chatrooms", chatrooms);
   });
 
 
-  socket.on("join_room", (data) => {
+  socket.on("join_room", (data: any) => {
     handleJoinRoom(data);
   });
 
 
-  socket.on("leave_room", (roomName) => {
+  socket.on("leave_room", (roomName: string) => {
     handleLeaveRoom(roomName);
   });
 
