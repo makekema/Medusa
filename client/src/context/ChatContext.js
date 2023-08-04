@@ -6,7 +6,8 @@ import {
   isUserAlreadyInTheRoom,
   removeRoomFromUserRoomListState,
   addRoomToUserRoomListState,
-  roomExists
+  chatroomExists,
+  updateChatrooms
 } from "./helper";
 
 const ChatContext = createContext();
@@ -28,7 +29,7 @@ function ChatProvider ({ children }) {
     if (roomName !== "") {
       if (isUserAlreadyInTheRoom(userRoomList, roomName)) return console.log("You are already in this room");
 
-      if (!roomExists(chatrooms, roomName)) {
+      if (!chatroomExists(chatrooms, roomName)) {
         socket.emit("create_room", roomName);
       }
       socket.emit("join_room", roomName);
@@ -41,6 +42,7 @@ function ChatProvider ({ children }) {
 
   const leaveRoom = (roomName) => {
     socket.emit("leave_room", roomName);
+
     setUserRoomList((prevRoomList) => {
       return removeRoomFromUserRoomListState(prevRoomList, roomName);
     });
@@ -51,8 +53,8 @@ function ChatProvider ({ children }) {
     http.getChatRooms().then(chatrooms => {
       setChatrooms(chatrooms);
     });
+
     socket.on("update_chatrooms", (chatrooms) => {
-      console.log('chatrooms: ', chatrooms);
       setChatrooms(chatrooms);
     });
 
@@ -63,34 +65,12 @@ function ChatProvider ({ children }) {
 
   useEffect(() => {
     socket.on("user_join", (userData) => {
-      const updatedChatrooms = chatrooms.map((chatroom) => {
-        if (chatroom.name === userData.room) {
-          return {
-            ...chatroom,
-            users: userData.userCount,
-            usernames: userData.usernames,
-          };
-        } else {
-          return chatroom;
-        }
-      });
-      setChatrooms(updatedChatrooms);
+      setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
       console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 
     socket.on("user_leaves", (userData) => {
-      const updatedChatrooms = chatrooms.map((chatroom) => {
-        if (chatroom.name === userData.room) {
-          return {
-            ...chatroom,
-            users: userData.userCount,
-            usernames: userData.usernames,
-          };
-        } else {
-          return chatroom;
-        }
-      });
-      setChatrooms(updatedChatrooms);
+      setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
       console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 

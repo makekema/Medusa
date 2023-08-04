@@ -10,7 +10,7 @@ export function createNewRoom (roomName, creator) {
   };
 }
 
-export const roomExists = (chatrooms, roomName) => {
+export const chatroomExists = (chatrooms, roomName) => {
   const rooms = chatrooms.some((c) => c.name === roomName);
   return rooms.length > 0;
 };
@@ -33,4 +33,17 @@ export const addRoomToUserRoomListState = (roomList, room) => {
   updatedRoomList.rooms = [...updatedRooms];
   console.log('roomList: ', updatedRoomList);
   return updatedRoomList;
+};
+
+export const updateChatrooms = (chatrooms, userData) => {
+  return chatrooms.map((chatroom) => {
+    if (chatroom.name === userData.room) {
+      return {
+        ...chatroom,
+        users: userData.userCount,
+        usernames: userData.usernames,
+      };
+    }
+    return chatroom;
+  });
 };
