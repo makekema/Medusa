@@ -4,6 +4,7 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import { router } from './router.js';
 
+
 const app = express();
 
 // express middleware
@@ -20,7 +21,7 @@ const httpServer = http.createServer(app);
 // socket.io
 // -> origin defines the frontend connection
 
-export const io = new Server(httpServer, {
+const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",
     methods: ['GET', 'POST'],
@@ -35,3 +36,6 @@ const PORT = 3001;
 httpServer.listen(PORT, () => {
   console.log(`SERVER IS RUNNING ON ${PORT}`);
 });
+
+
+export { io }

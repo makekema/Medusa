@@ -2,6 +2,7 @@ import { Chatroom } from '../models/Chatroom.js';
 // import { Socket } from 'socket.io';
 import { io } from '../server.js';
 
+
 io.on("connection", (socket) => {
   console.log(`User Connected: ${socket.id}`);
 
@@ -37,7 +38,7 @@ io.on("connection", (socket) => {
   //   });
   // };
   
-  
+
   async function handleCreateRoom(roomName) {
     const chatroom = new Chatroom({name: roomName});
     await chatroom.save();

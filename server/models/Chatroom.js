@@ -1,5 +1,6 @@
 import { mongoose } from './index.js';
 
+
 const chatroomSchema = new mongoose.Schema({
   name: String,
   users: { type: Number, default: 0 },
@@ -7,5 +8,6 @@ const chatroomSchema = new mongoose.Schema({
 });
 
 const Chatroom = mongoose.model('Chatroom', chatroomSchema);
+
 
 export { Chatroom };
