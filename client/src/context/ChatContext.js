@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import { createContext, useEffect, useState } from "react";
+import { http } from '../apiService';
 
 const ChatContext = createContext();
 const socket = io.connect("http://localhost:3001");
@@ -20,13 +21,6 @@ function ChatProvider ({ children }) {
   // SELECTOR
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
-
-  function getAll () {
-    fetch('http://localhost:3001/chatrooms')
-      .then((res) => res.json())
-      .then((data) => setChatrooms(data))
-      .catch((err) => console.error(err));
-  }
 
   // FUNCTIONS
   const joinRoom = () => {
@@ -151,7 +145,10 @@ function ChatProvider ({ children }) {
 
   // GET ALL
   useEffect(() => {
-    getAll();
+    http.getChatRooms().then(chatrooms => {
+      console.log(chatrooms);
+      setChatrooms(chatrooms);
+    });
   }, []);
 
   const value = {
