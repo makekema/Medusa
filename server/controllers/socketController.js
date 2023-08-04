@@ -8,11 +8,22 @@ io.on("connection", (socket) => {
 
   /* send message */
 
+  // socket.on("send_message", (data) => {
+  //   console.log('message from frontend', data)
+  //   socket.to(data.room).emit("receive_message", data)
+  //   console.log('message to room:', data.room)
+  // });
+
+  async function handleMessage(data) {
+    console.log('message from frontend', data);
+    io.to(data.room).emit("receive_message", data);
+    console.log('message to room:', data.room);
+  }
+  
   socket.on("send_message", (data) => {
-    console.log('message from frontend', data)
-    socket.to(data.room).emit("receive_message", data)
-    console.log('message to room:', data.room)
+    handleMessage(data);
   });
+  
 
   /* create room */
 
@@ -38,7 +49,6 @@ io.on("connection", (socket) => {
   //   });
   // };
   
-
   async function handleCreateRoom(roomName) {
     const chatroom = new Chatroom({name: roomName});
     await chatroom.save();
@@ -55,90 +65,187 @@ io.on("connection", (socket) => {
 
   /* join room */
 
-  socket.on("join_room", async (data) => {
-    const chatroom = await Chatroom.findOne({name: data.name});
-    if (chatroom) {
-      socket.join(chatroom.name);
-      chatroom.users += 1;
-      chatroom.usernames.push(socket.id)
-      await chatroom.save();
+  // socket.on("join_room", async (data) => {
+  //   const chatroom = await Chatroom.findOne({name: data.name});
+  //   if (chatroom) {
+  //     socket.join(chatroom.name);
+  //     chatroom.users += 1;
+  //     chatroom.usernames.push(socket.id)
+  //     await chatroom.save();
 
-      io.emit("user_join", { 
-        room: chatroom.name,
-        username: socket.id,
-        userCount: chatroom.users,
-        usernames: chatroom.usernames,
-      });
+  //     io.emit("user_join", { 
+  //       room: chatroom.name,
+  //       username: socket.id,
+  //       userCount: chatroom.users,
+  //       usernames: chatroom.usernames,
+  //     });
 
-      console.log('chatroom.users <= 1:', chatroom.users <= 1);
-      if (chatroom.users <= 1) {
-        socket.emit('joined_empty_room', {
-          room: chatroom.name
-        });
-      }
+  //     console.log('chatroom.users <= 1:', chatroom.users <= 1);
+  //     if (chatroom.users <= 1) {
+  //       socket.emit('joined_empty_room', {
+  //         room: chatroom.name
+  //       });
+  //     }
       
-      console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`)
+  //     console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`)
+  //   }
+  // })
+
+  async function handleJoinRoom(data) {
+    const chatroom = await Chatroom.findOne({name: data.name});
+    if (!chatroom) return;
+  
+    socket.join(chatroom.name);
+    chatroom.users += 1;
+    chatroom.usernames.push(socket.id);
+    await chatroom.save();
+  
+    io.emit("user_join", { 
+      room: chatroom.name,
+      username: socket.id,
+      userCount: chatroom.users,
+      usernames: chatroom.usernames,
+    });
+  
+    console.log('chatroom.users <= 1:', chatroom.users <= 1);
+    if (chatroom.users <= 1) {
+      socket.emit('joined_empty_room', {
+        room: chatroom.name
+      });
     }
-  })
+    
+    console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`);
+  }
+  
+  socket.on("join_room", (data) => {
+    handleJoinRoom(data);
+  });
+  
 
   /* leave room */
 
-  socket.on("leave_room", async (roomName) => {
-    console.log(roomName)
+  // socket.on("leave_room", async (roomName) => {
+  //   console.log(roomName)
+  //   socket.leave(roomName);
+
+  //   const chatroom = await Chatroom.findOne({name: roomName});
+  //   if (chatroom) {
+  //     chatroom.users -= 1; 
+  //     chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id); 
+  //     await chatroom.save();
+
+  //     console.log(chatroom.name, chatroom.users, chatroom.usernames)
+
+  //     io.emit("user_leaves", { 
+  //       room: chatroom.name,
+  //       username: socket.id,
+  //       userCount: chatroom.users,
+  //       usernames: chatroom.usernames,
+  //     });
+
+  //     console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}`);
+
+  //     if (chatroom.users === 0) {
+  //       await Chatroom.deleteOne({_id: chatroom._id}); 
+
+  //       console.log(`Chatroom ${chatroom.name} has been deleted.`);
+  //       io.emit("update_chatrooms", await Chatroom.find({})); 
+  //     }
+  //   }
+  // });
+
+  async function handleLeaveRoom(roomName) {
+    console.log(roomName);
     socket.leave(roomName);
-
+  
     const chatroom = await Chatroom.findOne({name: roomName});
-    if (chatroom) {
-      chatroom.users -= 1; 
-      chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id); 
-      await chatroom.save();
-
-      console.log(chatroom.name, chatroom.users, chatroom.usernames)
-
-      io.emit("user_leaves", { 
-        room: chatroom.name,
-        username: socket.id,
-        userCount: chatroom.users,
-        usernames: chatroom.usernames,
-      });
-
-      console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}`);
-
-      if (chatroom.users === 0) {
-        await Chatroom.deleteOne({_id: chatroom._id}); 
-
-        console.log(`Chatroom ${chatroom.name} has been deleted.`);
-        io.emit("update_chatrooms", await Chatroom.find({})); 
-      }
+    if (!chatroom) return;
+  
+    chatroom.users -= 1;
+    chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
+    await chatroom.save();
+  
+    console.log(chatroom.name, chatroom.users, chatroom.usernames);
+  
+    io.emit("user_leaves", {
+      room: chatroom.name,
+      username: socket.id,
+      userCount: chatroom.users,
+      usernames: chatroom.usernames,
+    });
+  
+    console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}`);
+  
+    if (chatroom.users === 0) {
+      await Chatroom.deleteOne({_id: chatroom._id});
+  
+      console.log(`Chatroom ${chatroom.name} has been deleted.`);
+      io.emit("update_chatrooms", await Chatroom.find({}));
     }
+  }
+  
+  socket.on("leave_room", (roomName) => {
+    handleLeaveRoom(roomName);
   });
+  
 
   /* disconnect */
 
-  socket.on("disconnect", async () => {
+  // socket.on("disconnect", async () => {
+  //   const chatrooms = await Chatroom.find({ usernames: socket.id });
+  //   for (const chatroom of chatrooms) {
+  //     chatroom.users -= 1;
+  //     chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
+  //     await chatroom.save();
+
+  //     io.to(chatroom.name).emit("user_geht", { 
+  //       room: chatroom.name,
+  //       username: socket.id,
+  //       userCount: chatroom.users,
+  //       usernames: chatroom.usernames,
+  //     });
+
+  //     console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}. Usernames: ${chatroom.usernames.join(", ")}`);
+      
+  //     if (chatroom.users === 0) {
+  //       await Chatroom.deleteOne({_id: chatroom._id}); 
+
+  //       console.log(`Chatroom ${chatroom.name} has been deleted.`);
+  //       io.emit("update_chatrooms", await Chatroom.find({})); 
+  //     }
+  //   }
+  //   console.log(`User disconnected: ${socket.id}`);
+  // });
+
+  async function handleDisconnect(socket) {
     const chatrooms = await Chatroom.find({ usernames: socket.id });
     for (const chatroom of chatrooms) {
       chatroom.users -= 1;
       chatroom.usernames = chatroom.usernames.filter(username => username !== socket.id);
       await chatroom.save();
-
-      io.to(chatroom.name).emit("user_geht", { 
+  
+      socket.to(chatroom.name).emit("user_geht", {
         room: chatroom.name,
         username: socket.id,
         userCount: chatroom.users,
         usernames: chatroom.usernames,
       });
-
+  
       console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}. Usernames: ${chatroom.usernames.join(", ")}`);
       
       if (chatroom.users === 0) {
         await Chatroom.deleteOne({_id: chatroom._id}); 
-
+  
         console.log(`Chatroom ${chatroom.name} has been deleted.`);
-        io.emit("update_chatrooms", await Chatroom.find({})); 
+        socket.emit("update_chatrooms", await Chatroom.find({})); 
       }
     }
     console.log(`User disconnected: ${socket.id}`);
+  }
+  
+  socket.on("disconnect", () => {
+    handleDisconnect(socket);
   });
+  
 
 });
