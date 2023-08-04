@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { ChatContext } from '../context/ChatContext';
-import ChatList from './ChatList';
 
 function RoomSelector({ handleBackgroundColor }) {
   const {

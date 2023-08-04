@@ -22,11 +22,8 @@ export function ChatBox({ room, socket, handleBackgroundColor }) {
 
   // MESSAGE FUNCTIONALITY
 
-  const handleSendMessage = (e) => {
-    sendMessage(room);
-    const parentNode = e.target.parentNode;
-    const input = parentNode.querySelector('input');
-    input.value = '';
+  const handleSendMessage = (message) => {
+    sendMessage(room, message);
   };
 
   const handleLeaveRoom = () => {

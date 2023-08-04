@@ -1,12 +1,12 @@
-import React, { useContext } from 'react';
-import { MessageContext } from '../context/MessageContext';
+import React, { useState } from 'react';
 
 export default function ChatInput({ sendMessage }) {
-  const { setMessage } = useContext(MessageContext);
+  const [message, setMessage] = useState('');
 
-  function handleSubmit (event) {
+  function handleSubmit(event) {
     event.preventDefault();
-    sendMessage();
+    sendMessage(message);
+    setMessage('');
   }
 
   return (
@@ -16,6 +16,7 @@ export default function ChatInput({ sendMessage }) {
           <input
             name='messageInput'
             className='MessageInput'
+            value={message}
             type='text'
             onChange={(event) => {
               setMessage(event.target.value);
