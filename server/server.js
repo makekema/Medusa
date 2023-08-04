@@ -6,15 +6,19 @@ import { router } from './router.js';
 
 const app = express();
 
-// middleware
+// express middleware
 
 app.use(cors());
 app.use(express.json());
 app.use(router);
 
-// socket.io
+// create HTTP server with express app
+// -> socket.io requires an HTTP server to attach to
 
 const httpServer = http.createServer(app);
+
+// socket.io
+// -> origin defines the frontend connection
 
 export const io = new Server(httpServer, {
   cors: {
