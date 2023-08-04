@@ -1,6 +1,6 @@
 import { ChatContext } from '../context/ChatContext';
-import { useContext } from 'react';
-import ChatBox from './ChatBox';
+import React, { useContext } from 'react';
+import {ChatBox} from './ChatBox';
 
 function ChatList({ handleBackgroundColor }) {
   const { roomLists, socket } = useContext(ChatContext);

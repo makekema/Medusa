@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState, useRef } from "react";
-import { MessageContext } from "../context/MessageContext";
-import { ChatContext } from "../context/ChatContext";
+import { useContext, useEffect, useState, useRef } from 'react';
+import { MessageContext } from '../context/MessageContext';
+import { ChatContext } from '../context/ChatContext';
 import {
   calculateLeft,
   calculateTop,
@@ -9,16 +9,17 @@ import {
 import ChatInput from './ChatInput';
 import ChatBoxHeader from './ChatBoxHeader';
 
-export function ChatBox ({ room, socket, handleBackgroundColor }) {
-
+export function ChatBox({ room, socket, handleBackgroundColor }) {
   const { messageList, sendMessage } = useContext(MessageContext);
   const { leaveRoom } = useContext(ChatContext);
   const [colorMap, setColorMap] = useState({});
-  const [color, setColor] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
-  const [position, setPosition] = useState({ top: "-1000px", left: "-1000px" });
+  const [color, setColor] = useState(
+    '#' + ((Math.random() * 0xffffff) << 0).toString(16)
+  ); // Define the color variable
+  const [position, setPosition] = useState({ top: '-1000px', left: '-1000px' });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  
+
   // MESSAGE FUNCTIONALITY
 
   const handleSendMessage = (e) => {
@@ -35,7 +36,6 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
 
   // COLORS
 
-
   useEffect(() => {
     setColorMap((prevColorMap) => {
       return {
@@ -45,7 +45,7 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
     });
   }, [socket.id, color]);
 
-  function getColor (sender) {
+  function getColor(sender) {
     if (!colorMap[sender]) {
       // Generate a random color for new users
       setColorMap((prevColorMap) => {
@@ -64,8 +64,7 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
 
   // MOUSE DRAG AND DROP
 
-
-  function handleMouseDown (event) {
+  function handleMouseDown(event) {
     setIsDragging(true);
     setDragOffset({
       x: event.clientX - parseInt(position.left),
@@ -73,16 +72,16 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
     });
   }
 
-  function handleMouseMove (event) {
+  function handleMouseMove(event) {
     if (isDragging) {
       setPosition({
-        left: event.clientX - dragOffset.x + "px",
-        top: event.clientY - dragOffset.y + "px",
+        left: event.clientX - dragOffset.x + 'px',
+        top: event.clientY - dragOffset.y + 'px',
       });
     }
   }
 
-  function handleMouseUp () {
+  function handleMouseUp() {
     setIsDragging(false);
   }
 
@@ -95,7 +94,6 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
     scrollToBottom();
   }, [messageList]);
 
-
   return (
     <>
       <div
@@ -105,7 +103,7 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}>
         <ChatBoxHeader name={room} leaveRoom={handleLeaveRoom} />
-        
+
         <div className='ChatWindow'>
           <div className='MessageWrapper'>
             {messageList
@@ -128,7 +126,6 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
           </div>
 
           <ChatInput sendMessage={handleSendMessage} />
-          
         </div>
       </div>
     </>
