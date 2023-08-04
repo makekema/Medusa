@@ -1,14 +1,13 @@
-import express from 'express';
-import { createChatroom, findChatrooms } from './controllers/chatrooms.js';
-
-
-const router = express.Router();
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.router = void 0;
+const express_1 = __importDefault(require("express"));
+const chatrooms_js_1 = require("./controllers/chatrooms.js");
+const router = express_1.default.Router();
+exports.router = router;
 /* respond to HTTP requests */
-
-router.post('/chatrooms', createChatroom);
-
-router.get('/chatrooms', findChatrooms);
-
-
-export { router };
+router.post('/chatrooms', chatrooms_js_1.createChatroom);
+router.get('/chatrooms', chatrooms_js_1.findChatrooms);
