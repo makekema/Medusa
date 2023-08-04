@@ -1,57 +1,44 @@
 import { createContext, useEffect, useState } from "react";
 import { ChatContext } from "./ChatContext";
 import { useContext } from "react";
+import { createNewRoom } from "../utils";
 
 const MessageContext = createContext();
 
 function MessageProvider ({ children }) {
 
-  const {socket, setRoom, roomLists, setRoomLists} = useContext(ChatContext)
+  const { socket, setRoomName, userRoomList, setUserRoomList } = useContext(ChatContext);
 
   // DEFINITIONS
 
   const [message, setMessage] = useState("");
-  const [messageList, setMessageList] = useState([])
+  const [messageList, setMessageList] = useState([]);
 
 
   // MESSAGE FUNCTIONALITY
 
-  function handleRoomButtonClick(roomName) {
-
-    const existingRoom = roomLists.some((list) =>
-        list.rooms.some((r) => r.name === roomName)
-      );
-      if (existingRoom) {
-        console.log("You are already in this room.");
-        return;
+  function handleRoomButtonClick (roomName) {
+    const existingRoom = userRoomList.rooms?.some((r) => r.name === roomName);
+    if (existingRoom) {
+      console.log("You are already in this room.");
+      return;
     }
 
-    setRoom(roomName);
-    const roomData = {
-      name: roomName,
-      time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-      creator: socket.id,
-    };
-    console.log("Room Data from RoomList:", roomData);
-    socket.emit("join_room", roomData);
-  
-    setRoomLists((prevRoomLists) => {
-      const index = prevRoomLists.findIndex((list) => list.socketId === socket.id);
+    setRoomName(roomName);
+    const room = createNewRoom(roomName, socket.id);
+    console.log("Room Data from RoomList:", room);
+    socket.emit("join_room", room);
+
+    setUserRoomList((prevRoomList) => {
       const updatedRooms = [
-        ...prevRoomLists[index].rooms,
-        { name: roomName, time: roomData.time },
+        ...prevRoomList.rooms, room,
       ];
-      const updatedList = {
-        socketId: socket.id,
-        rooms: updatedRooms,
-      };
-      const updatedRoomLists = [...prevRoomLists];
-      updatedRoomLists[index] = updatedList;
-  
-      console.log("Updated Rooms RoomList:", updatedRooms);
-  
-      return updatedRoomLists;
+      const updatedRoomList = { ...prevRoomList };
+      updatedRoomList.rooms = [...updatedRooms];
+      console.log('roomList: ', updatedRoomList);
+      return updatedRoomList;
     });
+
   }
 
 
@@ -64,11 +51,11 @@ function MessageProvider ({ children }) {
         time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
         sender: "me",
         socketId: socket.id
-      }
+      };
       if (message !== "") {
         await socket.emit("send_message", messageData);
-        console.log('message sent:', messageData)
-        setMessageList((list) => [...list, messageData])
+        console.log('message sent:', messageData);
+        setMessageList((list) => [...list, messageData]);
         setMessage("");
       }
     }
@@ -79,13 +66,13 @@ function MessageProvider ({ children }) {
 
   useEffect(() => {
     socket.on("receive_message", (data) => {
-      console.log('message received', data)
+      console.log('message received', data);
       const messageData = {
         ...data,
         sender: data.user === socket.id ? "me" : "other"
-      }
+      };
       setMessageList((list) => [...list, messageData]);
-      console.log('messageList', messageList)
+      console.log('messageList', messageList);
     });
 
     socket.on('joined_empty_room', (data) => {
@@ -97,7 +84,7 @@ function MessageProvider ({ children }) {
         time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
         sender: "me",
         socketId: socket.id,
-      }
+      };
       setMessageList((list) => [...list, messageData]);
     });
 
@@ -105,7 +92,7 @@ function MessageProvider ({ children }) {
       socket.off("receive_message");
       socket.off("joined_empty_room");
     };
-   
+
   }, []);
 
 
@@ -114,7 +101,7 @@ function MessageProvider ({ children }) {
   // useEffect(() => {
   //   console.log('messageList:', messageList);
   // }, [messageList]);
-  
+
   const value = {
     message,
     setMessage,
@@ -122,13 +109,13 @@ function MessageProvider ({ children }) {
     setMessageList,
     sendMessage,
     handleRoomButtonClick
-  }
+  };
 
   return (
     < MessageContext.Provider value={value} >
       {children}
     </ MessageContext.Provider>
-  )
+  );
 }
 
-export { MessageContext, MessageProvider }
+export { MessageContext, MessageProvider };

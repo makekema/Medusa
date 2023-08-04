@@ -1,22 +1,17 @@
 import io from "socket.io-client";
 import { createContext, useEffect, useState } from "react";
 import { http } from '../apiService';
+import { createNewRoom } from "../utils";
 
 const ChatContext = createContext();
 const socket = io.connect("http://localhost:3001");
 
 function ChatProvider ({ children }) {
-  // ROOOMS
-  const [room, setRoom] = useState("");
+  const [roomName, setRoomName] = useState("");
   const [chatrooms, setChatrooms] = useState([]);
-  const [userCount, setUserCount] = useState(0);
-  const [roomLists, setRoomLists] = useState([]);
+  const [userRoomList, setUserRoomList] = useState({ socketId: socket.id, rooms: [] });
 
-  const roomData = {
-    name: room,
-    time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes(),
-    creator: socket.id,
-  };
+  const room = createNewRoom(roomName, socket.id);
 
   // SELECTOR
   const [isSelectorVisible, setSelectorVisible] = useState(true);
@@ -24,72 +19,46 @@ function ChatProvider ({ children }) {
 
   // FUNCTIONS
   const joinRoom = () => {
-    if (room !== "") {
-      const userAlreadyInRoom = roomLists.some((list) => list.rooms.some((r) => r.name === room));
+    if (roomName !== "") {
+      const userAlreadyInRoom = userRoomList.rooms?.some((r) => r.name === roomName);
       if (userAlreadyInRoom) {
         console.log("You are already in this room");
         return;
       }
-      const existingRoom = chatrooms.some((c) => c.name === room);
+      const existingRoom = chatrooms.some((c) => c.name === roomName);
       if (!existingRoom) {
-        socket.emit("create_room", room);
+        socket.emit("create_room", roomName);
       }
-      socket.emit("join_room", roomData);
-      setRoomLists((prevRoomLists) => {
-        const index = prevRoomLists.findIndex(
-          (list) => list.socketId === socket.id
-        );
+      socket.emit("join_room", roomName);
+      setUserRoomList((prevRoomList) => {
         const updatedRooms = [
-          ...prevRoomLists[index].rooms,
-          { name: room, time: roomData.time },
+          ...prevRoomList.rooms, room,
         ];
-        const updatedList = {
-          socketId: socket.id,
-          rooms: updatedRooms,
-        };
-        const updatedRoomLists = [...prevRoomLists];
-        updatedRoomLists[index] = updatedList;
-        return updatedRoomLists;
+        const updatedRoomList = { ...prevRoomList };
+        updatedRoomList.rooms = [...updatedRooms];
+        console.log('roomList: ', updatedRoomList);
+        return updatedRoomList;
       });
     }
   };
 
-  const leaveRoom = (room) => {
-    socket.emit("leave_room", room);
-    setRoomLists((prevRoomLists) => {
-      const index = prevRoomLists.findIndex(
-        (list) => list.socketId === socket.id
+  const leaveRoom = (roomName) => {
+    socket.emit("leave_room", roomName);
+    setUserRoomList((prevRoomList) => {
+      const updatedRooms = prevRoomList.rooms.filter(
+        (r) => r.name !== roomName
       );
-      const updatedRooms = prevRoomLists[index].rooms.filter(
-        (r) => r.name !== room
-      );
-      const updatedList = {
-        socketId: socket.id,
-        rooms: updatedRooms,
-      };
-      const updatedRoomLists = [...prevRoomLists];
-      updatedRoomLists[index] = updatedList;
-      return updatedRoomLists;
+      const updatedRoomList = { ...prevRoomList };
+      updatedRoomList.rooms = [...updatedRooms];
+      console.log('roomList: ', updatedRoomList);
+      return updatedRoomList;
     });
   };
-
-  // USE EFFECTS
-  // CREATING THE STORAGE OBJECT
-  useEffect(() => {
-    socket.on("connect", () => {
-      setRoomLists((prevRoomLists) => [
-        ...prevRoomLists,
-        { socketId: socket.id, rooms: [] },
-      ]);
-    });
-    return () => {
-      socket.off("connect");
-    };
-  }, []);
 
   // UPDATE CHATRROMS
   useEffect(() => {
     socket.on("update_chatrooms", (chatrooms) => {
+      console.log('chatrooms: ', chatrooms);
       setChatrooms(chatrooms);
     });
     return () => {
@@ -152,12 +121,12 @@ function ChatProvider ({ children }) {
 
   const value = {
     socket,
-    room,
-    setRoom,
+    roomName,
+    setRoomName,
     chatrooms,
     setChatrooms,
-    roomLists,
-    setRoomLists,
+    userRoomList,
+    setUserRoomList,
     leaveRoom,
     joinRoom,
     // //These have to go in their own slice
@@ -175,18 +144,3 @@ function ChatProvider ({ children }) {
 }
 
 export { ChatContext, ChatProvider };
-
-
-
-  // function postOne () {
-  //   fetch('http://localhost:3001/chatrooms', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify(roomData)
-  // })
-  //   .then(res => res.json())
-  //   .then(res => getAll())
-  //   .catch(error => console.log(error));
-  // }

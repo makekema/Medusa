@@ -4,7 +4,7 @@ import ChatList from "./ChatList";
 
 function RoomSelector ({ handleBackgroundColor }) {
 
-  const { setRoom, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible } = useContext(ChatContext);
+  const { setRoomName, joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible } = useContext(ChatContext);
 
   const handleJoinRoom = () => {
     setSelectorVisible(false);
@@ -28,7 +28,7 @@ function RoomSelector ({ handleBackgroundColor }) {
           <div className="SelectorInputAndButton">
 
             <input className="SelectorInput" type="text" placeholder="e.g. Japanese Food, Barbie, ..." onChange={(event) => {
-              setRoom(event.target.value);
+              setRoomName(event.target.value);
             }}>
             </input>
             <button className="JoinButton" onClick={handleJoinRoom} >Join</button>
