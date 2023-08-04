@@ -155,19 +155,16 @@ function ChatProvider ({ children }) {
   }, []);
 
   const value = {
-    roomData,
+    socket,
     room,
     setRoom,
     chatrooms,
     setChatrooms,
-    getAll,
-    socket,
-    userCount,
-    setUserCount,
-    joinRoom,
-    leaveRoom,
     roomLists,
     setRoomLists,
+    leaveRoom,
+    joinRoom,
+    //These have to go in their own slice
     setSelectorClosed,
     setSelectorVisible,
     isSelectorClosed,
