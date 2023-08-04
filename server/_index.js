@@ -1,11 +1,31 @@
-const express = require("express");
+// const express = require("express");
+// const app = express();
+// const router = express.Router();
+// const http = require("http");
+// const { Server } = require("socket.io");
+// const cors = require("cors");
+// const mongoose = require('mongoose');
+
+
+// app.use(cors());
+
+// const server = http.createServer(app);
+
+// const io = new Server(server, {
+//   cors: {
+//     origin: "http://localhost:3000",
+//     methods: ["GET", "POST"],
+//   },
+// });
+
+import express from "express";
+import { Server } from "socket.io";
+import http from "http";
+import cors from "cors";
+import mongoose from 'mongoose';
+
 const app = express();
 const router = express.Router();
-const http = require("http");
-const { Server } = require("socket.io");
-const cors = require("cors");
-const mongoose = require('mongoose');
-
 
 app.use(cors());
 
@@ -18,7 +38,6 @@ const io = new Server(server, {
   },
 });
 
-
 // db
 
 // const uri = 'mongodb://127.0.0.1:27017/chatapp_test_6';
@@ -27,13 +46,13 @@ const uri = "mongodb+srv://konradjosefsinger:JoqB2OFzXvBnXfZg@cluster0.jzgxvih.m
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const chatroomSchema_test_6 = new mongoose.Schema({
+const chatroomSchema = new mongoose.Schema({
   name: String,
   users: { type: Number, default: 0 },
   usernames: { type: [String], default: []}
 });
 
-const Chatroom = mongoose.model('Chatroom', chatroomSchema_test_6);
+const Chatroom = mongoose.model('Chatroom', chatroomSchema);
 
 
 // router

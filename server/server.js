@@ -14,15 +14,9 @@ app.use(router);
 
 // socket.io
 
-const PORT = 3001;
+const httpServer = http.createServer(app);
 
-app.listen(PORT, () => {
-  console.log(`SERVER IS RUNNING ON ${PORT}`);
-});
-
-const socketServer = http.createServer(app);
-
-const io = new Server(socketServer, {
+export const io = new Server(httpServer, {
   cors: {
     origin: "http://localhost:3000",
     methods: ['GET', 'POST'],
@@ -30,4 +24,10 @@ const io = new Server(socketServer, {
   }
 });
 
-export { io };
+// server
+
+const PORT = 3001;
+
+httpServer.listen(PORT, () => {
+  console.log(`SERVER IS RUNNING ON ${PORT}`);
+});

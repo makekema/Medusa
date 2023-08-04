@@ -1,4 +1,5 @@
 import { Chatroom } from '../models/Chatroom.js';
+// import { Socket } from 'socket.io';
 import { io } from '../server.js';
 
 io.on("connection", (socket) => {
@@ -14,12 +15,42 @@ io.on("connection", (socket) => {
 
   /* create room */
 
-  socket.on("create_room", async(roomName) => {
+  // socket.on("create_room", async(roomName) => {
+  //   const chatroom = new Chatroom({name: roomName});
+  //   await chatroom.save();
+  //   console.log(`New chatroom created: ${roomName}`)
+  //   io.emit("update_chatrooms", await Chatroom.find({}))
+  // })
+  
+  // export const handleCreateRoom = async (socket: Socket, io: Server) => {
+  //   socket.on("create_room", async(roomName) => {
+  //     try {
+  //       const chatroom = new Chatroom({name: roomName});
+  //       await chatroom.save();
+  //       console.log(`New chatroom created: ${roomName}`);
+        
+  //       // Emit update to all connected clients
+  //       io.emit("update_chatrooms", await Chatroom.find({}));
+  //     } catch (error) {
+  //       console.error(`Error while creating room ${roomName}:`, error);
+  //     }
+  //   });
+  // };
+  
+  
+  async function handleCreateRoom(roomName) {
     const chatroom = new Chatroom({name: roomName});
     await chatroom.save();
     console.log(`New chatroom created: ${roomName}`)
-    io.emit("update_chatrooms", await Chatroom.find({}))
-  })
+    const chatrooms = await Chatroom.find({});
+    return chatrooms;
+  }
+  
+  socket.on("create_room", async (roomName) => {
+    const chatrooms = await handleCreateRoom(roomName);
+    io.emit("update_chatrooms", chatrooms);
+  });
+
 
   /* join room */
 
