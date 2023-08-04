@@ -21,9 +21,6 @@ function ChatProvider ({ children }) {
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
 
-  // POSITIONS
-  const [positions, setPositions] = useState([]);
-
   function getAll () {
     fetch('http://localhost:3001/chatrooms')
       .then((res) => res.json())
@@ -157,17 +154,6 @@ function ChatProvider ({ children }) {
     getAll();
   }, []);
 
-  // POSITIONS
-  useEffect(() => {
-    const newPositions = [];
-    for (let i = 0; i < 10; i++) {
-      const top = Math.floor(Math.random() * window.innerHeight);
-      const left = Math.floor(Math.random() * window.innerWidth);
-      newPositions.push({ top, left });
-    }
-    setPositions(newPositions);
-  }, []);
-
   const value = {
     roomData,
     room,
@@ -182,8 +168,6 @@ function ChatProvider ({ children }) {
     leaveRoom,
     roomLists,
     setRoomLists,
-    positions,
-    setPositions,
     setSelectorClosed,
     setSelectorVisible,
     isSelectorClosed,
