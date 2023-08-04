@@ -101,6 +101,7 @@ export default function ChatBox({ room, socket }) {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}>
+        
         <ChatBoxHeader name={room} leaveRoom={handleLeaveRoom} />
 
         <div className='ChatWindow'>

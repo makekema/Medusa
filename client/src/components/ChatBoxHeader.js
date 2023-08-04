@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ChatBoxHeader(name, leaveRoom) {
+export default function ChatBoxHeader({ name, leaveRoom }) {
   return (
     <div className='ChatBar'>
       <div className='Room'>{name}</div>
