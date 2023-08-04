@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { ChatContext } from "./ChatContext";
 import { useContext } from "react";
-import { createNewRoom } from "../utils";
+import { createNewRoom } from "./helper";
 
 const MessageContext = createContext();
 
