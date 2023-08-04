@@ -138,7 +138,7 @@ io.on("connection", (socket) => {
 
       console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}`);
 
-      if (chatroom.users === 0) {
+      if (chatroom.users < 0) {
         await Chatroom.deleteOne({_id: chatroom._id}); 
 
         console.log(`Chatroom ${chatroom.name} has been deleted.`);
