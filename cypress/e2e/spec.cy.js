@@ -46,6 +46,6 @@ describe('Send a message', () => {
   it('Sends a message', () => {
     cy.get('input[name="roomInput"]').type(newChat).type('{enter}');
     cy.get('input[name="messageInput"]').type(message).type('{enter}');
-    // cy.contains(message);
+    cy.contains(message);
   });
 });
