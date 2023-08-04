@@ -1,6 +1,8 @@
 import { Chatroom } from '../models/Chatroom.js';
 
 
+/* GET */
+
 const createChatroom = async (req, res, next) => {
   try {
     const { name } = req.body;
@@ -11,6 +13,8 @@ const createChatroom = async (req, res, next) => {
     next(err);
   }
 }
+
+/* POST */
 
 const findChatrooms = async (req, res, next) => {
   try {
