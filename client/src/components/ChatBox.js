@@ -1,25 +1,24 @@
-import { useContext, useEffect, useState, useRef } from 'react';
-import { MessageContext } from '../context/MessageContext';
-import { ChatContext } from '../context/ChatContext';
+import { useContext, useEffect, useState, useRef } from "react";
+import { MessageContext } from "../context/MessageContext";
+import { ChatContext } from "../context/ChatContext";
 import {
   calculateLeft,
   calculateTop,
   getRandomColor,
 } from '../helperFunctions';
-import ChatInput from './_ChatInput';
-import ChatBoxHeader from './_ChatBoxHeader';
+import ChatInput from './ChatInput';
+import ChatBoxHeader from './ChatBoxHeader';
 
-export default function ChatBox({ room, socket }) {
-  const { messageList, sendMessage } = useContext(MessageContext); //, message
-  const { leaveRoom, handleBackgroundColor } = useContext(ChatContext);
+export function ChatBox ({ room, socket, handleBackgroundColor }) {
+
+  const { messageList, sendMessage } = useContext(MessageContext);
+  const { leaveRoom } = useContext(ChatContext);
   const [colorMap, setColorMap] = useState({});
-  const [color, setColor] = useState(
-    '#' + ((Math.random() * 0xffffff) << 0).toString(16)
-  );
-  const [position, setPosition] = useState({ top: '-1000px', left: '-1000px' });
+  const [color, setColor] = useState("#" + ((Math.random() * 0xffffff) << 0).toString(16)); // Define the color variable
+  const [position, setPosition] = useState({ top: "-1000px", left: "-1000px" });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-
+  
   // MESSAGE FUNCTIONALITY
 
   const handleSendMessage = (e) => {
@@ -35,6 +34,8 @@ export default function ChatBox({ room, socket }) {
   };
 
   // COLORS
+
+
   useEffect(() => {
     setColorMap((prevColorMap) => {
       return {
@@ -42,14 +43,14 @@ export default function ChatBox({ room, socket }) {
         [socket.id]: color,
       };
     });
-  }, [socket.id, color]); //colour
+  }, [socket.id, color]);
 
-  function getColor(sender) {
+  function getColor (sender) {
     if (!colorMap[sender]) {
       // Generate a random color for new users
-      setColorMap((prevState) => {
+      setColorMap((prevColorMap) => {
         return {
-          ...prevState,
+          ...prevColorMap,
           [sender]: getRandomColor(),
         };
       });
@@ -63,7 +64,8 @@ export default function ChatBox({ room, socket }) {
 
   // MOUSE DRAG AND DROP
 
-  function handleMouseDown(event) {
+
+  function handleMouseDown (event) {
     setIsDragging(true);
     setDragOffset({
       x: event.clientX - parseInt(position.left),
@@ -71,16 +73,16 @@ export default function ChatBox({ room, socket }) {
     });
   }
 
-  function handleMouseMove(event) {
+  function handleMouseMove (event) {
     if (isDragging) {
       setPosition({
-        left: event.clientX - dragOffset.x + 'px',
-        top: event.clientY - dragOffset.y + 'px',
+        left: event.clientX - dragOffset.x + "px",
+        top: event.clientY - dragOffset.y + "px",
       });
     }
   }
 
-  function handleMouseUp() {
+  function handleMouseUp () {
     setIsDragging(false);
   }
 
@@ -93,6 +95,7 @@ export default function ChatBox({ room, socket }) {
     scrollToBottom();
   }, [messageList]);
 
+
   return (
     <>
       <div
@@ -101,9 +104,8 @@ export default function ChatBox({ room, socket }) {
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}>
-        
         <ChatBoxHeader name={room} leaveRoom={handleLeaveRoom} />
-
+        
         <div className='ChatWindow'>
           <div className='MessageWrapper'>
             {messageList
@@ -112,9 +114,7 @@ export default function ChatBox({ room, socket }) {
                 <div className={`Message ${messageContent.sender}`}>
                   <div
                     className='User_Time'
-                    style={{
-                      color: getColor(messageContent.socketId),
-                    }}>
+                    style={{ color: getColor(messageContent.socketId) }}>
                     {messageContent.sender === 'me'
                       ? 'You'
                       : `User ${messageContent.socketId.substring(0, 5)}`}
@@ -128,6 +128,7 @@ export default function ChatBox({ room, socket }) {
           </div>
 
           <ChatInput sendMessage={handleSendMessage} />
+          
         </div>
       </div>
     </>
