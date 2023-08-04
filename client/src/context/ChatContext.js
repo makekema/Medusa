@@ -146,7 +146,6 @@ function ChatProvider ({ children }) {
   // GET ALL
   useEffect(() => {
     http.getChatRooms().then(chatrooms => {
-      console.log(chatrooms);
       setChatrooms(chatrooms);
     });
   }, []);
@@ -161,7 +160,7 @@ function ChatProvider ({ children }) {
     setRoomLists,
     leaveRoom,
     joinRoom,
-    //These have to go in their own slice
+    // //These have to go in their own slice
     setSelectorClosed,
     setSelectorVisible,
     isSelectorClosed,
