@@ -6,8 +6,8 @@ import {
   calculateTop,
   getRandomColor,
 } from '../helperFunctions';
-import ChatInput from './ChatInput';
-import ChatBoxHeader from './ChatBoxHeader';
+import ChatInput from './_ChatInput';
+import ChatBoxHeader from './_ChatBoxHeader';
 
 export default function ChatBox({ room, socket }) {
   const { messageList, sendMessage } = useContext(MessageContext); //, message
