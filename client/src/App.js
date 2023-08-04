@@ -3,8 +3,8 @@ import RoomList from './components/RoomList';
 import RoomSelector from './components/RoomSelector';
 import ChatList from './components/ChatList';
 import Marquee from 'react-fast-marquee';
-import { useContext } from 'react';
-import { ChatContext } from './context/ChatContext';
+import { useContext, useState } from 'react';
+// import { ChatContext } from './context/ChatContext';
 
 const colors = [
   'rgb(210, 185, 31)',
@@ -15,7 +15,7 @@ const colors = [
 ];
 
 function App() {
-  const { bgColor, setBgColor } = useContext(ChatContext);
+  const [bgColor, setBgColor] = useState(colors[0]);
 
   function handleBackgroundColor() {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
