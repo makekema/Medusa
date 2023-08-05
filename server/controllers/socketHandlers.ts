@@ -31,13 +31,13 @@ async function handleCreateRoom(roomName: string) {
 /* join_room */
 
 async function handleJoinRoom(data: Room, socket: Socket) {
-  const chatroom = await Chatroom.findOne({name: data.name});
+  const chatroom = await db.findChatroom(data.name);
   if (!chatroom) return;
 
   socket.join(chatroom.name);
   chatroom.users += 1;
   chatroom.usernames.push(socket.id);
-  await chatroom.save();
+  await db.saveChatroom(data.name)
 
   io.emit("user_join", { 
     room: chatroom.name,
@@ -63,7 +63,7 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
   //console.log(roomName);
   socket.leave(roomName);
 
-  const chatroom = await Chatroom.findOne({name: roomName});
+  const chatroom = await db.findChatroom(roomName);
   if (!chatroom) return;
 
   chatroom.users -= 1;
@@ -93,7 +93,7 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
 /* disconnect */
 
 async function handleDisconnect(socket: Socket) {
-  const chatrooms = await Chatroom.find({ usernames: socket.id });
+  const chatrooms = await db.findChatroom(socket.id);
   for (const chatroom of chatrooms) {
     chatroom.users -= 1;
     chatroom.usernames = chatroom.usernames.filter((username: string) => username !== socket.id);

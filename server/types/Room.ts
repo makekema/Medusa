@@ -1,6 +1,9 @@
+
+
 type Room = {
   name: string;
-  time: string;
+  users: number;
+  usernames: string[];
   creator: string;
 }
 
