@@ -1,98 +1,62 @@
-import io from 'socket.io-client';
-import { createContext, useEffect, useState } from 'react';
-import { http } from '../apiService.js';
+import { createContext, useEffect, useState } from "react";
+import { http } from '../apiService';
+import {
+  createNewRoom,
+  isUserAlreadyInTheRoom,
+  removeRoomFromUserRoomListState,
+  addRoomToUserRoomListState,
+  getChatroomFromChatrooms,
+  updateChatrooms
+} from "./helper";
+import { socket } from "../socket";
 
 const ChatContext = createContext();
-const socket = io('http://localhost:3001');
 
-function ChatProvider({ children }) {
-  // ROOOMS
-  const [room, setRoom] = useState('');
+
+function ChatProvider ({ children }) {
   const [chatrooms, setChatrooms] = useState([]);
-  const [userCount, setUserCount] = useState(0);
-  const [roomLists, setRoomLists] = useState([]);
-
-  const roomData = {
-    name: room,
-    time:
-      new Date(Date.now()).getHours() + ':' + new Date(Date.now()).getMinutes(),
-    creator: socket.id,
-  };
+  const [userRoomList, setUserRoomList] = useState({ socketId: socket.id, rooms: [] });
 
   // SELECTOR
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
 
   // FUNCTIONS
-  const joinRoom = () => {
-    if (room !== '') {
-      const userAlreadyInRoom = roomLists.some((list) =>
-        list.rooms.some((r) => r.name === room)
-      );
-      if (userAlreadyInRoom) {
-        console.log('You are already in this room');
+  const joinRoom = (roomName) => {
+    if (roomName !== "") {
+      if (isUserAlreadyInTheRoom(userRoomList, roomName)) {
+        console.log("You are already in this room");
         return;
       }
-      const existingRoom = chatrooms.some((c) => c.name === room);
-      if (!existingRoom) {
-        socket.emit('create_room', room);
+
+      let room = getChatroomFromChatrooms(chatrooms, roomName);
+
+      if (!room) {
+        socket.emit("create_room", roomName);
+        room = createNewRoom(roomName, socket.id);
       }
-      socket.emit('join_room', roomData);
-      setRoomLists((prevRoomLists) => {
-        const index = prevRoomLists.findIndex(
-          (list) => list.socketId === socket.id
-        );
-        const updatedRooms = [
-          ...prevRoomLists[index].rooms,
-          { name: room, time: roomData.time },
-        ];
-        const updatedList = {
-          socketId: socket.id,
-          rooms: updatedRooms,
-        };
-        const updatedRoomLists = [...prevRoomLists];
-        updatedRoomLists[index] = updatedList;
-        return updatedRoomLists;
+      socket.emit("join_room", roomName);
+
+      setUserRoomList((prevRoomList) => {
+        return addRoomToUserRoomListState(prevRoomList, room);
       });
     }
   };
 
-  const leaveRoom = (room) => {
-    socket.emit('leave_room', room);
-    setRoomLists((prevRoomLists) => {
-      const index = prevRoomLists.findIndex(
-        (list) => list.socketId === socket.id
-      );
-      const updatedRooms = prevRoomLists[index].rooms.filter(
-        (r) => r.name !== room
-      );
-      const updatedList = {
-        socketId: socket.id,
-        rooms: updatedRooms,
-      };
-      const updatedRoomLists = [...prevRoomLists];
-      updatedRoomLists[index] = updatedList;
-      return updatedRoomLists;
+  const leaveRoom = (roomName) => {
+    socket.emit("leave_room", roomName);
+
+    setUserRoomList((prevRoomList) => {
+      return removeRoomFromUserRoomListState(prevRoomList, roomName);
     });
   };
 
-  // USE EFFECTS
-  // CREATING THE STORAGE OBJECT
+  // SOCKETS
   useEffect(() => {
-    socket.on('connect', () => {
-      setRoomLists((prevRoomLists) => [
-        ...prevRoomLists,
-        { socketId: socket.id, rooms: [] },
-      ]);
+    http.getChatRooms().then(chatrooms => {
+      setChatrooms(chatrooms);
     });
-    return () => {
-      socket.off('connect');
-    };
-  }, []);
-
-  // UPDATE CHATRROMS
-  useEffect(() => {
-    socket.on('update_chatrooms', (chatrooms) => {
+    socket.on("update_chatrooms", (chatrooms) => {
       setChatrooms(chatrooms);
     });
     return () => {
@@ -100,77 +64,34 @@ function ChatProvider({ children }) {
     };
   }, []);
 
-  // USER JOIN
   useEffect(() => {
-    socket.on('user_join', (userData) => {
-      const updatedChatrooms = chatrooms.map((chatroom) => {
-        if (chatroom.name === userData.room) {
-          return {
-            ...chatroom,
-            users: userData.userCount,
-            usernames: userData.usernames,
-          };
-        } else {
-          return chatroom;
-        }
-      });
-      setChatrooms(updatedChatrooms);
-      console.log(
-        `User ${userData.username} joined the chatroom ${
-          userData.room
-        }. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(
-          ', '
-        )}`
-      );
+    socket.on("user_join", (userData) => {
+      setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
+      console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 
     return () => {
-      socket.off('user_join');
+      socket.off("user_join");
     };
   }, [chatrooms]);
 
-  // USER LEAVE
   useEffect(() => {
-    socket.on('user_leaves', (userData) => {
-      const updatedChatrooms = chatrooms.map((chatroom) => {
-        if (chatroom.name === userData.room) {
-          return {
-            ...chatroom,
-            users: userData.userCount,
-            usernames: userData.usernames,
-          };
-        } else {
-          return chatroom;
-        }
-      });
-      setChatrooms(updatedChatrooms);
-      console.log(
-        `User ${userData.username} left the chatroom ${userData.room}. Users: ${
-          userData.userCount
-        }. Usernames: ${userData.usernames.join(', ')}`
-      );
+    socket.on("user_leaves", (userData) => {
+      setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
+      console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 
     return () => {
-      socket.off('user_leaves');
+      socket.off("user_leaves");
     };
   }, [chatrooms]);
-
-  // GET ALL
-  useEffect(() => {
-    http.getChatRooms().then((chatrooms) => {
-      setChatrooms(chatrooms);
-    });
-  }, []);
 
   const value = {
     socket,
-    room,
-    setRoom,
     chatrooms,
     setChatrooms,
-    roomLists,
-    setRoomLists,
+    userRoomList,
+    setUserRoomList,
     leaveRoom,
     joinRoom,
     // //These have to go in their own slice
@@ -184,16 +105,3 @@ function ChatProvider({ children }) {
 }
 
 export { ChatContext, ChatProvider };
-
-// function postOne () {
-//   fetch('http://localhost:3001/chatrooms', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json'
-//   },
-//   body: JSON.stringify(roomData)
-// })
-//   .then(res => res.json())
-//   .then(res => getAll())
-//   .catch(error => console.log(error));
-// }

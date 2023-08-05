@@ -3,8 +3,7 @@ import RoomList from './components/RoomList';
 import RoomSelector from './components/RoomSelector';
 import ChatList from './components/ChatList';
 import Marquee from 'react-fast-marquee';
-import { useContext, useState } from 'react';
-// import { ChatContext } from './context/ChatContext';
+import { useState } from 'react';
 
 const colors = [
   'rgb(210, 185, 31)',
@@ -14,10 +13,10 @@ const colors = [
   'rgb(217,117,117)',
 ];
 
-function App() {
+function App () {
   const [bgColor, setBgColor] = useState(colors[0]);
 
-  function handleBackgroundColor() {
+  function handleBackgroundColor () {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     setBgColor(randomColor);
   }
@@ -43,11 +42,8 @@ function App() {
           handleBackgroundColor={handleBackgroundColor}></RoomSelector>
       </div>
       <ChatList handleBackgroundColor={handleBackgroundColor}></ChatList>
-      {/* <div className="page-border"></div> */}
     </>
   );
 }
 
 export default App;
-
-// background: 'rgb(182,182,182)',

@@ -1,22 +1,16 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { ChatContext } from '../context/ChatContext';
 
-function RoomSelector({ handleBackgroundColor }) {
-  const {
-    setRoom,
-    joinRoom,
-    setSelectorVisible,
-    setSelectorClosed,
-    isSelectorClosed,
-    isSelectorVisible,
-  } = useContext(ChatContext);
+function RoomSelector ({ handleBackgroundColor }) {
+  const [roomName, setRoomName] = useState('');
+  const { joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible } = useContext(ChatContext);
 
   const handleJoinRoom = (event) => {
     event.preventDefault();
     setSelectorVisible(false);
     setSelectorClosed(true);
     handleBackgroundColor();
-    joinRoom();
+    joinRoom(roomName);
   };
 
   const handleToggleSelector = () => {
@@ -41,7 +35,7 @@ function RoomSelector({ handleBackgroundColor }) {
                 autoFocus
                 placeholder='e.g. Japanese Food, Barbie, ...'
                 onChange={(event) => {
-                  setRoom(event.target.value);
+                  setRoomName(event.target.value);
                 }}></input>
               <button type='submit' className='JoinButton'>
                 Join

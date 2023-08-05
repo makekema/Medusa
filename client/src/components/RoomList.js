@@ -1,14 +1,12 @@
 import { useContext } from 'react';
 import { ChatContext } from '../context/ChatContext';
-import { MessageContext } from '../context/MessageContext';
 
-function RoomList({ handleBackgroundColor }) {
-  const { chatrooms, setSelectorClosed, setSelectorVisible } =
-    useContext(ChatContext);
-  const { handleRoomButtonClick } = useContext(MessageContext);
+
+function RoomList ({ handleBackgroundColor }) {
+  const { chatrooms, setSelectorClosed, setSelectorVisible, joinRoom } = useContext(ChatContext);
 
   const handleButtonClick = (roomName) => {
-    handleRoomButtonClick(roomName);
+    joinRoom(roomName);
     toggleSelector(roomName);
     handleBackgroundColor();
   };
@@ -23,12 +21,11 @@ function RoomList({ handleBackgroundColor }) {
       <div className='RoomList'>
         <div>
           {chatrooms.map((chatroom) => {
-            const roomName = chatroom.name;
             return (
               <button
                 className='RoomButton'
                 key={chatroom._id}
-                onClick={() => handleButtonClick(roomName)}>
+                onClick={() => handleButtonClick(chatroom.name)}>
                 {chatroom.name}
               </button>
             );
