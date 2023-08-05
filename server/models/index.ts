@@ -5,10 +5,12 @@ import path from 'path';
 import mongoose, { ConnectOptions } from 'mongoose';
 
 
-const __filename: string = fileURLToPath(import.meta.url);
-const __dirname: string = dirname(__filename);
+// const __filename: string = fileURLToPath(import.meta.url);
+// const __dirname: string = dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+// dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+
+dotenv.config();
 
 const connectionString: string = process.env.DB_CONNECTION_STRING!;
 
