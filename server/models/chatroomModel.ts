@@ -22,7 +22,26 @@ const db = {
     await Chatroom.deleteOne({ name });
   },
 
+  updateChatroom: async (name: string, updatedData: Partial<Room>): Promise<void> => {
+    await Chatroom.updateOne({ name }, { $set: updatedData });
+  }
+
 }
 
 
 export { db };
+
+
+// updateChatroom: async (name: string): Promise<void> {
+//   const chatrooms = dbConnection.collection('chatrooms');
+
+//   try {
+//       await chatrooms.updateOne(
+//           { name: roomName },
+//           { $set: updatedChatroomData }
+//       );
+//   } catch (err) {
+//       console.error('Error updating chatroom:', err.message);
+//       throw err;
+//   }
+// }

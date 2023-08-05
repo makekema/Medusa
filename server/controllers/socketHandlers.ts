@@ -24,6 +24,9 @@ async function handleCreateRoom(roomName: string) {
     throw new Error(`Chatroom with the name '${roomName}' already exists.`);
   }
   await db.saveChatroom(roomName);
+  //
+  // => is it necessary to get all chatrooms and send an update to all connected clients here?
+  //
   const chatrooms = await db.getAllChatrooms();
   io.emit("update_chatrooms", chatrooms)
   return chatrooms;
