@@ -10,7 +10,7 @@ function ChatList ({ handleBackgroundColor }) {
     <>
       <div>
         {userRoomList.rooms?.map((room) => (
-          <div className="ChatList" key={room.name}>
+          <div className="ChatList" key={room.name} data-testid='chat-list'>
             <ChatBox
               key={room._id}
               room={room.name}

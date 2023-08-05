@@ -95,6 +95,7 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
     <>
       <div
         className='MessageContainer'
+        data-testid='message-container'
         style={{ position: 'absolute', ...position }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}

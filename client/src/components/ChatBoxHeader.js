@@ -3,8 +3,8 @@ import React from 'react';
 export default function ChatBoxHeader({ name, leaveRoom }) {
   return (
     <div className='ChatBar'>
-      <div className='Room'>{name}</div>
-      <button className='LeaveButton' onClick={leaveRoom}>
+      <div className='Room' data-testid='title'>{name}</div>
+      <button className='LeaveButton' onClick={leaveRoom} data-testid='leave-button'>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='16'
