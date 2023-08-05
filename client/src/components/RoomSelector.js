@@ -1,9 +1,15 @@
 import { useContext, useState } from 'react';
 import { ChatContext } from '../context/ChatContext';
 
-function RoomSelector ({ handleBackgroundColor }) {
+function RoomSelector({ handleBackgroundColor }) {
   const [roomName, setRoomName] = useState('');
-  const { joinRoom, setSelectorVisible, setSelectorClosed, isSelectorClosed, isSelectorVisible } = useContext(ChatContext);
+  const {
+    joinRoom,
+    setSelectorVisible,
+    setSelectorClosed,
+    isSelectorClosed,
+    isSelectorVisible,
+  } = useContext(ChatContext);
 
   const handleJoinRoom = (event) => {
     event.preventDefault();
@@ -21,7 +27,7 @@ function RoomSelector ({ handleBackgroundColor }) {
   return (
     <>
       {isSelectorVisible && !isSelectorClosed && (
-        <div className='RoomSelector'>
+        <div className='RoomSelector' data-testid='room-selector'>
           <div>
             Hello, again!<br></br>Is there anything specific, you feel like
             talking about today?
@@ -29,6 +35,7 @@ function RoomSelector ({ handleBackgroundColor }) {
           <div className='SelectorInputAndButton'>
             <form onSubmit={handleJoinRoom}>
               <input
+                data-testid='room-input'
                 name='roomInput'
                 className='SelectorInput'
                 type='text'
