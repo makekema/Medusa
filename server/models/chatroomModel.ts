@@ -8,12 +8,16 @@ const db = {
     return Chatroom.find({});
   },
 
-  createChatroom: async (name: string): Promise<void> => {
-    await Chatroom.create({ name });
+  findChatroomsBySocketId: async (socketId: string): Promise<Room[]> => {
+    return Chatroom.find({ 'usernames': socketId });
   },
 
   findChatroom: async (name: string): Promise<Room | null> => {
     return Chatroom.findOne({ name });
+  },
+
+  createChatroom: async (name: string): Promise<void> => {
+    await Chatroom.create({ name });
   },
 
   deleteChatroom: async (name: string): Promise<void> => {
@@ -23,6 +27,7 @@ const db = {
   updateChatroom: async (name: string, updatedData: Partial<Room>): Promise<void> => {
     await Chatroom.updateOne({ name }, { $set: updatedData });
   }
+
 
 }
 
