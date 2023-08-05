@@ -41,7 +41,7 @@ function ChatProvider ({ children }: IChatProviderProps) {
       socket.emit("join_room", roomName);
 
       setUserRoomList((prevRoomList) => {
-        return addRoomToUserRoomListState(prevRoomList, room);
+        return addRoomToUserRoomListState(prevRoomList, room!);
       });
     }
   };
