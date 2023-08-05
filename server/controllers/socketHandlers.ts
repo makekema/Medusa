@@ -10,8 +10,13 @@ import { db } from '../models/chatroomModel';
 /* send_message */
 
 async function handleMessage(data: Message) {
-
+  //
+  console.log('message from frontend', data)
+  //
   io.to(data.room).emit("receive_message", data);
+  //
+  console.log('message to room:', data.room)
+  //
 }
 
 
@@ -24,11 +29,12 @@ async function handleCreateRoom(roomName: string) {
     throw new Error(`Chatroom with the name '${roomName}' already exists.`);
   }
   await db.createChatroom(roomName);
-  //
-  // => is it necessary to get all chatrooms and send an update to all connected clients here?
-  //
+
   const chatrooms = await db.getAllChatrooms();
   io.emit("update_chatrooms", chatrooms)
+  //
+  console.log(`New chatroom created: ${roomName}`)
+  //
   return chatrooms;
 }
 
@@ -43,8 +49,7 @@ async function handleJoinRoom(data: Room, socket: Socket) {
   socket.join(chatroom.name);
   chatroom.users += 1;
   chatroom.usernames.push(socket.id);
-  await db.createChatroom(data.name)
-  //await db.updateChatroom()
+  await db.updateChatroom(data.name, chatroom)
 
   io.emit("user_join", { 
     room: chatroom.name,
@@ -57,6 +62,9 @@ async function handleJoinRoom(data: Room, socket: Socket) {
     socket.emit('joined_empty_room', {
       room: chatroom.name
     });
+    //
+    console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`)
+    //
   }
 }
 
@@ -72,7 +80,7 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
 
   chatroom.users -= 1;
   chatroom.usernames = chatroom.usernames.filter((username: string) => username !== socket.id);
-  await db.createChatroom(roomName);
+  await db.updateChatroom(roomName, chatroom);
 
   io.emit("user_leaves", {
     room: chatroom.name,
@@ -80,9 +88,11 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
     userCount: chatroom.users,
     usernames: chatroom.usernames,
   });
-
+  //
+  console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}`);
+  //
   if (chatroom.users < 0) {
-    await db.deleteChatroom(chatroom._id);
+    await db.deleteChatroom(chatroom.name);
 
     io.emit("update_chatrooms", await db.getAllChatrooms());
   }
@@ -92,11 +102,12 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
 /* disconnect */
 
 async function handleDisconnect(socket: Socket) {
-  const chatrooms = await db.findChatroom(socket.id);
+
+  const chatrooms = await db.findChatroomsBySocketId(socket.id);
   for (const chatroom of chatrooms) {
     chatroom.users -= 1;
     chatroom.usernames = chatroom.usernames.filter((username: string) => username !== socket.id);
-    await db.createChatroom(chatroom);
+    await db.updateChatroom(chatroom.name, chatroom);
 
     socket.to(chatroom.name).emit("user_geht", {
       room: chatroom.name,
@@ -104,11 +115,11 @@ async function handleDisconnect(socket: Socket) {
       userCount: chatroom.users,
       usernames: chatroom.usernames,
     });
-
+    //
     console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}. Usernames: ${chatroom.usernames.join(", ")}`);
-    
+    //  
     if (chatroom.users < 0) {
-      await db.deleteChatroom(chatroom._id);
+      await db.deleteChatroom(chatroom.name);
       socket.emit("update_chatrooms", await db.getAllChatrooms());
     }
   }

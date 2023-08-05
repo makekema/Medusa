@@ -5,7 +5,6 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node dist/server.js",
     "build": "tsc -p tsconfig.json",
     "dev": "ts-node server.ts"
   },

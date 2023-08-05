@@ -1,5 +1,6 @@
 import { Chatroom } from '../models/Chatroom.js';
-
+import { Socket } from 'socket.io';
+import { io } from '../server.js';
 
 /* send_message */
 

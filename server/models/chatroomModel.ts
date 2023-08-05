@@ -28,7 +28,6 @@ const db = {
     await Chatroom.updateOne({ name }, { $set: updatedData });
   }
 
-
 }
 
 

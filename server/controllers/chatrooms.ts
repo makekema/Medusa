@@ -9,7 +9,7 @@ const createChatroom = async (req: Request, res: Response, next: NextFunction) =
     const { name } = req.body;
     const chatroom = new Chatroom({ name });
     await chatroom.save();
-    res.status(201).send(chatroom);
+    res.status(201).send(chatroom); // created
   } catch (err) {
     next(err);
   }
@@ -20,7 +20,7 @@ const createChatroom = async (req: Request, res: Response, next: NextFunction) =
 const findChatrooms = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const chatrooms = await Chatroom.find({});
-    res.status(200).send(chatrooms);
+    res.status(200).send(chatrooms); // OK
   } catch (err) {
     next(err);
   }
