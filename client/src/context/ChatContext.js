@@ -1,4 +1,3 @@
-import io from "socket.io-client";
 import { createContext, useEffect, useState } from "react";
 import { http } from '../apiService';
 import {
@@ -9,9 +8,10 @@ import {
   getChatroomFromChatrooms,
   updateChatrooms
 } from "./helper";
+import { socket } from "../socket";
 
 const ChatContext = createContext();
-const socket = io.connect('http://localhost:3001');
+
 
 function ChatProvider ({ children }) {
   const [chatrooms, setChatrooms] = useState([]);
@@ -56,11 +56,9 @@ function ChatProvider ({ children }) {
     http.getChatRooms().then(chatrooms => {
       setChatrooms(chatrooms);
     });
-
     socket.on("update_chatrooms", (chatrooms) => {
       setChatrooms(chatrooms);
     });
-
     return () => {
       socket.off('update_chatrooms');
     };
@@ -72,13 +70,18 @@ function ChatProvider ({ children }) {
       console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 
+    return () => {
+      socket.off("user_join");
+    };
+  }, [chatrooms]);
+
+  useEffect(() => {
     socket.on("user_leaves", (userData) => {
       setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
       console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
     });
 
     return () => {
-      socket.off("user_join");
       socket.off("user_leaves");
     };
   }, [chatrooms]);
