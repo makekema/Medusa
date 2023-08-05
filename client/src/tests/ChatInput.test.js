@@ -21,11 +21,12 @@ EDGE CASES
 describe('Chat input', () => {
   it('should call sendMessage function with the correct message', () => {
     const mockSendMessage = jest.fn();
+
     render(<ChatInput sendMessage={mockSendMessage} />);
+    
     const inputElement = screen.getByTestId('message-input');
-
     const buttonElement = screen.getByTestId('send-button');
-
+    
     const testMessage = 'Fiddle Faddle';
 
     act(() => {
@@ -39,6 +40,7 @@ describe('Chat input', () => {
 
   it('should update state as input changes', () => {
     const testInput = 'Pfaffaroo';
+    
     render(<ChatInput sendMessage={() => {}} />);
 
     const inputElement = screen.getByTestId('message-input');

@@ -5,11 +5,6 @@ import RoomSelector from '../components/RoomSelector';
 import { render, screen, act } from '@testing-library/react';
 import { ChatContext } from '../context/ChatContext';
 
-/*
-1. Room state should change when input changes
-2.  should call joinRRoom function with the correct room name
-3. verify if selectorClosed then display plus button
-*/
 const mockChatContextClosedFalse = {
   joinRoom: jest.fn(),
   setSelectorVisible: jest.fn(),
@@ -37,6 +32,7 @@ describe('Room Selector', () => {
     );
 
     const plusButton = screen.getByTestId('plus-button');
+
     expect(plusButton).toBeTruthy();
   });
 
