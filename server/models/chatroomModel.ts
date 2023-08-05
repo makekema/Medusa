@@ -5,17 +5,15 @@ import { Room } from '../types/Room'
 const db = {
 
   getAllChatrooms: async (): Promise<Room[]> => {
-    return await Chatroom.find({});
+    return Chatroom.find({});
   },
 
-  saveChatroom: async (name: string): Promise<void> => {
-    const newRoom = new Chatroom({ name });
-    await newRoom.save();
+  createChatroom: async (name: string): Promise<void> => {
+    await Chatroom.create({ name });
   },
 
   findChatroom: async (name: string): Promise<Room | null> => {
-    const chatroom = await Chatroom.findOne<Room>({ name });
-    return chatroom || null;
+    return Chatroom.findOne({ name });
   },
 
   deleteChatroom: async (name: string): Promise<void> => {
@@ -30,18 +28,3 @@ const db = {
 
 
 export { db };
-
-
-// updateChatroom: async (name: string): Promise<void> {
-//   const chatrooms = dbConnection.collection('chatrooms');
-
-//   try {
-//       await chatrooms.updateOne(
-//           { name: roomName },
-//           { $set: updatedChatroomData }
-//       );
-//   } catch (err) {
-//       console.error('Error updating chatroom:', err.message);
-//       throw err;
-//   }
-// }

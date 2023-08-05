@@ -23,7 +23,7 @@ async function handleCreateRoom(roomName: string) {
   if (existingRoom) {
     throw new Error(`Chatroom with the name '${roomName}' already exists.`);
   }
-  await db.saveChatroom(roomName);
+  await db.createChatroom(roomName);
   //
   // => is it necessary to get all chatrooms and send an update to all connected clients here?
   //
@@ -43,7 +43,8 @@ async function handleJoinRoom(data: Room, socket: Socket) {
   socket.join(chatroom.name);
   chatroom.users += 1;
   chatroom.usernames.push(socket.id);
-  await db.saveChatroom(data.name)
+  await db.createChatroom(data.name)
+  //await db.updateChatroom()
 
   io.emit("user_join", { 
     room: chatroom.name,
@@ -71,7 +72,7 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
 
   chatroom.users -= 1;
   chatroom.usernames = chatroom.usernames.filter((username: string) => username !== socket.id);
-  await db.saveChatroom(roomName);
+  await db.createChatroom(roomName);
 
   io.emit("user_leaves", {
     room: chatroom.name,
@@ -95,7 +96,7 @@ async function handleDisconnect(socket: Socket) {
   for (const chatroom of chatrooms) {
     chatroom.users -= 1;
     chatroom.usernames = chatroom.usernames.filter((username: string) => username !== socket.id);
-    await db.saveChatroom(chatroom);
+    await db.createChatroom(chatroom);
 
     socket.to(chatroom.name).emit("user_geht", {
       room: chatroom.name,
