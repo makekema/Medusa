@@ -1,21 +1,14 @@
-import { useContext } from "react";
-import { ChatContext } from "../context/ChatContext";
-import { MessageContext } from "../context/MessageContext";
+import { useContext } from 'react';
+import { ChatContext } from '../context/ChatContext';
 
 
-function RoomList() {
-  const { chatrooms, setSelectorClosed,setSelectorVisible, colors, setBgColor, bgColor, handleBackgroundColor} = useContext(ChatContext);
-  const { handleRoomButtonClick } = useContext(MessageContext);
-
-  
-
+function RoomList ({ handleBackgroundColor }) {
+  const { chatrooms, setSelectorClosed, setSelectorVisible, joinRoom } = useContext(ChatContext);
 
   const handleButtonClick = (roomName) => {
-    handleRoomButtonClick(roomName); 
+    joinRoom(roomName);
     toggleSelector(roomName);
-    handleBackgroundColor()
-    console.log('I was executed handleBf')
-
+    handleBackgroundColor();
   };
 
   const toggleSelector = () => {
@@ -25,25 +18,22 @@ function RoomList() {
 
   return (
     <>
-        <div className="RoomList" >
-          <div>
-            {chatrooms.map((chatroom) => {
-              const roomName = chatroom.name; 
-              return (
-                <button className="RoomButton"
-                  key={chatroom._id}
-                  onClick={() => handleButtonClick(roomName)}
-                >
-                  {chatroom.name}
-                </button>
-              );
-            })}
-          </div>
+      <div className='RoomList'>
+        <div>
+          {chatrooms.map((chatroom) => {
+            return (
+              <button
+                className='RoomButton'
+                key={chatroom._id}
+                onClick={() => handleButtonClick(chatroom.name)}>
+                {chatroom.name}
+              </button>
+            );
+          })}
         </div>
+      </div>
     </>
   );
 }
 
 export default RoomList;
-
-
