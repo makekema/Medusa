@@ -14,23 +14,22 @@ io.on("connection", (socket: Socket) => {
   console.log(`User Connected: ${socket.id}`);
 
 
-  socket.on("send_message", (data: any) => {
+  socket.on("send_message", (data) => {
     handleMessage(data);
   });
 
 
-  socket.on("create_room", async (roomName: string) => {
-    const chatrooms = await handleCreateRoom(roomName);
-    io.emit("update_chatrooms", chatrooms);
+  socket.on("create_room", (roomName) => {
+    handleCreateRoom(roomName);
   });
 
 
-  socket.on("join_room", (data: any) => {
+  socket.on("join_room", (data) => {
     handleJoinRoom(data);
   });
 
 
-  socket.on("leave_room", (roomName: string) => {
+  socket.on("leave_room", (roomNameg) => {
     handleLeaveRoom(roomName);
   });
 

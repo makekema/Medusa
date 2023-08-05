@@ -8,6 +8,13 @@ import dotenv from 'dotenv';
 
 const app: Express = express();
 
+// environmental variables
+
+dotenv.config();
+
+const ORIGIN = process.env.ORIGIN! // "http://localhost:3000";
+const PORT = Number(process.env.PORT)! // 3001;
+
 // express middleware
 
 app.use(cors());
@@ -24,15 +31,13 @@ const httpServer: http.Server = http.createServer(app);
 
 const io: Server = new Server(httpServer, {
   cors: {
-    origin: process.env.ORIGIN, // origin: "http://localhost:3000",
+    origin: ORIGIN,
     methods: ['GET', 'POST'],
     credentials: true
   }
 });
 
 // server
-
-const PORT: number = Number(process.env.PORT)!
 
 httpServer.listen(PORT, () => {
   console.log(`SERVER IS RUNNING ON ${PORT}`);

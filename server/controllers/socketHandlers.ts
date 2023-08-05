@@ -1,9 +1,29 @@
 import { Chatroom } from '../models/Chatroom.js';
+import { Socket } from 'socket.io';
+import { io } from '../server.js';
 
+const socket: Socket = io.socket
+
+/* INTERFACES */
+
+interface RoomData {
+  name: string;
+  time: string;
+  creator: string;
+}
+
+interface MessageSent {
+  user: string;
+  room: string;
+  message: string;
+  time: string;
+  sender: string;
+  socketId: string;
+}
 
 /* send_message */
 
-async function handleMessage(data) {
+async function handleMessage(data: MessageSent) {
   //console.log('message from frontend', data);
   io.to(data.room).emit("receive_message", data);
   //console.log('message to room:', data.room);
@@ -12,7 +32,12 @@ async function handleMessage(data) {
 
 /* create_room */
 
-async function handleCreateRoom(roomName) {
+// socket.on("create_room", async (roomName) => {
+//   const chatrooms = await handleCreateRoom(roomName);
+//   io.emit("update_chatrooms", chatrooms);
+// });
+
+async function handleCreateRoom(roomName: string) {
   const chatroom = new Chatroom({name: roomName});
   await chatroom.save();
   //console.log(`New chatroom created: ${roomName}`)
@@ -23,7 +48,7 @@ async function handleCreateRoom(roomName) {
 
 /* join_room */
 
-async function handleJoinRoom(data) {
+async function handleJoinRoom(data: RoomData) {
   const chatroom = await Chatroom.findOne({name: data.name});
   if (!chatroom) return;
 
@@ -52,7 +77,7 @@ async function handleJoinRoom(data) {
 
 /* leave_room */
 
-async function handleLeaveRoom(roomName) {
+async function handleLeaveRoom(roomName: RoomData["name"]) {
   //console.log(roomName);
   socket.leave(roomName);
 
