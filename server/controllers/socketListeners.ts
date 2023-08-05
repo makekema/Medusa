@@ -29,7 +29,7 @@ io.on("connection", (socket: Socket) => {
   });
 
 
-  socket.on("leave_room", (roomNameg) => {
+  socket.on("leave_room", (roomName) => {
     handleLeaveRoom(roomName);
   });
 
