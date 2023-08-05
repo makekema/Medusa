@@ -19,7 +19,7 @@ export type Chatroom = {
   creator: string,
 };
 
-export type ChatContext = {
+export type ChatContextType = {
   chatrooms: Chatroom[];
   setChatrooms: Dispatch<SetStateAction<Chatroom[]>>;
   userRoomList: UserRoomList;

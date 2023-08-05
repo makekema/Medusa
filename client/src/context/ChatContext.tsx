@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { ChatContext, Chatroom, UserData, UserRoomList } from './ContextTypes';
+import { ChatContextType, Chatroom, UserData, UserRoomList } from './ContextTypes';
 import { http } from '../apiService';
 import {
   createNewRoom,
@@ -15,7 +15,7 @@ type IChatProviderProps = {
   children: React.ReactNode;
 };
 
-const ChatContext = createContext<ChatContext | null>(null);
+const ChatContext = createContext<ChatContextType | null>(null);
 
 function ChatProvider ({ children }: IChatProviderProps) {
   const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
@@ -36,7 +36,7 @@ function ChatProvider ({ children }: IChatProviderProps) {
 
       if (!room) {
         socket.emit("create_room", roomName);
-        room = createNewRoom(roomName, socket.id);
+        room = createNewRoom(roomName, userRoomList.socketId);
       }
       socket.emit("join_room", roomName);
 
@@ -87,7 +87,7 @@ function ChatProvider ({ children }: IChatProviderProps) {
     };
   }, [chatrooms]);
 
-  const value: ChatContext = {
+  const value: ChatContextType = {
     chatrooms,
     setChatrooms,
     userRoomList,
@@ -102,5 +102,5 @@ function ChatProvider ({ children }: IChatProviderProps) {
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
-
 }
+export { ChatContext, ChatProvider };

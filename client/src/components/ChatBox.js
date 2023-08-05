@@ -37,10 +37,10 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
     setColorMap((prevColorMap) => {
       return {
         ...prevColorMap,
-        [socket.id]: color,
+        [socket]: color,
       };
     });
-  }, [socket.id, color]);
+  }, [socket, color]);
 
   function getColor (sender) {
     if (!colorMap[sender]) {

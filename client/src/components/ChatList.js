@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { ChatBox } from './ChatBox';
 
 function ChatList ({ handleBackgroundColor }) {
-  const { userRoomList, socket } = useContext(ChatContext);
+  const { userRoomList } = useContext(ChatContext);
 
 
   return (
@@ -14,7 +14,7 @@ function ChatList ({ handleBackgroundColor }) {
             <ChatBox
               key={room._id}
               room={room.name}
-              socket={socket}
+              socket={userRoomList.socketId}
               handleBackgroundColor={handleBackgroundColor}></ChatBox>
           </div>
         ))}
