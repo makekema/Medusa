@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { io } from '../server.js';
+import { io } from '../server';
 
 import { Message } from '../types/Message';
 import { Room } from '../types/Room';

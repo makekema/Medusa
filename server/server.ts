@@ -32,10 +32,13 @@ const httpServer: http.Server = http.createServer(app);
 const io: Server = new Server(httpServer, {
   cors: {
     origin: ORIGIN,
-    methods: ['GET', 'POST'],
-    credentials: true
+    methods: ['GET', 'POST']
+    // credentials: true
   }
 });
+
+import {ioConnect} from './controllers/socketListeners';
+ioConnect(io);
 
 // server
 
