@@ -32,3 +32,15 @@ export type ChatContextType = {
   isSelectorClosed: boolean,
   isSelectorVisible: boolean,
 };
+
+export type Message = {
+  user: string;
+  roomName: string;
+  message: string;
+  time: string;
+};
+
+export type MessageContextType = {
+  messageList: Message[];
+  sendMessage: (roomName: string, message: string) => void;
+};
