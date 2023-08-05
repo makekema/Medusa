@@ -1,18 +1,22 @@
 export const isUserAlreadyInTheRoom = (userRoomList, roomName) => {
-  const rooms = userRoomList.rooms?.some((r) => r.name === roomName);
-  return rooms.length > 0;
+  console.log("🚀 ~ file: helper.js:2 ~ isUserAlreadyInTheRoom ~ userRoomList:", userRoomList);
+  const room = userRoomList.rooms.find((room) => { if (room.name === roomName) return room; });
+  return room;
 };
 
 export function createNewRoom (roomName, creator) {
   return {
     name: roomName,
+    usernames: [],
+    users: 0,
     creator,
   };
 }
 
-export const chatroomExists = (chatrooms, roomName) => {
-  const rooms = chatrooms.some((c) => c.name === roomName);
-  return rooms.length > 0;
+export const getChatroomFromChatrooms = (chatrooms, roomName) => {
+  const room = chatrooms.find((room) => { if (room.name === roomName) return room; });
+  console.log("🚀 ~ file: helper.js:15 ~ getChatroomFromChatrooms ~ rooms:", room);
+  return room;
 };
 
 export const removeRoomFromUserRoomListState = (roomList, roomName) => {

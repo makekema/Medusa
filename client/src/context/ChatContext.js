@@ -6,7 +6,7 @@ import {
   isUserAlreadyInTheRoom,
   removeRoomFromUserRoomListState,
   addRoomToUserRoomListState,
-  chatroomExists,
+  getChatroomFromChatrooms,
   updateChatrooms
 } from "./helper";
 
@@ -23,17 +23,18 @@ function ChatProvider ({ children }) {
 
   // FUNCTIONS
   const joinRoom = (roomName) => {
-    console.log("🚀 ~ file: ChatContext.js:28 ~ joinRoom ~ roomName:", roomName);
     if (roomName !== "") {
       if (isUserAlreadyInTheRoom(userRoomList, roomName)) {
         console.log("You are already in this room");
         return;
       }
 
-      if (!chatroomExists(chatrooms, roomName)) {
+      let room = getChatroomFromChatrooms(chatrooms, roomName);
+
+      if (!room) {
         socket.emit("create_room", roomName);
+        room = createNewRoom(roomName, socket.id);
       }
-      const room = createNewRoom(roomName, socket.id);
       socket.emit("join_room", roomName);
 
       setUserRoomList((prevRoomList) => {
