@@ -6,7 +6,7 @@ import {
   calculateTop,
   getRandomColor,
 } from '../utils';
-import ChatInput from './ChatInput';
+import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 
 export function ChatBox ({ room, socket, handleBackgroundColor }) {
@@ -122,7 +122,7 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
               ))}
           </div>
 
-          <ChatInput sendMessage={handleSendMessage} />
+          <ChatBoxInput sendMessage={handleSendMessage} />
         </div>
       </div>
     </>
