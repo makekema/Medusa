@@ -19,6 +19,10 @@ async function handleMessage(data: Message) {
 
 async function handleCreateRoom(roomName: string) {
 
+  const existingRoom = await db.findChatroom(roomName);
+  if (existingRoom) {
+    throw new Error(`Chatroom with the name '${roomName}' already exists.`);
+  }
   await db.saveChatroom(roomName);
   const chatrooms = await db.getAllChatrooms();
   io.emit("update_chatrooms", chatrooms)
