@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/no-unnecessary-act */
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -27,7 +28,6 @@ describe('Chat input', () => {
 
     const testMessage = 'Fiddle Faddle';
 
-    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
       userEvent.type(inputElement, testMessage);
       userEvent.click(buttonElement);
@@ -42,7 +42,7 @@ describe('Chat input', () => {
     render(<ChatInput sendMessage={() => {}} />);
 
     const inputElement = screen.getByTestId('message-input');
-    // eslint-disable-next-line testing-library/no-unnecessary-act
+
     act(() => {
       userEvent.type(inputElement, testInput);
     });

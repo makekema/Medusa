@@ -44,7 +44,7 @@ function RoomSelector({ handleBackgroundColor }) {
                 onChange={(event) => {
                   setRoomName(event.target.value);
                 }}></input>
-              <button type='submit' className='JoinButton'>
+              <button data-testid='join-button' type='submit' className='JoinButton'>
                 Join
               </button>
             </form>
@@ -53,7 +53,7 @@ function RoomSelector({ handleBackgroundColor }) {
         </div>
       )}
       {isSelectorClosed && (
-        <div className='PlusButton'>
+        <div className='PlusButton' data-testid='plus-button'>
           <button onClick={handleToggleSelector}>+</button>
         </div>
       )}
