@@ -1,4 +1,4 @@
-import { Chatroom } from '../models/Chatroom';
+import { Chatroom } from '../models/ChatroomSchema';
 import { Request, Response, NextFunction } from 'express';
 
 

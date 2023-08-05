@@ -24,13 +24,13 @@ io.on("connection", (socket: Socket) => {
   });
 
 
-  socket.on("join_room", (data) => {
-    handleJoinRoom(data);
+  socket.on("join_room", (data, socket) => {
+    handleJoinRoom(data, socket);
   });
 
 
-  socket.on("leave_room", (roomName) => {
-    handleLeaveRoom(roomName);
+  socket.on("leave_room", (roomName, socket) => {
+    handleLeaveRoom(roomName, socket);
   });
 
 
