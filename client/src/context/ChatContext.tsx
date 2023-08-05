@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { ChatContext, Chatroom, UserData, UserRoomList } from './ContextTypes';
 import { http } from '../apiService';
 import {
   createNewRoom,
@@ -9,39 +10,6 @@ import {
   updateChatrooms
 } from "./helper";
 import { socket } from "../socket";
-
-type UserData = {
-  username: string,
-  usernames: [],
-  userCount: number,
-  room: string;
-};
-
-type UserRoomList = {
-  rooms: Chatroom[];
-  socketId: string;
-};
-
-type Chatroom = {
-  name: string,
-  usernames: string[],
-  users: number,
-  creator: string,
-};
-
-type ChatContext = {
-  chatrooms: Chatroom[];
-  setChatrooms: Dispatch<SetStateAction<Chatroom[]>>;
-  userRoomList: UserRoomList;
-  setUserRoomList: Dispatch<SetStateAction<UserRoomList>>;
-  joinRoom: (roomName: string) => void;
-  leaveRoom: (roomName: string) => void;
-  // When putting Redux this will go in another slice
-  setSelectorClosed: Dispatch<SetStateAction<boolean>>,
-  setSelectorVisible: Dispatch<SetStateAction<boolean>>,
-  isSelectorClosed: boolean,
-  isSelectorVisible: boolean,
-};
 
 type IChatProviderProps = {
   children: React.ReactNode;
