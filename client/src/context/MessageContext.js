@@ -114,12 +114,6 @@ function MessageProvider({ children }) {
     };
   }, []);
 
-  // TEST LOGS
-
-  // useEffect(() => {
-  //   console.log('messageList:', messageList);
-  // }, [messageList]);
-
   const value = {
     // message,
     // setMessage,

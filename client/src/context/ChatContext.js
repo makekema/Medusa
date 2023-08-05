@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from 'react';
 import { http } from '../apiService.js';
 
 const ChatContext = createContext();
-const socket = io.connect('http://localhost:3001');
+const socket = io('http://localhost:3001');
 
 function ChatProvider({ children }) {
   // ROOOMS

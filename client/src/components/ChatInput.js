@@ -14,6 +14,7 @@ export default function ChatInput({ sendMessage }) {
       <div className='ChatInput'>
         <form onSubmit={handleSubmit}>
           <input
+            data-testid='message-input'
             name='messageInput'
             className='MessageInput'
             value={message}
@@ -22,7 +23,7 @@ export default function ChatInput({ sendMessage }) {
               setMessage(event.target.value);
             }}
           />
-          <button type='submit' className='SendButton'>
+          <button data-testid='send-button' type='submit' className='SendButton'>
             Send
           </button>
         </form>
