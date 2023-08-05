@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
 import { io } from '../server.js';
 
-import { Chatroom } from '../models/ChatroomSchema';
 import { Message } from '../types/Message';
 import { Room } from '../types/Room';
 
@@ -11,17 +10,16 @@ import { db } from '../models/chatroomModel';
 /* send_message */
 
 async function handleMessage(data: Message) {
-  //console.log('message from frontend', data);
+
   io.to(data.room).emit("receive_message", data);
-  //console.log('message to room:', data.room);
 }
 
 
 /* create_room */
 
 async function handleCreateRoom(roomName: string) {
+
   await db.saveChatroom(roomName);
-  //console.log(`New chatroom created: ${roomName}`)
   const chatrooms = await db.getAllChatrooms();
   io.emit("update_chatrooms", chatrooms)
   return chatrooms;
@@ -31,6 +29,7 @@ async function handleCreateRoom(roomName: string) {
 /* join_room */
 
 async function handleJoinRoom(data: Room, socket: Socket) {
+
   const chatroom = await db.findChatroom(data.name);
   if (!chatroom) return;
 
@@ -46,21 +45,18 @@ async function handleJoinRoom(data: Room, socket: Socket) {
     usernames: chatroom.usernames,
   });
 
-  //console.log('chatroom.users <= 1:', chatroom.users <= 1);
   if (chatroom.users <= 1) {
     socket.emit('joined_empty_room', {
       room: chatroom.name
     });
   }
-  
-  //console.log(`user with Id: ${socket.id} joined room: ${chatroom.name} number of users ${chatroom.users}, names of users ${chatroom.usernames}`);
 }
 
 
 /* leave_room */
 
 async function handleLeaveRoom(roomName: string, socket: Socket) {
-  //console.log(roomName);
+
   socket.leave(roomName);
 
   const chatroom = await db.findChatroom(roomName);
@@ -68,9 +64,7 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
 
   chatroom.users -= 1;
   chatroom.usernames = chatroom.usernames.filter((username: string) => username !== socket.id);
-  await chatroom.save();
-
-  //console.log(chatroom.name, chatroom.users, chatroom.usernames);
+  await db.saveChatroom(roomName);
 
   io.emit("user_leaves", {
     room: chatroom.name,
@@ -79,13 +73,10 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
     usernames: chatroom.usernames,
   });
 
-  //console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}`);
-
   if (chatroom.users < 0) {
-    await Chatroom.deleteOne({_id: chatroom._id});
+    await db.deleteChatroom(chatroom._id);
 
-    //console.log(`Chatroom ${chatroom.name} has been deleted.`);
-    io.emit("update_chatrooms", await Chatroom.find({}));
+    io.emit("update_chatrooms", await db.getAllChatrooms());
   }
 }
 
@@ -97,7 +88,7 @@ async function handleDisconnect(socket: Socket) {
   for (const chatroom of chatrooms) {
     chatroom.users -= 1;
     chatroom.usernames = chatroom.usernames.filter((username: string) => username !== socket.id);
-    await chatroom.save();
+    await db.saveChatroom(chatroom);
 
     socket.to(chatroom.name).emit("user_geht", {
       room: chatroom.name,
@@ -109,13 +100,10 @@ async function handleDisconnect(socket: Socket) {
     console.log(`User with ID ${socket.id} left room ${chatroom.name}. Number of users: ${chatroom.users}. Usernames: ${chatroom.usernames.join(", ")}`);
     
     if (chatroom.users < 0) {
-      await Chatroom.deleteOne({_id: chatroom._id}); 
-
-      //console.log(`Chatroom ${chatroom.name} has been deleted.`);
-      socket.emit("update_chatrooms", await Chatroom.find({})); 
+      await db.deleteChatroom(chatroom._id);
+      socket.emit("update_chatrooms", await db.getAllChatrooms());
     }
   }
-  //console.log(`User disconnected: ${socket.id}`);
 }
 
 
