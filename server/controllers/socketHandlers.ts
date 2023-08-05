@@ -3,7 +3,9 @@ import { io } from '../server.js';
 
 import { Chatroom } from '../models/ChatroomSchema';
 import { Message } from '../types/Message';
-import { Room } from '../types/Room'
+import { Room } from '../types/Room';
+
+import { db } from '../models/chatroomModel';
 
 
 /* send_message */
@@ -18,11 +20,10 @@ async function handleMessage(data: Message) {
 /* create_room */
 
 async function handleCreateRoom(roomName: string) {
-  const chatroom = new Chatroom({name: roomName});
-  await chatroom.save();
+  await db.saveChatroom(roomName);
   //console.log(`New chatroom created: ${roomName}`)
-  io.emit("update_chatrooms", await Chatroom.find({}))
-  const chatrooms = await Chatroom.find({});
+  const chatrooms = await db.getAllChatrooms();
+  io.emit("update_chatrooms", chatrooms)
   return chatrooms;
 }
 
