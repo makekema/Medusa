@@ -21,7 +21,6 @@ function MessageProvider ({ children }: IMessagePRoviderProps) {
   };
 
   useEffect(() => {
-    socket.on('connect', () => console.log("Socket Connected"));
     socket.on('receive_message', (message: Message) => {
       setMessageList((prevList: Message[]) => [...prevList, message]);
     });
@@ -32,7 +31,6 @@ function MessageProvider ({ children }: IMessagePRoviderProps) {
     });
 
     return () => {
-      socket.off('connect');
       socket.off("receive_message");
       socket.off("joined_empty_room");
     };

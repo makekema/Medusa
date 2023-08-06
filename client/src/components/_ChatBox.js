@@ -21,7 +21,6 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   // MESSAGE FUNCTIONALITY
-
   const handleSendMessage = (message) => {
     sendMessage(room, message);
   };
@@ -31,8 +30,7 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
     leaveRoom(room);
   };
 
-  // COLORS
-
+  // Colors of the usernames
   useEffect(() => {
     setColorMap((prevColorMap) => {
       return {
@@ -55,12 +53,13 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
     return colorMap[sender];
   }
 
+
+  // Generate random position
   useEffect(() => {
     setPosition({ top: calculateTop(), left: calculateLeft() });
   }, []);
 
-  // MOUSE DRAG AND DROP
-
+  // Move chatbox with mouse
   function handleMouseDown (event) {
     setIsDragging(true);
     setDragOffset({
@@ -82,14 +81,16 @@ export function ChatBox ({ room, socket, handleBackgroundColor }) {
     setIsDragging(false);
   }
 
+
+  // Auto scroll when there is a new message
   const messagesEndRef = useRef(null);
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
   useEffect(() => {
     scrollToBottom();
   }, [messageList]);
+
 
   return (
     <>

@@ -57,10 +57,15 @@ function ChatProvider ({ children }: IChatProviderProps) {
     http.getChatRooms().then((chatrooms: Chatroom[]) => {
       setChatrooms(chatrooms);
     });
+    socket.on('connect', () => setUserRoomList(prevUserRoomlist => {
+      console.log('Socket Connected');
+      return { rooms: [...prevUserRoomlist.rooms], socketId: socket.id };
+    }));
     socket.on("update_chatrooms", (chatrooms: Chatroom[]) => {
       setChatrooms(chatrooms);
     });
     return () => {
+      socket.off('connect');
       socket.off('update_chatrooms');
     };
   }, []);

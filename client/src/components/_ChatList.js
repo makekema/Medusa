@@ -14,7 +14,7 @@ function ChatList ({ handleBackgroundColor }) {
             <ChatBox
               key={room._id}
               room={room.name}
-              socket={userRoomList.socketId}
+              socketId={userRoomList.socketId}
               handleBackgroundColor={handleBackgroundColor}></ChatBox>
           </div>
         ))}

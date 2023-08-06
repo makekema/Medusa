@@ -1,7 +1,7 @@
 import './index.css';
 import RoomList from './components/RoomList';
 import RoomSelector from './components/RoomSelector';
-import ChatList from './components/ChatList';
+import ChatBoxList from './components/ChatBoxList';
 import Marquee from 'react-fast-marquee';
 import { useState } from 'react';
 
@@ -41,7 +41,7 @@ function App () {
         <RoomSelector
           handleBackgroundColor={handleBackgroundColor}></RoomSelector>
       </div>
-      <ChatList handleBackgroundColor={handleBackgroundColor}></ChatList>
+      <ChatBoxList handleBackgroundColor={handleBackgroundColor}></ChatBoxList>
     </>
   );
 }
