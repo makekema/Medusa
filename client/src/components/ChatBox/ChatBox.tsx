@@ -9,6 +9,7 @@ import {
 import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType, MessageContextType } from '../../context/ContextTypes';
+import useWindowMove from '../../hooks/useWindowMove';
 
 type IChatBoxProps = {
   roomName: string,
@@ -19,17 +20,14 @@ type IChatBoxProps = {
 export function ChatBox ({ roomName, socketId, handleBackgroundColor }: IChatBoxProps) {
   const { messageList, sendMessage } = useContext(MessageContext) as MessageContextType;
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
+  const { position, handleMouseDown, handleMouseMove, handleMouseUp } = useWindowMove();
+
   //Color states
   // const [colorMap, setColorMap] = useState({});
   // const [color, setColor] = useState(
   //   '#' + ((Math.random() * 0xffffff) << 0).toString(16)
   // );
   // Define the color variable
-
-  // Position states
-  const [position, setPosition] = useState({ top: '-1000px', left: '-1000px' });
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   // MESSAGE FUNCTIONALITY
   const handleSendMessage = (message: string) => {
@@ -63,34 +61,6 @@ export function ChatBox ({ roomName, socketId, handleBackgroundColor }: IChatBox
   //   }
   //   return colorMap[socketId];
   // }
-
-
-  // Generate random position
-  useEffect(() => {
-    setPosition({ top: calculateTop(), left: calculateLeft() });
-  }, []);
-
-  // Move chatbox with mouse
-  function handleMouseDown (e: React.MouseEvent<HTMLDivElement>) {
-    setIsDragging(true);
-    setDragOffset({
-      x: e.clientX - parseInt(position.left),
-      y: e.clientY - parseInt(position.top),
-    });
-  }
-
-  function handleMouseMove (e: React.MouseEvent<HTMLDivElement>) {
-    if (isDragging) {
-      setPosition({
-        left: e.clientX - dragOffset.x + 'px',
-        top: e.clientY - dragOffset.y + 'px',
-      });
-    }
-  }
-
-  function handleMouseUp () {
-    setIsDragging(false);
-  }
 
   // Auto scroll when there is a new message
   const messagesEndRef = useRef<HTMLDivElement>(null);
