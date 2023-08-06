@@ -3,15 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { ChatProvider } from './context/ChatContext';
-import { MessageProvider } from './context/MessageContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
     <ChatProvider>
-      <MessageProvider>
-        <App />
-      </MessageProvider>
+      <App />
     </ChatProvider>
   </React.StrictMode>
 );
