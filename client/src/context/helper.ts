@@ -1,4 +1,4 @@
-import { Chatroom, Message, UserData, UserRoomList } from "./ContextTypes";
+import { Chatroom, UserData, UserRoomList } from "./ContextTypes";
 
 export const isUserAlreadyInTheRoom = (userRoomList: UserRoomList, roomName: string) => {
   const room = userRoomList.rooms.find((room) => { if (room.name === roomName) return room; });
@@ -11,13 +11,6 @@ export function createNewRoom (roomName: string, creator: string) {
     usernames: [],
     users: 0,
     creator,
-  };
-}
-
-export function createNewMessage (user: string, message: string, roomName: string): Message {
-  return {
-    user, roomName, message,
-    time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
   };
 }
 
@@ -56,5 +49,3 @@ export const updateChatrooms = (chatrooms: Chatroom[], userData: UserData) => {
     return chatroom;
   });
 };
-
-export const DEFAULT_MESSAGE = "Congrats, you are the first user that came up with this brilliant topic. Feel free, to wait for others to join you and in the meantime, maybe inspire yourself with what your friends talk about.";
