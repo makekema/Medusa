@@ -1,6 +1,6 @@
 import { ChatContext } from '../context/ChatContext';
 import React, { useContext } from 'react';
-import { ChatBox } from './ChatBox';
+import { ChatBox } from './ChatBox/ChatBox';
 import { ChatContextType } from '../context/ContextTypes';
 
 type IChatBoxListProps = {

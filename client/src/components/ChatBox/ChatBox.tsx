@@ -1,14 +1,14 @@
 import { useContext, useEffect, useState, useRef } from 'react';
-import { MessageContext } from '../context/MessageContext';
-import { ChatContext } from '../context/ChatContext';
+import { MessageContext } from '../../context/MessageContext';
+import { ChatContext } from '../../context/ChatContext';
 import {
   calculateLeft,
   calculateTop,
   getRandomColor,
-} from '../utils';
+} from '../../utils';
 import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
-import { ChatContextType, MessageContextType } from '../context/ContextTypes';
+import { ChatContextType, MessageContextType } from '../../context/ContextTypes';
 
 type IChatBoxProps = {
   roomName: string,
