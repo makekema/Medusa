@@ -1,17 +1,21 @@
 import { useContext, useState } from 'react';
 import { ChatContext } from '../context/ChatContext';
+import { ChatContextType } from '../context/ContextTypes';
 
-function RoomSelector({ handleBackgroundColor }) {
+type IRoomSelectorProps = {
+  handleBackgroundColor: () => void;
+};
+
+export default function RoomSelector ({ handleBackgroundColor }: IRoomSelectorProps) {
   const [roomName, setRoomName] = useState('');
   const {
     joinRoom,
     setSelectorVisible,
     setSelectorClosed,
     isSelectorClosed,
-    isSelectorVisible,
-  } = useContext(ChatContext);
+    isSelectorVisible } = useContext(ChatContext) as ChatContextType;
 
-  const handleJoinRoom = (event) => {
+  const handleJoinRoom = (event: React.FormEvent) => {
     event.preventDefault();
     setSelectorVisible(false);
     setSelectorClosed(true);
@@ -27,7 +31,7 @@ function RoomSelector({ handleBackgroundColor }) {
   return (
     <>
       {isSelectorVisible && !isSelectorClosed && (
-        <div className='RoomSelector' data-testid='room-selector'>
+        <div className='RoomSelector'>
           <div>
             Hello, again!<br></br>Is there anything specific, you feel like
             talking about today?
@@ -35,7 +39,6 @@ function RoomSelector({ handleBackgroundColor }) {
           <div className='SelectorInputAndButton'>
             <form onSubmit={handleJoinRoom}>
               <input
-                data-testid='room-input'
                 name='roomInput'
                 className='SelectorInput'
                 type='text'
@@ -44,7 +47,7 @@ function RoomSelector({ handleBackgroundColor }) {
                 onChange={(event) => {
                   setRoomName(event.target.value);
                 }}></input>
-              <button data-testid='join-button' type='submit' className='JoinButton'>
+              <button type='submit' className='JoinButton'>
                 Join
               </button>
             </form>
@@ -53,12 +56,10 @@ function RoomSelector({ handleBackgroundColor }) {
         </div>
       )}
       {isSelectorClosed && (
-        <div className='PlusButton' data-testid='plus-button'>
+        <div className='PlusButton'>
           <button onClick={handleToggleSelector}>+</button>
         </div>
       )}
     </>
   );
 }
-
-export default RoomSelector;

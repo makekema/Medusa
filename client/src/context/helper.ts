@@ -1,9 +1,11 @@
-export const isUserAlreadyInTheRoom = (userRoomList, roomName) => {
+import { Chatroom, UserData, UserRoomList } from "./ContextTypes";
+
+export const isUserAlreadyInTheRoom = (userRoomList: UserRoomList, roomName: string) => {
   const room = userRoomList.rooms.find((room) => { if (room.name === roomName) return room; });
   return room;
 };
 
-export function createNewRoom (roomName, creator) {
+export function createNewRoom (roomName: string, creator: string) {
   return {
     name: roomName,
     usernames: [],
@@ -12,12 +14,12 @@ export function createNewRoom (roomName, creator) {
   };
 }
 
-export const getChatroomFromChatrooms = (chatrooms, roomName) => {
+export const getChatroomFromChatrooms = (chatrooms: Chatroom[], roomName: string) => {
   const room = chatrooms.find((room) => { if (room.name === roomName) return room; });
   return room;
 };
 
-export const removeRoomFromUserRoomListState = (roomList, roomName) => {
+export const removeRoomFromUserRoomListState = (roomList: UserRoomList, roomName: string) => {
   const updatedRooms = roomList.rooms.filter(
     (r) => r.name !== roomName
   );
@@ -26,7 +28,7 @@ export const removeRoomFromUserRoomListState = (roomList, roomName) => {
   return updatedRoomList;
 };
 
-export const addRoomToUserRoomListState = (roomList, room) => {
+export const addRoomToUserRoomListState = (roomList: UserRoomList, room: Chatroom) => {
   const updatedRooms = [
     ...roomList.rooms, room,
   ];
@@ -35,7 +37,7 @@ export const addRoomToUserRoomListState = (roomList, room) => {
   return updatedRoomList;
 };
 
-export const updateChatrooms = (chatrooms, userData) => {
+export const updateChatrooms = (chatrooms: Chatroom[], userData: UserData) => {
   return chatrooms.map((chatroom) => {
     if (chatroom.name === userData.room) {
       return {

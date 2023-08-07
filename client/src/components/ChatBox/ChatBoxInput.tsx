@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 
-export default function ChatInput({ sendMessage }) {
-  const [message, setMessage] = useState('');
+type IChatBoxInput = {
+  sendMessage: (message: string) => void;
+};
 
-  function handleSubmit(event) {
-    event.preventDefault();
+export default function ChatInput ({ sendMessage }: IChatBoxInput) {
+  const [message, setMessage] = useState<string>('');
+
+  function handleSubmit (e: React.FormEvent) {
+    e.preventDefault();
     sendMessage(message);
     setMessage('');
   }
@@ -14,16 +18,15 @@ export default function ChatInput({ sendMessage }) {
       <div className='ChatInput'>
         <form onSubmit={handleSubmit}>
           <input
-            data-testid='message-input'
             name='messageInput'
             className='MessageInput'
             value={message}
             type='text'
-            onChange={(event) => {
-              setMessage(event.target.value);
+            onChange={(e) => {
+              setMessage(e.target.value);
             }}
           />
-          <button data-testid='send-button' type='submit' className='SendButton'>
+          <button type='submit' className='SendButton'>
             Send
           </button>
         </form>
