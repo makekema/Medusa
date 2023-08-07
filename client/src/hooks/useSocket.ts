@@ -3,10 +3,10 @@ import { socket } from '../socket';
 
 export interface Event {
   name: string;
-  handler (...args: any[]): any;
+  handler(...args: any[]): any;
 }
 
-export function useSocket (events: Event[]) {
+export function useSocket(events: Event[]) {
   useEffect(() => {
     for (const event of events) {
       socket.on(event.name, event.handler);
