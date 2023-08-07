@@ -10,6 +10,7 @@ import {
   updateChatrooms
 } from "./helper";
 import { socket } from "../socket";
+import { Event, useSocket } from "../hooks/useSocket";
 
 type IChatProviderProps = {
   children: React.ReactNode;
@@ -20,6 +21,36 @@ const ChatContext = createContext<ChatContextType | null>(null);
 function ChatProvider ({ children }: IChatProviderProps) {
   const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
   const [userRoomList, setUserRoomList] = useState<UserRoomList>({ socketId: socket.id, rooms: [] });
+  const events: Event[] = [
+    {
+      name: 'connect',
+      handler: () => setUserRoomList(prevUserRoomlist => {
+        console.log('Socket Connected');
+        return { rooms: [...prevUserRoomlist.rooms], socketId: socket.id };
+      })
+    },
+    {
+      name: 'update_chatrooms',
+      handler: (chatrooms: Chatroom[]) => {
+        setChatrooms(chatrooms);
+      }
+    },
+    {
+      name: 'user_join',
+      handler: (userData: UserData) => {
+        setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
+        console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
+      }
+    },
+    {
+      name: 'user_leaves',
+      handler: (userData: UserData) => {
+        setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
+        console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
+      }
+    }
+  ];
+  useSocket(events);
 
   // SELECTOR
   const [isSelectorVisible, setSelectorVisible] = useState(true);
@@ -31,15 +62,12 @@ function ChatProvider ({ children }: IChatProviderProps) {
         console.log("You are already in this room");
         return;
       }
-
       let room = getChatroomFromChatrooms(chatrooms, roomName);
-
       if (!room) {
         socket.emit("create_room", roomName);
         room = createNewRoom(roomName, userRoomList.socketId);
       }
       socket.emit("join_room", roomName);
-
       setUserRoomList((prevRoomList) => {
         return addRoomToUserRoomListState(prevRoomList, room!);
       });
@@ -57,40 +85,7 @@ function ChatProvider ({ children }: IChatProviderProps) {
     http.getChatRooms().then((chatrooms: Chatroom[]) => {
       setChatrooms(chatrooms);
     });
-    socket.on('connect', () => setUserRoomList(prevUserRoomlist => {
-      console.log('Socket Connected');
-      return { rooms: [...prevUserRoomlist.rooms], socketId: socket.id };
-    }));
-    socket.on("update_chatrooms", (chatrooms: Chatroom[]) => {
-      setChatrooms(chatrooms);
-    });
-    return () => {
-      socket.off('connect');
-      socket.off('update_chatrooms');
-    };
   }, []);
-
-  useEffect(() => {
-    socket.on("user_join", (userData: UserData) => {
-      setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
-      console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
-    });
-
-    return () => {
-      socket.off("user_join");
-    };
-  }, [chatrooms]);
-
-  useEffect(() => {
-    socket.on("user_leaves", (userData: UserData) => {
-      setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
-      console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
-    });
-
-    return () => {
-      socket.off("user_leaves");
-    };
-  }, [chatrooms]);
 
   const value: ChatContextType = {
     chatrooms,
