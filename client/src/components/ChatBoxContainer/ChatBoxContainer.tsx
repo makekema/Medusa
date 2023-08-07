@@ -1,11 +1,13 @@
 import { ChatContext } from '../../context/ChatContext';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ChatBox } from './ChatBox';
-import { ChatContextType } from '../../context/ContextTypes';
+import { ChatContextType, UserData } from '../../context/ContextTypes';
 import { createNewMessage, DEFAULT_MESSAGE } from '../helper';
 import { socket } from '../../socket';
 import { Message } from '../types';
 import { Event, useSocket } from '../../hooks/useSocket';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type IChatBoxListProps = {
   handleBackgroundColor: () => void;
@@ -25,9 +27,21 @@ export default function ChatBoxContainer({
     },
     {
       name: 'joined_empty_room',
-      handler: (data) => {
-        const message = createNewMessage(socket.id, DEFAULT_MESSAGE, data.room);
-        setMessageList((prevList: Message[]) => [...prevList, message]);
+      handler: () => {
+        toast.success(DEFAULT_MESSAGE, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        // const message = createNewMessage(socket.id, DEFAULT_MESSAGE, data.room);
+        // setMessageList((prevList: Message[]) => [...prevList, message]);
+      },
+    },
+    {
+      name: 'user_leaves',
+      handler: (userData: UserData) => {
+        const messsage = `User ${userData.username} left the chatroom ${userData.room}`;
+        toast.info(messsage, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       },
     },
   ];
@@ -44,6 +58,7 @@ export default function ChatBoxContainer({
   return (
     <>
       <div>
+        <ToastContainer />
         {userRoomList.rooms?.map((room) => (
           <div className='ChatList' key={room.name}>
             <ChatBox

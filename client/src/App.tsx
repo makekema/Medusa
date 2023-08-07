@@ -1,12 +1,12 @@
 import './index.css';
 import { useState } from 'react';
 import ChatBoxContainer from './components/ChatBoxContainer/ChatBoxContainer';
-import ChatroomManager from './components/ChatRoomManager/ChatRoomManager';
+import ChatroomManager from './components/ChatRoomManager/ChatRoomManager'; 
 
 const colors = [
   'rgb(210, 185, 31)',
   'rgb(37,73,155)',
-  'rgb(130,125,188',
+  'rgb(130,125,188)',
   'rgb(244,90,51)',
   'rgb(217,117,117)',
 ];
