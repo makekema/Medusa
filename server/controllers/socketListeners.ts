@@ -1,53 +1,48 @@
 import { Socket } from 'socket.io';
 import { io } from '../server';
+import { Message } from '../types/Message';
 
 import {
-  handleMessage,
   handleCreateRoom,
   handleJoinRoom,
   handleLeaveRoom,
-  handleDisconnect
+  handleDisconnect,
 } from './socketHandlers';
 
-const ioConnect = (io: any) => {
+let sockets: Socket[] = [];
 
-  io.on("connection", (socket: Socket) => {
-    console.log(`User Connected: ${socket.id}`);
-  
-  
-    socket.on("send_message", (data) => {
-      console.log('Message send 1234');
-      handleMessage(data);
+const ioConnect = (io: any) => {
+  io.on('connection', (socket: Socket) => {
+    sockets.push(socket);
+
+    socket.on('send_message', (message: Message) => {
+      if (message.user) {
+        sockets.map((socket) => {
+          if (socket.id !== message.user) {
+            socket.emit('receive_message', message);
+          }
+        });
+      }
     });
-  
-  
-    socket.on("create_room", (roomName) => {
-      //
-      console.log('room created');
-      //
+
+    socket.on('create_room', (roomName) => {
       handleCreateRoom(roomName);
     });
-  
-  
-    socket.on("join_room", (data) => {
-      console.log('joinjoinjoin1234')
+
+    socket.on('join_room', (data) => {
       handleJoinRoom(data, socket);
     });
-  
-  
-    socket.on("leave_room", (roomName) => {
-      console.log('leave Room 1234')
+
+    socket.on('leave_room', (roomName) => {
       handleLeaveRoom(roomName, socket);
     });
-  
-  
-    socket.on("disconnect", () => {
-      console.log('disconnect1234')
+
+    socket.on('disconnect', () => {
+      console.log('disconnect listener fired');
+      sockets = sockets.filter((storedSocket) => storedSocket.id !== socket.id);
       handleDisconnect(socket);
     });
-  
   });
+};
 
-}
-
-export { ioConnect }
+export { ioConnect };

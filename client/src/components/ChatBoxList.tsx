@@ -17,8 +17,9 @@ export default function ChatBoxList ({ handleBackgroundColor }: IChatBoxListProp
   const events: Event[] = [
     {
       name: 'receive_message',
-      handler: (message: Message) => {
+      handler: (message: any) => {
         setMessageList((prevList: Message[]) => [...prevList, message]);
+        console.log(message)
       }
     },
     {
@@ -27,7 +28,8 @@ export default function ChatBoxList ({ handleBackgroundColor }: IChatBoxListProp
         const message = createNewMessage(socket.id, DEFAULT_MESSAGE, data.room);
         setMessageList((prevList: Message[]) => [...prevList, message]);
       }
-    }
+    },
+    
   ];
   useSocket(events);
 

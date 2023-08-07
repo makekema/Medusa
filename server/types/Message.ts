@@ -1,10 +1,6 @@
-type Message = {
+export type Message = {
   user: string;
-  room: string;
+  roomName: string;
   message: string;
   time: string;
-  sender: string;
-  socketId: string;
-}
-
-export { Message };
+};
