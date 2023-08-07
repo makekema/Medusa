@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Marquee from 'react-fast-marquee';
-import RoomList from './RoomList';
-import RoomSelector from './RoomSelector';
+import RoomList from './ChatRoomMarquee';
+import RoomSelector from './NewChatRoomForm';
 
 export interface IChatroomManagerProps {
   handleBackgroundColor: () => void;
