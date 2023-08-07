@@ -52,10 +52,6 @@ function ChatProvider ({ children }: IChatProviderProps) {
   ];
   useSocket(events);
 
-  // SELECTOR
-  const [isSelectorVisible, setSelectorVisible] = useState(true);
-  const [isSelectorClosed, setSelectorClosed] = useState(false);
-
   const joinRoom = (roomName: string) => {
     if (roomName !== "") {
       if (isUserAlreadyInTheRoom(userRoomList, roomName)) {
@@ -94,11 +90,6 @@ function ChatProvider ({ children }: IChatProviderProps) {
     setUserRoomList,
     leaveRoom,
     joinRoom,
-    // //These have to go in their own slice
-    setSelectorClosed,
-    setSelectorVisible,
-    isSelectorClosed,
-    isSelectorVisible,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
