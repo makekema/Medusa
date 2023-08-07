@@ -10,6 +10,7 @@ const testPort: string = process.env.TEST_PORT!;
 
 let httpServer: http.Server;
 
+
 beforeAll((done) => {
   httpServer = app.listen(testPort, () => {
     console.log(`Test server is running on ${testPort}`);
@@ -32,3 +33,7 @@ describe('Server', () => {
     expect(response.statusCode).toBe(404);
   });
 });
+
+describe('Router, chatrooms', () => {
+  
+})

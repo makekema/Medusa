@@ -6,8 +6,20 @@ dotenv.config();
 const connectionString: string = process.env.DB_CONNECTION_STRING!;
 
 
-afterAll(async () => {
-  mongoose.disconnect();
+// afterAll(async () => {
+//   await mongoose.disconnect();
+// });
+
+afterAll((done) => {
+  mongoose.disconnect()
+    .then(() => {
+      console.log('Database disconnected');
+      done();
+    })
+    .catch((error) => {
+      console.error('Failed to disconnect from database:', error);
+      done(error);
+    });
 });
 
 
@@ -23,3 +35,4 @@ describe('Test database connection', () => {
     });
   });
 });
+
