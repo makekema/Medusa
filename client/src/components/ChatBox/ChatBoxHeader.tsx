@@ -1,3 +1,5 @@
+import React from 'react'
+
 type IChatBoxHeaderProps = {
   roomName: string,
   leaveRoom: (roomName: string) => void;
