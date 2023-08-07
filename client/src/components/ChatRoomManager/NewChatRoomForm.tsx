@@ -17,7 +17,7 @@ export default function RoomSelector ({
   isSelectorClosed,
   isSelectorVisible,
 }: IRoomSelectorProps) {
-  const [roomName, setRoomName] = useState('');
+  const [chatroomName, setChatroomName] = useState('');
   const { joinRoom } = useContext(ChatContext) as ChatContextType;
 
   const handleJoinRoom = (event: React.FormEvent) => {
@@ -25,7 +25,7 @@ export default function RoomSelector ({
     setSelectorVisible(false);
     setSelectorClosed(true);
     handleBackgroundColor();
-    joinRoom(roomName);
+    joinRoom(chatroomName);
   };
 
   const handleToggleSelector = () => {
@@ -50,7 +50,7 @@ export default function RoomSelector ({
                 autoFocus
                 placeholder='e.g. Japanese Food, Barbie, ...'
                 onChange={(event) => {
-                  setRoomName(event.target.value);
+                  setChatroomName(event.target.value);
                 }}></input>
               <button type='submit' className='JoinButton'>
                 Join

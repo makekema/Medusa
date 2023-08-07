@@ -4,6 +4,7 @@ import cors from 'cors';
 import { Server } from 'socket.io';
 import { router } from './router';
 import dotenv from 'dotenv';
+import {ioConnect} from './controllers/socketListeners';
 
 
 const app: Express = express();
@@ -37,7 +38,6 @@ const io: Server = new Server(httpServer, {
   }
 });
 
-import {ioConnect} from './controllers/socketListeners';
 ioConnect(io);
 
 // server

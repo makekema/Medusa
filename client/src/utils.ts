@@ -9,7 +9,6 @@ export function getRandomColor () {
 
 export function calculateLeft () {
   const value = `${Math.floor(Math.random() * (window.innerWidth - 300))}px`;
-  console.log('VALEU', value);
   return value;
 }
 

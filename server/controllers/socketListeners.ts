@@ -1,53 +1,53 @@
 import { Socket } from 'socket.io';
 import { io } from '../server';
+import { ChatRoom, Message } from '../models/types';
 
 import {
-  handleMessage,
   handleCreateRoom,
   handleJoinRoom,
   handleLeaveRoom,
-  handleDisconnect
+  handleDisconnect,
 } from './socketHandlers';
 
-const ioConnect = (io: any) => {
+let sockets: Socket[] = [];
 
-  io.on("connection", (socket: Socket) => {
-    console.log(`User Connected: ${socket.id}`);
-  
-  
-    socket.on("send_message", (data) => {
-      console.log('Message send 1234');
-      handleMessage(data);
+const ioConnect = (io: any) => {
+  io.on('connection', (socket: Socket) => {
+    sockets.push(socket);
+
+    socket.on('send_message', (message: Message) => {
+      if (message.user) {
+        sockets.map((socket) => {
+          if (socket.id !== message.user) {
+            socket.emit('receive_message', message);
+          }
+        });
+      }
     });
-  
-  
-    socket.on("create_room", (roomName) => {
-      //
-      console.log('room created');
-      //
-      handleCreateRoom(roomName);
+
+    socket.on('create_room', (roomName: string) => {
+      const newChatroom: ChatRoom = {
+        name: roomName,
+        users: 0,
+        usernames: [],
+        creator: socket.id,
+      };
+      handleCreateRoom(newChatroom);
     });
-  
-  
-    socket.on("join_room", (data) => {
-      console.log('joinjoinjoin1234')
-      handleJoinRoom(data, socket);
+
+    socket.on('join_room', (roomName: string) => {
+      handleJoinRoom(roomName, socket);
     });
-  
-  
-    socket.on("leave_room", (roomName) => {
-      console.log('leave Room 1234')
+
+    socket.on('leave_room', (roomName) => {
       handleLeaveRoom(roomName, socket);
     });
-  
-  
-    socket.on("disconnect", () => {
-      console.log('disconnect1234')
+
+    socket.on('disconnect', () => {
+      sockets = sockets.filter((storedSocket) => storedSocket.id !== socket.id);
       handleDisconnect(socket);
     });
-  
   });
+};
 
-}
-
-export { ioConnect }
+export { ioConnect };
