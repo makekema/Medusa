@@ -26,9 +26,4 @@ export type ChatContextType = {
   setUserRoomList: Dispatch<SetStateAction<UserRoomList>>;
   joinRoom: (roomName: string) => void;
   leaveRoom: (roomName: string) => void;
-  // When putting Redux this will go in another slice
-  setSelectorClosed: Dispatch<SetStateAction<boolean>>,
-  setSelectorVisible: Dispatch<SetStateAction<boolean>>,
-  isSelectorClosed: boolean,
-  isSelectorVisible: boolean,
 };

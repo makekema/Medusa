@@ -1,19 +1,24 @@
-import React, { useContext, useState } from 'react';
-import { ChatContext } from '../context/ChatContext';
-import { ChatContextType } from '../context/ContextTypes';
+import { Dispatch, SetStateAction, useContext, useState } from 'react';
+import { ChatContextType } from '../../context/ContextTypes';
+import { ChatContext } from '../../context/ChatContext';
 
 type IRoomSelectorProps = {
   handleBackgroundColor: () => void;
+  setSelectorClosed: Dispatch<SetStateAction<boolean>>,
+  setSelectorVisible: Dispatch<SetStateAction<boolean>>,
+  isSelectorClosed: boolean,
+  isSelectorVisible: boolean,
 };
 
-export default function RoomSelector ({ handleBackgroundColor }: IRoomSelectorProps) {
+export default function RoomSelector ({
+  handleBackgroundColor,
+  setSelectorClosed,
+  setSelectorVisible,
+  isSelectorClosed,
+  isSelectorVisible,
+}: IRoomSelectorProps) {
   const [roomName, setRoomName] = useState('');
-  const {
-    joinRoom,
-    setSelectorVisible,
-    setSelectorClosed,
-    isSelectorClosed,
-    isSelectorVisible } = useContext(ChatContext) as ChatContextType;
+  const { joinRoom } = useContext(ChatContext) as ChatContextType;
 
   const handleJoinRoom = (event: React.FormEvent) => {
     event.preventDefault();
