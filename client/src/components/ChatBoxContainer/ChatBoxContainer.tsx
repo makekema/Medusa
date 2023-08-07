@@ -29,19 +29,10 @@ export default function ChatBoxContainer({
       name: 'joined_empty_room',
       handler: () => {
         toast.success(DEFAULT_MESSAGE, {
-          position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.BOTTOM_CENTER,
         });
         // const message = createNewMessage(socket.id, DEFAULT_MESSAGE, data.room);
         // setMessageList((prevList: Message[]) => [...prevList, message]);
-      },
-    },
-    {
-      name: 'user_leaves',
-      handler: (userData: UserData) => {
-        const messsage = `User ${userData.username} left the chatroom ${userData.room}`;
-        toast.info(messsage, {
-          position: toast.POSITION.TOP_CENTER,
-        });
       },
     },
   ];

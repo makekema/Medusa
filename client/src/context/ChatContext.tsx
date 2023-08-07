@@ -1,5 +1,10 @@
-import { createContext, useEffect, useState } from "react";
-import { ChatContextType, Chatroom, UserData, UserRoomList } from './ContextTypes';
+import { createContext, useEffect, useState } from 'react';
+import {
+  ChatContextType,
+  Chatroom,
+  UserData,
+  UserRoomList,
+} from './ContextTypes';
 import { http } from '../apiService';
 import {
   createNewRoom,
@@ -7,10 +12,11 @@ import {
   removeRoomFromUserRoomListState,
   addRoomToUserRoomListState,
   getChatroomFromChatrooms,
-  updateChatrooms
-} from "./helper";
-import { socket } from "../socket";
-import { Event, useSocket } from "../hooks/useSocket";
+  updateChatrooms,
+} from './helper';
+import { socket } from '../socket';
+import { Event, useSocket } from '../hooks/useSocket';
+import { toast } from 'react-toastify';
 
 type IChatProviderProps = {
   children: React.ReactNode;
@@ -18,59 +24,83 @@ type IChatProviderProps = {
 
 const ChatContext = createContext<ChatContextType | null>(null);
 
-function ChatProvider ({ children }: IChatProviderProps) {
+function ChatProvider({ children }: IChatProviderProps) {
   const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
-  const [userRoomList, setUserRoomList] = useState<UserRoomList>({ socketId: socket.id, rooms: [] });
+  const [userRoomList, setUserRoomList] = useState<UserRoomList>({
+    socketId: socket.id,
+    rooms: [],
+  });
   const events: Event[] = [
     {
       name: 'connect',
-      handler: () => setUserRoomList(prevUserRoomlist => {
-        console.log('Socket Connected');
-        return { rooms: [...prevUserRoomlist.rooms], socketId: socket.id };
-      })
+      handler: () =>
+        setUserRoomList((prevUserRoomlist) => {
+          console.log('Socket Connected');
+          return { rooms: [...prevUserRoomlist.rooms], socketId: socket.id };
+        }),
     },
     {
       name: 'update_chatrooms',
       handler: (chatrooms: Chatroom[]) => {
         setChatrooms(chatrooms);
-      }
+      },
     },
     {
       name: 'user_join',
       handler: (userData: UserData) => {
-        setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
-        console.log(`User ${userData.username} joined the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
-      }
+        setChatrooms((prevChatRooms) =>
+          updateChatrooms(prevChatRooms, userData)
+        );
+        console.log(
+          `User ${userData.username} joined the chatroom ${
+            userData.room
+          }. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(
+            ', '
+          )}`
+        );
+      },
     },
     {
       name: 'user_leaves',
       handler: (userData: UserData) => {
-        setChatrooms((prevChatRooms) => updateChatrooms(prevChatRooms, userData));
-        console.log(`User ${userData.username} left the chatroom ${userData.room}. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(", ")}`);
-      }
-    }
+        setChatrooms((prevChatRooms) =>
+          updateChatrooms(prevChatRooms, userData)
+        );
+        const messsage = `User ${userData.username} left the chatroom ${userData.room}`;
+        toast.info(messsage, {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+        // console.log(
+        //   `User ${userData.username} left the chatroom ${
+        //     userData.room
+        //   }. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(
+        //     ', '
+        //   )}`
+        // );
+      },
+    },
   ];
   useSocket(events);
 
   const joinRoom = (roomName: string) => {
-    if (roomName !== "") {
+    if (roomName !== '') {
       if (isUserAlreadyInTheRoom(userRoomList, roomName)) {
-        console.log("You are already in this room");
+        console.log('You are already in this room');
         return;
       }
       let room = getChatroomFromChatrooms(chatrooms, roomName);
       if (!room) {
-        socket.emit("create_room", roomName);
+        socket.emit('create_room', roomName);
         room = createNewRoom(roomName, userRoomList.socketId);
       }
-      socket.emit("join_room", roomName);
+      socket.emit('join_room', roomName);
       setUserRoomList((prevRoomList) => {
         return addRoomToUserRoomListState(prevRoomList, room!);
       });
     }
   };
   const leaveRoom = (roomName: string) => {
-    socket.emit("leave_room", roomName);
+    socket.emit('leave_room', roomName);
 
     setUserRoomList((prevRoomList) => {
       return removeRoomFromUserRoomListState(prevRoomList, roomName);
