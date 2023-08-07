@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { io } from '../server';
-import { Message } from '../types/Message';
+import { ChatRoom, Message } from '../models/types';
 
 import {
   handleCreateRoom,
@@ -25,12 +25,18 @@ const ioConnect = (io: any) => {
       }
     });
 
-    socket.on('create_room', (roomName) => {
-      handleCreateRoom(roomName);
+    socket.on('create_room', (roomName: string) => {
+      const newChatroom: ChatRoom = {
+        name: roomName,
+        users: 0,
+        usernames: [],
+        creator: socket.id,
+      };
+      handleCreateRoom(newChatroom);
     });
 
-    socket.on('join_room', (data) => {
-      handleJoinRoom(data, socket);
+    socket.on('join_room', (roomName: string) => {
+      handleJoinRoom(roomName, socket);
     });
 
     socket.on('leave_room', (roomName) => {
@@ -38,7 +44,6 @@ const ioConnect = (io: any) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('disconnect listener fired');
       sockets = sockets.filter((storedSocket) => storedSocket.id !== socket.id);
       handleDisconnect(socket);
     });

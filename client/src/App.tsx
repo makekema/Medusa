@@ -1,6 +1,6 @@
 import './index.css';
 import { useState } from 'react';
-import ChatBoxList from './components/ChatBoxList';
+import ChatBoxContainer from './components/ChatBoxContainer/ChatBoxContainer';
 import ChatroomManager from './components/ChatRoomManager/ChatRoomManager';
 
 const colors = [
@@ -11,10 +11,10 @@ const colors = [
   'rgb(217,117,117)',
 ];
 
-function App () {
+function App() {
   const [bgColor, setBgColor] = useState(colors[0]);
 
-  function handleBackgroundColor () {
+  function handleBackgroundColor() {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     setBgColor(randomColor);
   }
@@ -24,7 +24,8 @@ function App () {
       <div className='App' style={{ backgroundColor: bgColor }}>
         <ChatroomManager handleBackgroundColor={handleBackgroundColor} />
       </div>
-      <ChatBoxList handleBackgroundColor={handleBackgroundColor}></ChatBoxList>
+      <ChatBoxContainer
+        handleBackgroundColor={handleBackgroundColor}></ChatBoxContainer>
     </>
   );
 }
