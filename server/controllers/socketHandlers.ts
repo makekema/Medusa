@@ -13,7 +13,7 @@ async function handleCreateRoom(chatroom: ChatRoom) {
 
   const chatrooms = await db.getAllChatrooms();
   io.emit('update_chatrooms', chatrooms);
-  
+
   return chatrooms;
 }
 
@@ -46,7 +46,7 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
   const chatroom = await db.findChatroom(roomName);
   if (!chatroom) return;
 
-  chatroom.users -= 1;
+  chatroom.users--;
   chatroom.usernames = chatroom.usernames.filter(
     (username: string) => username !== socket.id
   );
@@ -58,19 +58,17 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
     userCount: chatroom.users,
     usernames: chatroom.usernames,
   });
-  if (chatroom.users < 0) {
+  if (chatroom.users < 1) {
     await db.deleteChatroom(chatroom.name);
 
     io.emit('update_chatrooms', await db.getAllChatrooms());
   }
 }
 
-/* disconnect */
-
 async function handleDisconnect(socket: Socket) {
   const chatrooms = await db.findChatroomsBySocketId(socket.id);
   for (const chatroom of chatrooms) {
-    chatroom.users -= 1;
+    chatroom.users--;
     chatroom.usernames = chatroom.usernames.filter(
       (username: string) => username !== socket.id
     );
@@ -82,8 +80,8 @@ async function handleDisconnect(socket: Socket) {
       userCount: chatroom.users,
       usernames: chatroom.usernames,
     });
-    
-    if (chatroom.users < 0) {
+
+    if (chatroom.users < 1) {
       await db.deleteChatroom(chatroom.name);
       socket.emit('update_chatrooms', await db.getAllChatrooms());
     }
