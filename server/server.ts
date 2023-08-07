@@ -12,8 +12,8 @@ const app: Express = express();
 
 dotenv.config();
 
-const ORIGIN =  "http://localhost:3000"; // process.env.ORIGIN! //
-const PORT =  3001; // Number(process.env.PORT)! //
+const ORIGIN: string =  process.env.ORIGIN! // "http://localhost:3000"
+const PORT: string =  process.env.PORT! // 3001
 
 // express middleware
 
