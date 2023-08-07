@@ -1,9 +1,7 @@
 import './index.css';
-import RoomList from './components/RoomList';
-import RoomSelector from './components/RoomSelector';
-import ChatBoxList from './components/ChatBoxList';
-import Marquee from 'react-fast-marquee';
 import { useState } from 'react';
+import ChatBoxList from './components/ChatBoxList';
+import ChatroomManager from './components/ChatRoomManager/ChatRoomManager';
 
 const colors = [
   'rgb(210, 185, 31)',
@@ -24,22 +22,7 @@ function App () {
   return (
     <>
       <div className='App' style={{ backgroundColor: bgColor }}>
-        <div className='room-list-container'>
-          <div
-            className='RoomListMarquee'
-            style={{ background: 'rgb(182,182,182)', color: 'rgb(15,11,39)' }}>
-            <Marquee pauseOnHover={true} speed={50}>
-              <RoomList
-                handleBackgroundColor={handleBackgroundColor}></RoomList>
-            </Marquee>
-            <Marquee pauseOnHover={true} speed={25}>
-              <RoomList
-                handleBackgroundColor={handleBackgroundColor}></RoomList>
-            </Marquee>
-          </div>
-        </div>
-        <RoomSelector
-          handleBackgroundColor={handleBackgroundColor}></RoomSelector>
+        <ChatroomManager handleBackgroundColor={handleBackgroundColor} />
       </div>
       <ChatBoxList handleBackgroundColor={handleBackgroundColor}></ChatBoxList>
     </>
