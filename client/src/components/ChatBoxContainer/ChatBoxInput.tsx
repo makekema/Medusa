@@ -25,8 +25,9 @@ export default function ChatInput ({ sendMessage }: IChatBoxInput) {
             onChange={(e) => {
               setMessage(e.target.value);
             }}
+            data-testid='message-input'
           />
-          <button type='submit' className='SendButton'>
+          <button type='submit' className='SendButton' data-testid='send-button'>
             Send
           </button>
         </form>

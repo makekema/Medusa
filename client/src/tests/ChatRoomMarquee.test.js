@@ -1,6 +1,6 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import RoomList from '../components/RoomList';
+import RoomList from '../components/ChatRoomManager/ChatRoomMarquee';
 import { render, screen } from '@testing-library/react';
 import { ChatContext } from '../context/ChatContext';
 
@@ -16,7 +16,7 @@ const mockChatContext = {
   setSelectorClosed: jest.fn(),
 };
 
-describe('Room List component', () => {
+describe.only('Room List component', () => {
   it('should render an array of chatrooms as buttons', () => {
     render(
       <ChatContext.Provider value={mockChatContext}>

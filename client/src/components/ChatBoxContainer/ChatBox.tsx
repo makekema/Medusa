@@ -14,7 +14,7 @@ type IChatBoxProps = {
   handleBackgroundColor: () => void;
 };
 
-export function ChatBox ({ messageList, sendMessage, roomName, socketId, handleBackgroundColor }: IChatBoxProps) {
+export default function ChatBox ({ messageList, sendMessage, roomName, socketId, handleBackgroundColor }: IChatBoxProps) {
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
   const { position, handleMouseDown, handleMouseMove, handleMouseUp } = useWindowMove();
 
@@ -43,7 +43,8 @@ export function ChatBox ({ messageList, sendMessage, roomName, socketId, handleB
         style={{ position: 'absolute', ...position }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}>
+        onMouseUp={handleMouseUp}
+        data-testid='message-container'>
         <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
 
         <div className='ChatWindow'>
@@ -54,7 +55,7 @@ export function ChatBox ({ messageList, sendMessage, roomName, socketId, handleB
                 <div className={`Message ${messageContent.user}`} key={i}>
                   <div
                     className='User_Time'
-                  // style={{ color: getColor(messageContent.user) }}
+                    // style={{ color: getColor(messageContent.user) }}
                   >
                     {messageContent.user === socketId
                       ? 'You'
@@ -62,7 +63,11 @@ export function ChatBox ({ messageList, sendMessage, roomName, socketId, handleB
                     , {messageContent.time}
                   </div>
 
-                  <div className='MessageContent'>{messageContent.message}</div>
+                  <div
+                    className='MessageContent'
+                    data-testid={`message-content-${i}`}>
+                    {messageContent.message}
+                  </div>
                   <div ref={messagesEndRef}></div>
                 </div>
               ))}

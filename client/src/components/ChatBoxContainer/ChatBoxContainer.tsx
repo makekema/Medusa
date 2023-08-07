@@ -1,6 +1,6 @@
 import { ChatContext } from '../../context/ChatContext';
 import { useContext, useEffect, useState } from 'react';
-import { ChatBox } from './ChatBox';
+import ChatBox from './ChatBox';
 import { ChatContextType } from '../../context/ContextTypes';
 import { createNewMessage, DEFAULT_MESSAGE } from '../helper';
 import { socket } from '../../socket';
@@ -45,7 +45,7 @@ export default function ChatBoxContainer({
     <>
       <div>
         {userRoomList.rooms?.map((room) => (
-          <div className='ChatList' key={room.name}>
+          <div className='ChatList' key={room.name} data-testid='chat-list'>
             <ChatBox
               key={room.name}
               messageList={messageList}

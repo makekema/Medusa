@@ -1,32 +1,29 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import RoomSelector from '../components/RoomSelector';
+import RoomSelector from '../components/ChatRoomManager/NewChatRoomForm';
 import { render, screen, act } from '@testing-library/react';
 import { ChatContext } from '../context/ChatContext';
 
-const mockChatContextClosedFalse = {
+const mockChatContext = {
   joinRoom: jest.fn(),
-  setSelectorVisible: jest.fn(),
-  setSelectorClosed: jest.fn(),
-  isSelectorClosed: false,
-  isSelectorVisible: true,
 };
-
-const mockChatContextClosedTrue = {
-  joinRoom: jest.fn(),
-  setSelectorVisible: jest.fn(),
-  setSelectorClosed: jest.fn(),
-  isSelectorClosed: true,
-  isSelectorVisible: true,
-};
-
+const mockSetSelectorVisible = jest.fn();
+const mockSetSelectorClosed = jest.fn();
+const mockIsSelectorClosedFalse = false;
+const mockIsSelectorClosedTrue = true;
+const mockIsSelectorVisible = true;
 const mockHandleBackgroundColor = jest.fn();
 
 describe('Room Selector', () => {
   it('should show the plus button if selectedClosed is true', () => {
     render(
-      <ChatContext.Provider value={mockChatContextClosedTrue}>
+      <ChatContext.Provider
+        value={mockChatContext}
+        setSelectorClosed={mockSetSelectorClosed}
+        setSelectorVisible={mockSetSelectorVisible}
+        isSelectorClosed={mockIsSelectorClosedTrue}
+        isSelectorVisible={mockIsSelectorVisible}>
         <RoomSelector handleBackgroundColor={mockHandleBackgroundColor} />
       </ChatContext.Provider>
     );
@@ -38,7 +35,7 @@ describe('Room Selector', () => {
 
   it('input should update the room state', () => {
     render(
-      <ChatContext.Provider value={mockChatContextClosedFalse}>
+      <ChatContext.Provider value={mockChatContext}>
         <RoomSelector handleBackgroundColor={mockHandleBackgroundColor} />
       </ChatContext.Provider>
     );
@@ -56,7 +53,12 @@ describe('Room Selector', () => {
 
   it('should call joinRoom function with the correct room name', () => {
     render(
-      <ChatContext.Provider value={mockChatContextClosedFalse}>
+      <ChatContext.Provider
+        value={mockChatContext}
+        setSelectorClosed={mockSetSelectorClosed}
+        setSelectorVisible={mockSetSelectorVisible}
+        isSelectorClosed={mockIsSelectorClosedFalse}
+        isSelectorVisible={mockIsSelectorVisible}>
         <RoomSelector handleBackgroundColor={mockHandleBackgroundColor} />
       </ChatContext.Provider>
     );
@@ -70,7 +72,7 @@ describe('Room Selector', () => {
       userEvent.click(join);
     });
 
-    expect(mockChatContextClosedFalse.joinRoom).toHaveBeenCalledWith(
+    expect(mockChatContext.joinRoom).toHaveBeenCalledWith(
       testRoomName
     );
   });
