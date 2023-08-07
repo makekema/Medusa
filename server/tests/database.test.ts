@@ -6,18 +6,26 @@ dotenv.config();
 const connectionString: string = process.env.DB_CONNECTION_STRING!;
 
 
-// afterAll(async () => {
-//   await mongoose.disconnect();
-// });
+beforeAll((done) => {
+  mongoose.connect(connectionString)
+    .then(() => {
+      //console.log('database connected');
+      done();
+    })
+    .catch((error: Error) => {
+      //console.error('MongoDB connection error:', error);
+      done(error);
+    });
+});
 
 afterAll((done) => {
   mongoose.disconnect()
     .then(() => {
-      console.log('Database disconnected');
+      //console.log('Database disconnected');
       done();
     })
     .catch((error) => {
-      console.error('Failed to disconnect from database:', error);
+      //console.error('Failed to disconnect from database:', error);
       done(error);
     });
 });
@@ -25,14 +33,18 @@ afterAll((done) => {
 
 describe('Test database connection', () => {
   it('should establish a connection to the MongoDB database', (done) => {
-    mongoose.connect(connectionString);
-    mongoose.connection.on('connected', () => {
+    if (mongoose.connection.readyState === 1) {
       expect(mongoose.connection.readyState).toBe(1);
       done();
-    });
-    mongoose.connection.on('error', (error) => {
-      done(error);
-    });
+    } else {
+      mongoose.connection.on('connected', () => {
+        expect(mongoose.connection.readyState).toBe(1);
+        done();
+      });
+      mongoose.connection.on('error', (error) => {
+        done(error);
+      });
+    }
   });
 });
 

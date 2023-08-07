@@ -34,13 +34,18 @@ writeConcern: {
 };
 
 
-mongoose.connect(connectionString, options)
-  .then(() => {
-    console.log('database connected');
-  })
-  .catch((error: Error) => {
-    console.error('MongoDB connection error:', error);
-  });
+export const connectToDatabase = (): Promise<void> => {
+  return mongoose.connect(connectionString, options)
+    .then(() => {
+      console.log('database connected');
+    })
+    .catch((error: Error) => {
+      console.error('MongoDB connection error:', error);
+      throw error;
+    });
+};
+
+connectToDatabase();
 
 
 export { mongoose };
