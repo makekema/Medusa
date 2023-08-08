@@ -1,3 +1,5 @@
+import { Message, UserData, ChatRoom } from '../models/types';
+
 const mockMessage: Message = {
   user: "John Doe",
   roomName: "General",
@@ -18,3 +20,5 @@ const mockChatRoom: ChatRoom = {
   usernames: ["John Doe", "Jane Doe"],
   creator: "Admin",
 };
+
+export { mockMessage, mockUserData, mockChatRoom };

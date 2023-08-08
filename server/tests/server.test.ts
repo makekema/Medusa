@@ -1,7 +1,8 @@
 import request from 'supertest';
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import { io, app } from '../server';
 import { connectToDatabase } from '../models/index';
+import { Chatroom } from '../models/ChatroomSchema';
 
 
 beforeAll((done) => {
@@ -81,6 +82,32 @@ describe('Router, chatrooms', () => {
       .get('/chatrooms')
       .expect(200);
     expect(Array.isArray(response.body)).toBeTruthy();
+  });
+
+});
+
+
+describe('Chatroom Model Test', () => {
+  it('should create & save a chatroom successfully', async () => {
+    const chatroomData = {
+      name: 'Test Room',
+      creator: 'CreatorUser',
+    };
+
+    const validChatroom = new Chatroom(chatroomData);
+    let savedChatroom: Document;
+
+    try {
+      savedChatroom = await validChatroom.save();
+    } catch (error) {
+      throw new Error('Should save the chatroom successfully');
+    }
+
+    expect(savedChatroom._id).toBeDefined();
+    expect(savedChatroom.get('name')).toBe(chatroomData.name);
+    expect(savedChatroom.get('users')).toBe(0);
+    expect(savedChatroom.get('usernames')).toStrictEqual([]);
+    expect(savedChatroom.get('creator')).toBe(chatroomData.creator);
   });
 
 });

@@ -7,7 +7,7 @@ export type Message = {
 
 export type UserData = {
   username: string;
-  usernames: [];
+  usernames: string[];
   userCount: number;
   room: string;
 };
