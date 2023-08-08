@@ -3,6 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { io, app } from '../server';
 import { connectToDatabase } from '../models/index';
 import { Chatroom } from '../models/ChatroomSchema';
+import { mockChatRoom } from './mocks';
 
 
 beforeAll((done) => {
@@ -32,7 +33,7 @@ afterAll((done) => {
 });
 
 
-describe('Server connection', () => {
+describe('Test server connection', () => {
 
   it('should return 404, when accessing an unknown endpoint', async () => {
     const response = await request(app).get('/unknown');
@@ -66,7 +67,7 @@ describe('Test database connection', () => {
 });
 
 
-describe('Router, chatrooms', () => {
+describe('Test router endpoints', () => {
 
   it('should create a new chatroom', async () => {
     const chatroomName = 'Test Room';
@@ -87,27 +88,23 @@ describe('Router, chatrooms', () => {
 });
 
 
-describe('Chatroom Model Test', () => {
-  it('should create & save a chatroom successfully', async () => {
-    const chatroomData = {
-      name: 'Test Room',
-      creator: 'CreatorUser',
-    };
+describe('Test chatroom model', () => {
+  it('should create and save a chatroom successfully', async () => {
 
-    const validChatroom = new Chatroom(chatroomData);
+    const validChatroom = new Chatroom(mockChatRoom);
     let savedChatroom: Document;
 
     try {
       savedChatroom = await validChatroom.save();
     } catch (error) {
-      throw new Error('Should save the chatroom successfully');
+      throw new Error('cannot save chatroom');
     }
 
     expect(savedChatroom._id).toBeDefined();
-    expect(savedChatroom.get('name')).toBe(chatroomData.name);
-    expect(savedChatroom.get('users')).toBe(0);
-    expect(savedChatroom.get('usernames')).toStrictEqual([]);
-    expect(savedChatroom.get('creator')).toBe(chatroomData.creator);
+    expect(savedChatroom.get('name')).toBe(mockChatRoom.name);
+    expect(savedChatroom.get('users')).toBe(mockChatRoom.users);
+    expect(savedChatroom.get('usernames')).toStrictEqual(mockChatRoom.usernames);
+    expect(savedChatroom.get('creator')).toBe(mockChatRoom.creator);
   });
 
 });
