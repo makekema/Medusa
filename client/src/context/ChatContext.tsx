@@ -16,7 +16,6 @@ import {
 } from './helper';
 import { socket } from '../socket';
 import { Event, useSocket } from '../hooks/useSocket';
-import { toast } from 'react-toastify';
 
 type IChatProviderProps = {
   children: React.ReactNode;
@@ -66,18 +65,6 @@ function ChatProvider({ children }: IChatProviderProps) {
         setChatrooms((prevChatRooms) =>
           updateChatrooms(prevChatRooms, userData)
         );
-        notifyUserLeft(userData.room, userRoomList, userData.username);
-        // const messsage = `User ${userData.username} left the chatroom ${userData.room}`;
-        // toast.info(messsage, {
-        //   position: toast.POSITION.BOTTOM_CENTER,
-        // });
-        // console.log(
-        //   `User ${userData.username} left the chatroom ${
-        //     userData.room
-        //   }. Users: ${userData.userCount}. Usernames: ${userData.usernames.join(
-        //     ', '
-        //   )}`
-        // );
       },
     },
   ];
@@ -113,22 +100,6 @@ function ChatProvider({ children }: IChatProviderProps) {
       setChatrooms(chatrooms);
     });
   }, []);
-
-  const notifyUserLeft = (
-    roomName: string,
-    userRoomList: UserRoomList,
-    username: string
-  ) => {
-    const userInRoom = userRoomList.rooms.find(
-      (currentRoom: Chatroom) => currentRoom.name === roomName
-    );
-    if (userInRoom) {
-      const messsage = `User ${username} left the chatroom ${roomName}`;
-      toast.info(messsage, {
-        position: toast.POSITION.BOTTOM_CENTER,
-      });
-    }
-  };
 
   const value: ChatContextType = {
     chatrooms,

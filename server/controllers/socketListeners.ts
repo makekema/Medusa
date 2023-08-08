@@ -1,5 +1,4 @@
 import { Socket } from 'socket.io';
-import { io } from '../server';
 import { ChatRoom, Message } from '../models/types';
 
 import {
@@ -39,8 +38,14 @@ const ioConnect = (io: any) => {
       handleJoinRoom(roomName, socket);
     });
 
-    socket.on('leave_room', (roomName) => {
+    socket.on('leave_room', (roomName: string) => {
       handleLeaveRoom(roomName, socket);
+      const username = socket.id;
+      sockets.map((socket) => {
+        if (socket.id !== username) {
+          socket.emit('notify_user_left', { roomName, username });
+        }
+      });
     });
 
     socket.on('disconnect', () => {

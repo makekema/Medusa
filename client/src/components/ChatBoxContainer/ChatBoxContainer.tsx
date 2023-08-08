@@ -1,7 +1,7 @@
 import { ChatContext } from '../../context/ChatContext';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import ChatBox from './ChatBox';
-import { ChatContextType } from '../../context/ContextTypes';
+import { ChatContextType, Chatroom } from '../../context/ContextTypes';
 import { createNewMessage, DEFAULT_MESSAGE } from '../helper';
 import { socket } from '../../socket';
 import { Message } from '../types';
@@ -29,6 +29,22 @@ export default function ChatBoxContainer({
       name: 'joined_empty_room',
       handler: () => {
         toast.success(DEFAULT_MESSAGE, {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
+      },
+    },
+    {
+      name: 'notify_user_left',
+      handler: (roomName: string, username: string) => {
+        /*
+        **** NO ROOMLIST ****
+        console.log(userRoomList)
+        const userInRoom = userRoomList.rooms.find((currentRoom: Chatroom) => currentRoom.name === roomName);
+        console.log(userInRoom);
+         */
+
+        const messsage = `User ${username} left the chatroom ${roomName}`;
+        toast.info(messsage, {
           position: toast.POSITION.BOTTOM_CENTER,
         });
       },

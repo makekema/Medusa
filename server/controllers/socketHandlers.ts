@@ -58,6 +58,7 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
     userCount: chatroom.users,
     usernames: chatroom.usernames,
   });
+
   if (chatroom.users < 1) {
     await db.deleteChatroom(chatroom.name);
 
