@@ -4,13 +4,13 @@ import { ChatContext } from '../../context/ChatContext';
 
 type IRoomSelectorProps = {
   handleBackgroundColor: () => void;
-  setSelectorClosed: Dispatch<SetStateAction<boolean>>,
-  setSelectorVisible: Dispatch<SetStateAction<boolean>>,
-  isSelectorClosed: boolean,
-  isSelectorVisible: boolean,
+  setSelectorClosed: Dispatch<SetStateAction<boolean>>;
+  setSelectorVisible: Dispatch<SetStateAction<boolean>>;
+  isSelectorClosed: boolean;
+  isSelectorVisible: boolean;
 };
 
-export default function RoomSelector ({
+export default function RoomSelector({
   handleBackgroundColor,
   setSelectorClosed,
   setSelectorVisible,
@@ -44,6 +44,7 @@ export default function RoomSelector ({
           <div className='SelectorInputAndButton'>
             <form onSubmit={handleJoinRoom}>
               <input
+                data-testid='room-input'
                 name='roomInput'
                 className='SelectorInput'
                 type='text'
@@ -52,7 +53,10 @@ export default function RoomSelector ({
                 onChange={(event) => {
                   setChatroomName(event.target.value);
                 }}></input>
-              <button type='submit' className='JoinButton'>
+              <button
+                type='submit'
+                className='JoinButton'
+                data-testid='join-button'>
                 Join
               </button>
             </form>
@@ -61,7 +65,7 @@ export default function RoomSelector ({
         </div>
       )}
       {isSelectorClosed && (
-        <div className='PlusButton'>
+        <div className='PlusButton' data-testid='plus-button'>
           <button onClick={handleToggleSelector}>+</button>
         </div>
       )}

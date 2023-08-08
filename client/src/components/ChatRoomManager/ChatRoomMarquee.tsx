@@ -28,7 +28,7 @@ export default function RoomList ({
 
   return (
     <>
-      <div className='RoomList'>
+      <div className='RoomList' >
         <div>
           {chatrooms.map((chatroom) => {
             return (
