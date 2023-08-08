@@ -4,3 +4,8 @@ export type Message = {
   message: string;
   time: string;
 };
+
+export type MessageDetails = {
+  room: string;
+  user: string;
+};

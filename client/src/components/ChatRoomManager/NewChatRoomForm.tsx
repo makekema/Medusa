@@ -10,7 +10,7 @@ type IRoomSelectorProps = {
   isSelectorVisible: boolean;
 };
 
-export default function RoomSelector({
+export default function NewChatRoomForm({
   handleBackgroundColor,
   setSelectorClosed,
   setSelectorVisible,
