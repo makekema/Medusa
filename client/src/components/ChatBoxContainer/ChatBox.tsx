@@ -1,24 +1,32 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { ChatContext } from '../../context/ChatContext';
 import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType } from '../../context/ContextTypes';
 import useWindowMove from '../../hooks/useWindowMove';
+import useWindowResize from '../../hooks/useWindowResize';
 import { Message } from '../types';
-import { getRandomColor } from '../../utils';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
 
 type IChatBoxProps = {
-  messageList: Message[],
+  messageList: Message[];
   sendMessage: (roomName: string, message: string) => void;
-  roomName: string,
-  socketId: string,
+  roomName: string;
+  socketId: string;
   handleBackgroundColor: () => void;
 };
 
-export default function ChatBox ({ messageList, sendMessage, roomName, socketId, handleBackgroundColor }: IChatBoxProps) {
+export default function ChatBox({
+  messageList,
+  sendMessage,
+  roomName,
+  socketId,
+  handleBackgroundColor,
+}: IChatBoxProps) {
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
-  const { position, handleMouseDown, handleMouseMove, handleMouseUp } = useWindowMove();
+  const { position, handleMouseDown, handleMouseMove, handleMouseUp } =
+    useWindowMove();
+  const { size, handleSizeMouseDown } = useWindowResize();
   const { getColor } = useRandomUserNameColor(socketId);
 
   // MESSAGE FUNCTIONALITY
@@ -43,19 +51,31 @@ export default function ChatBox ({ messageList, sendMessage, roomName, socketId,
     <>
       <div
         className='MessageContainer'
-        style={{ position: 'absolute', ...position }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+        style={{
+          position: 'absolute',
+          ...position,
+          width: size.x,
+          height: size.y,
+        }}
         data-testid='message-container'>
-        <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
+        <ChatBoxHeader
+          roomName={roomName}
+          leaveRoom={handleLeaveRoom}
+          handleMouseDown={handleMouseDown}
+          handleMouseMove={handleMouseMove}
+          handleMouseUp={handleMouseUp}
+        />
 
-        <div className='ChatWindow'>
+        <div className='ChatWindow' style={{ width: size.x, height: size.y }}>
           <div className='MessageWrapper'>
             {messageList
               .filter((messageContent) => messageContent.roomName === roomName)
               .map((messageContent, i) => (
-                <div className={`Message ${messageContent.user === socketId ? 'me' : 'other'}`} key={i}>
+                <div
+                  className={`Message ${
+                    messageContent.user === socketId ? 'me' : 'other'
+                  }`}
+                  key={i}>
                   <div
                     className='User_Time'
                     style={{ color: getColor(messageContent.user) }}>
@@ -76,6 +96,9 @@ export default function ChatBox ({ messageList, sendMessage, roomName, socketId,
           </div>
 
           <ChatBoxInput sendMessage={handleSendMessage} />
+          <div className='resizeIcon' onMouseDown={handleSizeMouseDown}>
+            {'[\\]'}
+          </div>
         </div>
       </div>
     </>
