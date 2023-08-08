@@ -4,11 +4,11 @@ import { ChatContextType } from '../../context/ContextTypes';
 
 type IRoomListProps = {
   handleBackgroundColor: () => void;
-  setSelectorClosed: Dispatch<SetStateAction<boolean>>,
-  setSelectorVisible: Dispatch<SetStateAction<boolean>>,
+  setSelectorClosed: Dispatch<SetStateAction<boolean>>;
+  setSelectorVisible: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function RoomList ({
+export default function ChatRoomMarquee({
   handleBackgroundColor,
   setSelectorClosed,
   setSelectorVisible,
@@ -28,7 +28,7 @@ export default function RoomList ({
 
   return (
     <>
-      <div className='RoomList' >
+      <div className='RoomList'>
         <div>
           {chatrooms.map((chatroom) => {
             return (
