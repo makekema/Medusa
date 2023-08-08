@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "ts-node server.ts",
-    "test": "jest --detectOpenHandles"
+    "test": "NODE_ENV=test jest --detectOpenHandles"
   },
   "babel": {
     "presets": [
