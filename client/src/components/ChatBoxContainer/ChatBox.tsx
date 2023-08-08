@@ -96,9 +96,14 @@ export default function ChatBox({
           </div>
 
           <ChatBoxInput sendMessage={handleSendMessage} />
-          <div className='resizeIcon' onMouseDown={handleSizeMouseDown}>
-            {'[\\]'}
-          </div>
+          <div
+            className='resizeIcon'
+            onMouseDown={handleSizeMouseDown}
+            style={{
+              cursor: 'nwse-resize',
+              borderBottom: '2px solid black',
+              borderRight: '2px solid black',
+            }}></div>
         </div>
       </div>
     </>

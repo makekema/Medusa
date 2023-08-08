@@ -4,10 +4,10 @@ type IChatBoxInput = {
   sendMessage: (message: string) => void;
 };
 
-export default function ChatInput ({ sendMessage }: IChatBoxInput) {
+export default function ChatInput({ sendMessage }: IChatBoxInput) {
   const [message, setMessage] = useState<string>('');
 
-  function handleSubmit (e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     sendMessage(message);
     setMessage('');
@@ -16,7 +16,7 @@ export default function ChatInput ({ sendMessage }: IChatBoxInput) {
   return (
     <div className='ChatInputWrapper'>
       <div className='ChatInput'>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{ width: '100%', margin: '10px' }}>
           <input
             name='messageInput'
             className='MessageInput'
@@ -27,7 +27,10 @@ export default function ChatInput ({ sendMessage }: IChatBoxInput) {
             }}
             data-testid='message-input'
           />
-          <button type='submit' className='SendButton' data-testid='send-button'>
+          <button
+            type='submit'
+            className='SendButton'
+            data-testid='send-button'>
             Send
           </button>
         </form>

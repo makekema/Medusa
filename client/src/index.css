@@ -283,6 +283,7 @@ input[type='text'] {
   left: 10px;
   display: flex;
   flex-direction: row;
+  justify-content: stretch;
   gap: 5px;
   word-wrap: break-word;
   
