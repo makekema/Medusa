@@ -31,8 +31,6 @@ export default function ChatBoxContainer({
         toast.success(DEFAULT_MESSAGE, {
           position: toast.POSITION.BOTTOM_CENTER,
         });
-        // const message = createNewMessage(socket.id, DEFAULT_MESSAGE, data.room);
-        // setMessageList((prevList: Message[]) => [...prevList, message]);
       },
     },
   ];
