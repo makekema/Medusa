@@ -18,8 +18,8 @@ const db = {
     await Chatroom.create(chatroom);
   },
 
-  deleteChatroom: async (name: string): Promise<void> => {
-    await Chatroom.deleteOne({ name });
+  deleteChatroom: async (id: string): Promise<void> => {
+    await Chatroom.deleteOne({ _id: id });
   },
 
   updateChatroom: async (

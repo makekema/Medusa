@@ -4,6 +4,7 @@ import { io, app } from '../server';
 import { connectToDatabase } from '../models/index';
 import { Chatroom } from '../models/ChatroomSchema';
 import { mockChatRoom } from './mocks';
+import { db } from '../models/chatroomModel';
 
 
 beforeAll((done) => {
@@ -71,13 +72,17 @@ describe('Test router endpoints', () => {
 
   it('should create a new chatroom', async () => {
     const chatroomName = 'Test Room';
-    const response = await request(app)
-      .post('/chatrooms')
-      .send({ name: chatroomName })
-      .expect(201);
-    expect(response.body.name).toEqual(chatroomName);
+    try {
+      const response = await request(app)
+        .post('/chatrooms')
+        .send({ name: chatroomName })
+        .expect(201);
+      expect(response.body.name).toEqual(chatroomName);
+    } finally {
+      // await db.deleteChatroom(chatroomName);
+    }
   });
-
+  
   it('should fetch all chatrooms', async () => {
     const response = await request(app)
       .get('/chatrooms')
@@ -106,5 +111,51 @@ describe('Test chatroom model', () => {
     expect(savedChatroom.get('usernames')).toStrictEqual(mockChatRoom.usernames);
     expect(savedChatroom.get('creator')).toBe(mockChatRoom.creator);
   });
+
+});
+
+
+describe('Test database functions', () => {
+
+  it('should create a chatroom', async () => {
+    try {
+      await db.createChatroom(mockChatRoom);
+      const createdRoom = await Chatroom.findOne({ name: 'testRoom' });
+      if (createdRoom !== null) {
+        console.log(createdRoom._id);}
+      expect(createdRoom).not.toBeNull();    
+    } catch (err) {
+      throw err;
+    }
+  });
+
+  // it('should find a chatroom by name', async () => {
+  //   try {
+  //     const foundRoom = await db.findChatroom('testRoom');
+  //     expect(foundRoom).toMatchObject(mockChatRoom);
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // });
+
+  // it('should update a chatroom', async () => {
+  //   try {
+  //     await db.updateChatroom(mockChatRoom.name, { users: 4 });
+  //     const updatedRoom = await Chatroom.findOne({ name: 'testRoom' });
+  //     expect(updatedRoom?.users).toBe(4);
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // });
+
+  // it('should delete a chatroom by name', async () => {
+  //   try {
+  //     await db.deleteChatroom(mockChatRoom.name);
+  //     const deletedRoom = await Chatroom.findOne({ name: 'testRoom' });
+  //     expect(deletedRoom).toBeNull();
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // });
 
 });
