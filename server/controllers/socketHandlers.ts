@@ -58,6 +58,11 @@ async function handleLeaveRoom(roomName: string, socket: Socket) {
     userCount: chatroom.users,
     usernames: chatroom.usernames,
   });
+  const messageDetails = {
+    room: roomName,
+    user: socket.id,
+  };
+  io.to(roomName).emit('notify_user_left', messageDetails);
 
   if (chatroom.users < 1) {
     await db.deleteChatroom(chatroom.name);
@@ -89,10 +94,4 @@ async function handleDisconnect(socket: Socket) {
   }
 }
 
-export {
-  // handleMessage,
-  handleCreateRoom,
-  handleJoinRoom,
-  handleLeaveRoom,
-  handleDisconnect,
-};
+export { handleCreateRoom, handleJoinRoom, handleLeaveRoom, handleDisconnect };

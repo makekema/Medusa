@@ -16,6 +16,7 @@ import {
 } from './helper';
 import { socket } from '../socket';
 import { Event, useSocket } from '../hooks/useSocket';
+import { toast } from 'react-toastify';
 
 type IChatProviderProps = {
   children: React.ReactNode;
@@ -73,7 +74,9 @@ function ChatProvider({ children }: IChatProviderProps) {
   const joinRoom = (roomName: string) => {
     if (roomName !== '') {
       if (isUserAlreadyInTheRoom(userRoomList, roomName)) {
-        console.log('You are already in this room');
+        toast.info('You are already in this room', {
+          position: toast.POSITION.BOTTOM_CENTER,
+        });
         return;
       }
       let room = getChatroomFromChatrooms(chatrooms, roomName);

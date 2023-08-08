@@ -1,10 +1,10 @@
 import { ChatContext } from '../../context/ChatContext';
 import { useContext, useState } from 'react';
 import ChatBox from './ChatBox';
-import { ChatContextType, Chatroom } from '../../context/ContextTypes';
+import { ChatContextType } from '../../context/ContextTypes';
 import { createNewMessage, DEFAULT_MESSAGE } from '../helper';
 import { socket } from '../../socket';
-import { Message } from '../types';
+import { Message, MessageDetails } from '../types';
 import { Event, useSocket } from '../../hooks/useSocket';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -35,15 +35,8 @@ export default function ChatBoxContainer({
     },
     {
       name: 'notify_user_left',
-      handler: (roomName: string, username: string) => {
-        /*
-        **** NO ROOMLIST ****
-        console.log(userRoomList)
-        const userInRoom = userRoomList.rooms.find((currentRoom: Chatroom) => currentRoom.name === roomName);
-        console.log(userInRoom);
-         */
-
-        const messsage = `User ${username} left the chatroom ${roomName}`;
+      handler: (messageDetails: MessageDetails) => {
+        const messsage = `User ${messageDetails.user} left the chatroom ${messageDetails.room}`;
         toast.info(messsage, {
           position: toast.POSITION.BOTTOM_CENTER,
         });
