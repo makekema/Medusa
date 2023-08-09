@@ -1,26 +1,14 @@
-import React from 'react';
-
 type IChatBoxHeaderProps = {
   roomName: string;
   leaveRoom: (roomName: string) => void;
-  handleMouseDown: (e: any) => void;
-  handleMouseMove: (e: any) => void;
-  handleMouseUp: (e: any) => void;
 };
 
 export default function ChatBoxHeader({
   roomName,
   leaveRoom,
-  handleMouseDown,
-  handleMouseMove,
-  handleMouseUp,
 }: IChatBoxHeaderProps) {
   return (
-    <div
-      className='ChatBar'
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}>
+    <div className='ChatBar'>
       <div className='Room' data-testid='title'>
         {roomName}
       </div>

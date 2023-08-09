@@ -1,12 +1,12 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { ChatContext } from '../../context/ChatContext';
 import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType } from '../../context/ContextTypes';
-import useWindowMove from '../../hooks/useWindowMove';
 import { Message } from '../types';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
-import ResizableComponent from './ResizableComponent';
+import { calculateLeft, calculateTop } from '../../utils';
+import ResizableDraggableComponent from './ResizableComponent';
 
 type IChatBoxProps = {
   messageList: Message[];
@@ -14,7 +14,7 @@ type IChatBoxProps = {
   roomName: string;
   socketId: string;
   handleBackgroundColor: () => void;
-  bgColor: string
+  bgColor: string;
 };
 
 export default function ChatBox({
@@ -25,10 +25,13 @@ export default function ChatBox({
   socketId,
   handleBackgroundColor,
 }: IChatBoxProps) {
+  const [position, setPosition] = useState({ top: '-1000px', left: '-1000px' });
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
-  const { position, handleMouseDown, handleMouseMove, handleMouseUp } =
-    useWindowMove();
   const { getColor } = useRandomUserNameColor(socketId);
+
+  useEffect(() => {
+    setPosition({ top: calculateTop(), left: calculateLeft() });
+  }, []);
 
   const handleSendMessage = (message: string) => {
     sendMessage(roomName, message);
@@ -46,19 +49,14 @@ export default function ChatBox({
   useEffect(() => {
     scrollToBottom();
   }, [messageList]);
+  
 
   return (
     <>
-      <ResizableComponent
+      <ResizableDraggableComponent
         position={position}
         data-testid='message-container'>
-        <ChatBoxHeader
-          roomName={roomName}
-          leaveRoom={handleLeaveRoom}
-          handleMouseDown={handleMouseDown}
-          handleMouseMove={handleMouseMove}
-          handleMouseUp={handleMouseUp}
-        />
+        <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
 
         <div className='ChatWindow'>
           <div className='MessageWrapper'>
@@ -88,10 +86,9 @@ export default function ChatBox({
                 </div>
               ))}
           </div>
-
-          <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
         </div>
-      </ResizableComponent>
+        <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
+      </ResizableDraggableComponent>
     </>
   );
 }
