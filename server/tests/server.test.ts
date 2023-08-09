@@ -123,48 +123,49 @@ describe('Test database functions', () => {
     try {
       await db.createChatroom(mockChatRoom);
       createdRoom = await Chatroom.findOne({ name: mockChatRoom.name });
-      // if (createdRoom !== null) {
-      //   console.log(createdRoom._id);}
       expect(createdRoom).not.toBeNull();    
     } catch (err) {
       throw err;
     }
-    finally {
-      if (createdRoom !== null && createdRoom._id) {
-        await Chatroom.findByIdAndDelete(createdRoom._id);
-      }
+  });
+
+  it('should find a chatroom by name', async () => {
+    let foundRoom = null;
+    try {
+      foundRoom = await db.findChatroom(mockChatRoom.name);
+      // if (foundRoom !== null) {
+      //   console.log((foundRoom as any)._id);}
+      expect(foundRoom).toMatchObject(mockChatRoom);
+    } catch (err) {
+      throw err;
     }
   });
 
-  // it('should find a chatroom by name', async () => {
-  //   try {
-  //     const foundRoom = await db.findChatroom('testRoom');
-  //     // if (foundRoom !== null) {
-  //     //   console.log((foundRoom as any)._id);}
-  //     expect(foundRoom).toMatchObject(mockChatRoom);
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // });
+  it('should update a chatroom', async () => {
+    let updatedRoom = null;
+    try {
+      await db.updateChatroom(mockChatRoom.name, { users: 4 });
+      updatedRoom = await Chatroom.findOne({ name: mockChatRoom.name });
+      expect(updatedRoom?.users).toBe(4);
+    } catch (err) {
+      throw err;
+    }
+  });
 
-  // it('should update a chatroom', async () => {
-  //   try {
-  //     await db.updateChatroom(mockChatRoom.name, { users: 4 });
-  //     const updatedRoom = await Chatroom.findOne({ name: 'testRoom' });
-  //     expect(updatedRoom?.users).toBe(4);
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // });
-
-  // it('should delete a chatroom by name', async () => {
-  //   try {
-  //     await db.deleteChatroom(mockChatRoom.name);
-  //     const deletedRoom = await Chatroom.findOne({ name: 'testRoom' });
-  //     expect(deletedRoom).toBeNull();
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // });
+  it('should delete a chatroom by name', async () => {
+    let deletedRoom = null;
+    try {
+      await db.deleteChatroom(mockChatRoom.name);
+      deletedRoom = await Chatroom.findOne({ name: mockChatRoom.name });
+      expect(deletedRoom).toBeNull();
+    } catch (err) {
+      throw err;
+    }
+    // finally {
+    //   if (updatedRoom !== null && updatedRoom._id) {
+    //     await Chatroom.findByIdAndDelete(updatedRoom._id);
+    //   }
+    // }
+  });
 
 });

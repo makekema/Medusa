@@ -15,7 +15,7 @@ const mockUserData: UserData = {
 };
 
 const mockChatRoom: ChatRoom = {
-  name: "testRoom",
+  name: "testRoom_kn5j908jrgrjopg36khg",
   users: 2,
   usernames: ["John Doe", "Jane Doe"],
   creator: "Admin",
