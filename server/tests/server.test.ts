@@ -5,8 +5,7 @@ import { connectToDatabase } from '../models/index';
 import { Chatroom } from '../models/ChatroomSchema';
 import { mockChatRoom } from './mocks';
 import { db } from '../models/chatroomModel';
-import { handleCreateRoom, handleJoinRoom, handleLeaveRoom, handleDisconnect } from '../controllers/socketHandlers'
-import { ChatRoom } from '../models/types';
+import { handleCreateRoom } from '../controllers/socketHandlers';
 
 
 beforeAll((done) => {
@@ -167,7 +166,7 @@ describe('Test database functions', () => {
 
 describe('Test socket handler functions', () => {
 
-  it('should create a new chatroom and emit update_chatrooms', async () => {
+  it('should create a new chatroom and emit \'update_chatrooms\'', async () => {
     const emitSpy = jest.spyOn(io, 'emit');
     try {
       await handleCreateRoom(mockChatRoom);
