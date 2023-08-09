@@ -59,8 +59,10 @@ describe('WebSocket Server Test', () => {
   });
 
   afterAll(() => {
+    if (clientSocket) clientSocket.close();
     io.close();
-    clientSocket.close();
+    mongoose.disconnect()
+    // httpServer.close();
   });
 
   it('should emit event and client should listen', (done) => {
@@ -70,5 +72,5 @@ describe('WebSocket Server Test', () => {
     });
     io.emit('hello', 'world');
   });
-
 });
+

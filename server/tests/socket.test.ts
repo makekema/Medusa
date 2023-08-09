@@ -1,9 +1,13 @@
 import { io } from '../server';
+import { ioConnect } from '../controllers/socketListeners';
+
 
 const mockClient = {
+  connected: false,
   listeners: {} as { [key: string]: Function },
   on: function (event: string, callback: Function) {
     if (event === 'connect') {
+      this.connected = true;
       callback();
     }
     this.listeners[event] = callback;
@@ -13,21 +17,36 @@ const mockClient = {
       this.listeners[event](message);
     }
   },
-  close: jest.fn(),
+  disconnect: function() {
+    if (this.connected) {
+      this.connected = false;
+      if (this.listeners['disconnect']) {
+        this.listeners['disconnect']();
+      }
+    }
+  },
+  close: jest.fn(function() {
+    this.connected = false;
+  }),
 };
 
+
+let clientSocket: typeof mockClient;
+
+
+beforeAll((done) => {
+  clientSocket = mockClient;
+  ioConnect(io);
+  clientSocket.on('connect', done);
+});
+
+afterAll(() => {
+  io.close();
+  clientSocket.close();
+});
+
+
 describe('WebSocket Server Test', () => {
-  let clientSocket: typeof mockClient;
-
-  beforeAll((done) => {
-    clientSocket = mockClient;
-    clientSocket.on('connect', done);
-  });
-
-  afterAll(() => {
-    io.close();
-    clientSocket.close();
-  });
 
   it('should emit event and client should listen', (done) => {
     clientSocket.on('hello', (arg: any) => {
@@ -39,4 +58,5 @@ describe('WebSocket Server Test', () => {
       mockClient.listeners['hello']('world');
     }
   });
+
 });
