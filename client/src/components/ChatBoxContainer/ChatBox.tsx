@@ -57,7 +57,7 @@ export default function ChatBox({
         data-testid='message-container'>
         <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
         <div style={{ height: '90%' }}>
-          <div className='flex-col p-2 gap-2 pb-[47px] max-h-full overflow-y-scroll hide-scrollbar'>
+          <div className='flex-col p-2 pb-[50px] max-h-full overflow-y-scroll hide-scrollbar'>
             {messageList
               .filter((messageContent) => messageContent.roomName === roomName)
               .map((messageContent, i) => (
@@ -85,7 +85,9 @@ export default function ChatBox({
               ))}
           </div>
         </div>
-        <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
+        {/* <div style={{ backgroundColor: bgColor }}> */}
+          <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
+        {/* </div> */}
       </ResizableDraggableComponent>
     </>
   );

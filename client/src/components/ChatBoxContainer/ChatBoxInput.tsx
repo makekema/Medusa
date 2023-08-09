@@ -21,7 +21,7 @@ export default function ChatInput({ sendMessage, bgColor }: IChatBoxInput) {
       <form onSubmit={handleSubmit} className='flex w-full'>
         <input
           name='messageInput'
-          className='bg-white/[0.05] rounded-sm p-2 w-full'
+          className='bg-white/[0.15] rounded-sm p-2 w-full'
           value={message}
           type='text'
           onChange={(e) => {

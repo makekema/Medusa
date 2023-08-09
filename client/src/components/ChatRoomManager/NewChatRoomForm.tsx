@@ -37,7 +37,7 @@ export default function NewChatRoomForm({
     <>
       {isSelectorVisible && !isSelectorClosed && (
         // <div className='RoomSelector'>
-        <div className='absolute bottom-0 left-0 flex-col gap-4 w-30 p-5 font-semibold  '>
+        <div className='absolute bottom-0 left-0 flex-col gap-4 w-30 p-5 font-semibold'>
           <div>
             Hello, again!<br></br>Is there anything specific, you feel like
             talking about today?
