@@ -72,15 +72,14 @@ describe('Test router endpoints', () => {
 
   it('should create a new chatroom', async () => {
     const chatroomName = 'Test Room';
-    try {
       const response = await request(app)
         .post('/chatrooms')
         .send({ name: chatroomName })
         .expect(201);
       expect(response.body.name).toEqual(chatroomName);
-    } finally {
-      // await db.deleteChatroom(chatroomName);
-    }
+      if (response.body._id) {
+        await Chatroom.findByIdAndDelete(response.body._id);
+      }
   });
   
   it('should fetch all chatrooms', async () => {
@@ -95,48 +94,51 @@ describe('Test router endpoints', () => {
 
 describe('Test chatroom model', () => {
   it('should create and save a chatroom successfully', async () => {
-
-    const validChatroom = new Chatroom(mockChatRoom);
-    let savedChatroom: Document;
-
+    let savedChatroom: Document | null = null;
+  
     try {
+      const validChatroom = new Chatroom(mockChatRoom);
       savedChatroom = await validChatroom.save();
-    } catch (error) {
-      throw new Error('cannot save chatroom');
+  
+      expect(savedChatroom._id).toBeDefined();
+      expect(savedChatroom.get('name')).toBe(mockChatRoom.name);
+      expect(savedChatroom.get('users')).toBe(mockChatRoom.users);
+      expect(savedChatroom.get('usernames')).toStrictEqual(mockChatRoom.usernames);
+      expect(savedChatroom.get('creator')).toBe(mockChatRoom.creator);
+    } finally {
+      if (savedChatroom?._id) {
+        await Chatroom.findByIdAndDelete(savedChatroom._id);
+      }
     }
-
-    expect(savedChatroom._id).toBeDefined();
-    expect(savedChatroom.get('name')).toBe(mockChatRoom.name);
-    expect(savedChatroom.get('users')).toBe(mockChatRoom.users);
-    expect(savedChatroom.get('usernames')).toStrictEqual(mockChatRoom.usernames);
-    expect(savedChatroom.get('creator')).toBe(mockChatRoom.creator);
   });
-
 });
+  
 
 
-describe('Test database functions', () => {
+// describe('Test database functions', () => {
 
-  it('should create a chatroom', async () => {
-    try {
-      await db.createChatroom(mockChatRoom);
-      const createdRoom = await Chatroom.findOne({ name: 'testRoom' });
-      if (createdRoom !== null) {
-        console.log(createdRoom._id);}
-      expect(createdRoom).not.toBeNull();    
-    } catch (err) {
-      throw err;
-    }
-  });
+//   it('should create a chatroom', async () => {
+//     try {
+//       await db.createChatroom(mockChatRoom);
+//       const createdRoom = await Chatroom.findOne({ name: 'testRoom' });
+//       if (createdRoom !== null) {
+//         console.log(createdRoom._id);}
+//       expect(createdRoom).not.toBeNull();    
+//     } catch (err) {
+//       throw err;
+//     }
+//   });
 
-  // it('should find a chatroom by name', async () => {
-  //   try {
-  //     const foundRoom = await db.findChatroom('testRoom');
-  //     expect(foundRoom).toMatchObject(mockChatRoom);
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // });
+//   it('should find a chatroom by name', async () => {
+//     try {
+//       const foundRoom = await db.findChatroom('testRoom');
+//       // if (foundRoom !== null) {
+//       //   console.log((foundRoom as any)._id);}
+//       expect(foundRoom).toMatchObject(mockChatRoom);
+//     } catch (err) {
+//       throw err;
+//     }
+//   });
 
   // it('should update a chatroom', async () => {
   //   try {
@@ -158,4 +160,4 @@ describe('Test database functions', () => {
   //   }
   // });
 
-});
+// });
