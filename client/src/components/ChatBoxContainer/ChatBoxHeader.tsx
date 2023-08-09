@@ -1,6 +1,9 @@
 type IChatBoxHeaderProps = {
   roomName: string;
   leaveRoom: (roomName: string) => void;
+  handleMouseDown: (e: any) => void;
+  handleMouseMove: (e: any) => void;
+  handleMouseUp: (e: any) => void;
 };
 
 export default function ChatBoxHeader({

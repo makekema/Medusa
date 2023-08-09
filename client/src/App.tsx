@@ -25,7 +25,8 @@ function App() {
         <ChatroomManager handleBackgroundColor={handleBackgroundColor} />
       </div>
       <ChatBoxContainer
-        handleBackgroundColor={handleBackgroundColor}></ChatBoxContainer>
+        handleBackgroundColor={handleBackgroundColor}
+        bgColor={bgColor}></ChatBoxContainer>
     </>
   );
 }

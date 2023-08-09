@@ -7,16 +7,26 @@ import { Message } from '../types';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
 import Draggable from 'react-draggable';
 import { calculateLeft, calculateTop } from '../../utils';
+import ResizableComponent from './ResizableComponent';
+
 
 type IChatBoxProps = {
-  messageList: Message[],
+  messageList: Message[];
   sendMessage: (roomName: string, message: string) => void;
-  roomName: string,
-  socketId: string,
+  roomName: string;
+  socketId: string;
   handleBackgroundColor: () => void;
+  bgColor: string
 };
 
-export default function ChatBox ({ messageList, sendMessage, roomName, socketId, handleBackgroundColor }: IChatBoxProps) {
+export default function ChatBox({
+  bgColor,
+  messageList,
+  sendMessage,
+  roomName,
+  socketId,
+  handleBackgroundColor,
+}: IChatBoxProps) {
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
   const [position, setPosition] = useState({ top: '-1000px', left: '-1000px' });
   const { getColor } = useRandomUserNameColor(socketId);
@@ -42,21 +52,24 @@ useEffect(() => {
 
   return (
     <>
+
       <Draggable handle='.ChatBar'>
+        <ResizableComponent
+        position={position}
+        data-testid='message-container'>
         <div
           className='MessageContainer'
           style={{ position: 'absolute', ...position }}
           data-testid='message-container'>
           <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
 
-          <div className='ChatWindow'>
-            <div className='MessageWrapper'>
-              {messageList
-                .filter(
-                  (messageContent) => messageContent.roomName === roomName
-                )
-                .map((messageContent, i) => (
-                  <div
+      
+        <div className='ChatWindow'>
+          <div className='MessageWrapper'>
+            {messageList
+              .filter((messageContent) => messageContent.roomName === roomName)
+              .map((messageContent, i) => (
+              <div
                     className={`Message ${
                       messageContent.user === socketId ? 'me' : 'other'
                     }`}
@@ -79,10 +92,10 @@ useEffect(() => {
                   </div>
                 ))}
             </div>
-
-            <ChatBoxInput sendMessage={handleSendMessage} />
           </div>
+          <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
         </div>
+      </ResizableComponent>
       </Draggable>
     </>
   );

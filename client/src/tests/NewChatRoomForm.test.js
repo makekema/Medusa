@@ -1,3 +1,4 @@
+/* eslint-disable testing-library/await-async-query */
 /* eslint-disable testing-library/no-unnecessary-act */
 import React from 'react';
 import userEvent from '@testing-library/user-event';
@@ -16,8 +17,8 @@ const mockIsSelectorVisible = true;
 const mockHandleBackgroundColor = jest.fn();
 
 describe('Room Selector', () => {
-  it('should show the plus button if selectedClosed is true', () => {
-    render(
+  it('should show the plus button if selectedClosed is true', async () => {
+    await render(
       <ChatContext.Provider
         value={mockChatContext}
         setSelectorClosed={mockSetSelectorClosed}
@@ -28,20 +29,20 @@ describe('Room Selector', () => {
       </ChatContext.Provider>
     );
 
-    const plusButton = screen.getByTestId('plus-button');
+    const plusButton = await screen.findByTestId('plus-button');
 
     expect(plusButton).toBeTruthy();
   });
 
-  it('input should update the room state', () => {
-    render(
+  it('input should update the room state', async () => {
+    await render(
       <ChatContext.Provider value={mockChatContext}>
         <RoomSelector handleBackgroundColor={mockHandleBackgroundColor} />
       </ChatContext.Provider>
     );
 
     const testInput = 'Fiddle Faddle';
-    const input = screen.getByTestId('room-input');
+    const input = await screen.findByTestId('room-input');
 
     act(() => {
       userEvent.type(input, testInput);
@@ -51,8 +52,8 @@ describe('Room Selector', () => {
     expect(roomNameState).toBe(testInput);
   });
 
-  it('should call joinRoom function with the correct room name', () => {
-    render(
+  it('should call joinRoom function with the correct room name', async () => {
+    await render(
       <ChatContext.Provider
         value={mockChatContext}
         setSelectorClosed={mockSetSelectorClosed}
@@ -64,16 +65,14 @@ describe('Room Selector', () => {
     );
 
     const testRoomName = 'Meat Pies!';
-    const input = screen.getByTestId('room-input');
-    const join = screen.getByTestId('join-button');
+    const input = await screen.findByTestId('room-input');
+    const join = await screen.findByTestId('join-button');
 
     act(() => {
       userEvent.type(input, testRoomName);
       userEvent.click(join);
     });
 
-    expect(mockChatContext.joinRoom).toHaveBeenCalledWith(
-      testRoomName
-    );
+    expect(mockChatContext.joinRoom).toHaveBeenCalledWith(testRoomName);
   });
 });
