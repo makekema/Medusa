@@ -1,5 +1,4 @@
 const { io } = require('../server');
-const { ioConnect } = require('../controllers/socketListeners');
 
 
 const mockClient = {
@@ -43,17 +42,5 @@ describe('WebSocket Server Test', () => {
       mockClient.listeners['hello']('world');
     }
   });
-
-  // it('should acknowledge client event and answer', (done) => {
-  //   const socket = io.emit('connection', mockClient);
-  //   socket.on('holaRequest', () => {
-  //     socket.emit('holaResponse', 'mundo');
-  //   });
-  //   clientSocket.on('holaResponse', (arg) => {
-  //     expect(arg).toBe('mundo');
-  //     done();
-  //   });
-  //   clientSocket.emit('holaRequest');
-  // });
 
 });
