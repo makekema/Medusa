@@ -1,6 +1,7 @@
 import { Chatroom } from '../models/ChatroomSchema';
 import { Request, Response, NextFunction } from 'express';
 
+
 const createChatroom = async (
   req: Request,
   res: Response,
@@ -28,5 +29,6 @@ const findChatrooms = async (
     next(err);
   }
 };
+
 
 export { createChatroom, findChatrooms };

@@ -5,6 +5,7 @@ import { Server } from 'socket.io';
 import { router } from './router';
 import dotenv from 'dotenv';
 import {ioConnect} from './controllers/socketListeners';
+import { ErrorHandler } from './middlewares/errorHandler';
 
 
 const app: Express = express();
@@ -18,6 +19,7 @@ const PORT: string = String(process.env.PORT!);
 app.use(cors());
 app.use(express.json());
 app.use(router);
+app.use(ErrorHandler);
 
 const httpServer: http.Server = http.createServer(app);
 
