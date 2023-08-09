@@ -188,7 +188,7 @@ input[type='text'] {
   /* background-color: rgba(255, 255, 255, 0.04); */
   padding-right: 10px;
   padding-left: 10px;
-  padding-top: 5px;
+  padding-top: 10px;
   padding-bottom: 5px;
   text-transform: capitalize;
 }
@@ -256,8 +256,6 @@ input[type='text'] {
 .ChatWindow {
   display: flex;
   flex-direction: column;
-  max-height: 300px;
-  width: 250px;
   overflow-y: scroll;
   border: none;
   padding: 10px;
@@ -277,16 +275,22 @@ input[type='text'] {
 
 .ChatInput {
   position: absolute;
-  bottom: 10px;
+  bottom: 0;
   right: 10px;
   left: 10px;
   display: flex;
   flex-direction: row;
+  justify-content: stretch;
   gap: 5px;
   word-wrap: break-word;
+  
 }
 
-.ChatInputWrapper {
+.resizeIcon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
 }
 
 .MessageWrapper {

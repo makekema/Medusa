@@ -1,27 +1,35 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { ChatContext } from '../../context/ChatContext';
 import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType } from '../../context/ContextTypes';
 import useWindowMove from '../../hooks/useWindowMove';
 import { Message } from '../types';
-import { getRandomColor } from '../../utils';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
+import ResizableComponent from './ResizableComponent';
 
 type IChatBoxProps = {
-  messageList: Message[],
+  messageList: Message[];
   sendMessage: (roomName: string, message: string) => void;
-  roomName: string,
-  socketId: string,
+  roomName: string;
+  socketId: string;
   handleBackgroundColor: () => void;
+  bgColor: string
 };
 
-export default function ChatBox ({ messageList, sendMessage, roomName, socketId, handleBackgroundColor }: IChatBoxProps) {
+export default function ChatBox({
+  bgColor,
+  messageList,
+  sendMessage,
+  roomName,
+  socketId,
+  handleBackgroundColor,
+}: IChatBoxProps) {
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
-  const { position, handleMouseDown, handleMouseMove, handleMouseUp } = useWindowMove();
+  const { position, handleMouseDown, handleMouseMove, handleMouseUp } =
+    useWindowMove();
   const { getColor } = useRandomUserNameColor(socketId);
 
-  // MESSAGE FUNCTIONALITY
   const handleSendMessage = (message: string) => {
     sendMessage(roomName, message);
   };
@@ -41,21 +49,27 @@ export default function ChatBox ({ messageList, sendMessage, roomName, socketId,
 
   return (
     <>
-      <div
-        className='MessageContainer'
-        style={{ position: 'absolute', ...position }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+      <ResizableComponent
+        position={position}
         data-testid='message-container'>
-        <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
+        <ChatBoxHeader
+          roomName={roomName}
+          leaveRoom={handleLeaveRoom}
+          handleMouseDown={handleMouseDown}
+          handleMouseMove={handleMouseMove}
+          handleMouseUp={handleMouseUp}
+        />
 
         <div className='ChatWindow'>
           <div className='MessageWrapper'>
             {messageList
               .filter((messageContent) => messageContent.roomName === roomName)
               .map((messageContent, i) => (
-                <div className={`Message ${messageContent.user === socketId ? 'me' : 'other'}`} key={i}>
+                <div
+                  className={`Message ${
+                    messageContent.user === socketId ? 'me' : 'other'
+                  }`}
+                  key={i}>
                   <div
                     className='User_Time'
                     style={{ color: getColor(messageContent.user) }}>
@@ -75,9 +89,9 @@ export default function ChatBox ({ messageList, sendMessage, roomName, socketId,
               ))}
           </div>
 
-          <ChatBoxInput sendMessage={handleSendMessage} />
+          <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
         </div>
-      </div>
+      </ResizableComponent>
     </>
   );
 }
