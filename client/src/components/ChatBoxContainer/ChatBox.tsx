@@ -4,9 +4,9 @@ import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType } from '../../context/ContextTypes';
 import useWindowMove from '../../hooks/useWindowMove';
-import { Resizable } from 're-resizable';
 import { Message } from '../types';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
+import ResizableComponent from './ResizableComponent';
 
 type IChatBoxProps = {
   messageList: Message[];
@@ -49,18 +49,8 @@ export default function ChatBox({
 
   return (
     <>
-      <Resizable
-        className='MessageContainer'
-        style={{
-          position: 'absolute',
-          ...position,
-        }}
-        defaultSize={{
-          width: 250,
-          height: 300,
-        }}
-        minHeight={300}
-        minWidth={300}
+      <ResizableComponent
+        position={position}
         data-testid='message-container'>
         <ChatBoxHeader
           roomName={roomName}
@@ -101,7 +91,7 @@ export default function ChatBox({
 
           <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
         </div>
-      </Resizable>
+      </ResizableComponent>
     </>
   );
 }
