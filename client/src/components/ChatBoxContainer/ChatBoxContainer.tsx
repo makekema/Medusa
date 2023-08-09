@@ -11,10 +11,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 type IChatBoxListProps = {
   handleBackgroundColor: () => void;
+  bgColor: string
 };
 
 export default function ChatBoxContainer({
   handleBackgroundColor,
+  bgColor
 }: IChatBoxListProps) {
   const { userRoomList } = useContext(ChatContext) as ChatContextType;
   const [messageList, setMessageList] = useState<Message[]>([]);
@@ -58,14 +60,15 @@ export default function ChatBoxContainer({
       <div>
         <ToastContainer />
         {userRoomList.rooms?.map((room) => (
-          <div className='ChatList' key={room.name} data-testid='chat-list'>
+          <div className='flex-col gap-2' key={room.name} data-testid='chat-list'>
             <ChatBox
               key={room.name}
               messageList={messageList}
               sendMessage={sendMessage}
               roomName={room.name}
               socketId={userRoomList.socketId}
-              handleBackgroundColor={handleBackgroundColor}></ChatBox>
+              handleBackgroundColor={handleBackgroundColor}
+              bgColor={bgColor}></ChatBox>
           </div>
         ))}
       </div>
