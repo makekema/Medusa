@@ -188,7 +188,7 @@ input[type='text'] {
   /* background-color: rgba(255, 255, 255, 0.04); */
   padding-right: 10px;
   padding-left: 10px;
-  padding-top: 15px;
+  padding-top: 5px;
   padding-bottom: 5px;
   text-transform: capitalize;
 }
@@ -245,7 +245,7 @@ input[type='text'] {
   display: flex;
   flex-direction: column;
   border-radius: 2px;
-  overflow: hidden;
+  /* overflow: hidden; */
   -webkit-backdrop-filter: blur(15px);
   backdrop-filter: blur(15px);
   background-color: rgba(255, 255, 255, 0.07);
@@ -310,8 +310,6 @@ input[type='text'] {
   right: 0;
   padding: 10px;
 }
-
-
 
 .User_Time {
   font-size: 12px;
