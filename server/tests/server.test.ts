@@ -71,12 +71,11 @@ describe('Test database connection', () => {
 describe('Test router endpoints', () => {
 
   it('should create a new chatroom', async () => {
-    const chatroomName = 'Test Room';
       const response = await request(app)
         .post('/chatrooms')
-        .send({ name: chatroomName })
+        .send({ name: mockChatRoom.name })
         .expect(201);
-      expect(response.body.name).toEqual(chatroomName);
+      expect(response.body.name).toEqual(mockChatRoom.name);
       if (response.body._id) {
         await Chatroom.findByIdAndDelete(response.body._id);
       }
