@@ -93,7 +93,7 @@ describe('Test router endpoints', () => {
 
 describe('Test chatroom model', () => {
 
-  it('should create and save a chatroom successfully', async () => {
+  it('should match chatroom schema', async () => {
     let savedChatroom: Document | null = null;
   
     try {
@@ -132,8 +132,6 @@ describe('Test database functions', () => {
     let foundRoom = null;
     try {
       foundRoom = await db.findChatroom(mockChatRoom.name);
-      // if (foundRoom !== null) {
-      //   console.log((foundRoom as any)._id);}
       expect(foundRoom).toMatchObject(mockChatRoom);
     } catch (err) {
       throw err;
@@ -160,11 +158,6 @@ describe('Test database functions', () => {
     } catch (err) {
       throw err;
     }
-    // finally {
-    //   if (updatedRoom !== null && updatedRoom._id) {
-    //     await Chatroom.findByIdAndDelete(updatedRoom._id);
-    //   }
-    // }
   });
 
 });
