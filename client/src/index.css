@@ -188,7 +188,7 @@ input[type='text'] {
   /* background-color: rgba(255, 255, 255, 0.04); */
   padding-right: 10px;
   padding-left: 10px;
-  padding-top: 10px;
+  padding-top: 15px;
   padding-bottom: 5px;
   text-transform: capitalize;
 }
@@ -261,6 +261,25 @@ input[type='text'] {
   padding: 10px;
 }
 
+.MessageWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 47px;
+  overflow-y: scroll;
+}
+
+.MessageWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.MessageWrapper::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.MessageWrapper::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
 .ChatWindow::-webkit-scrollbar {
   display: none;
 }
@@ -283,7 +302,6 @@ input[type='text'] {
   justify-content: stretch;
   gap: 5px;
   word-wrap: break-word;
-  
 }
 
 .resizeIcon {
@@ -293,12 +311,7 @@ input[type='text'] {
   padding: 10px;
 }
 
-.MessageWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 47px;
-}
+
 
 .User_Time {
   font-size: 12px;

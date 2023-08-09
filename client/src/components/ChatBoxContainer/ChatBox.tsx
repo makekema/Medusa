@@ -5,10 +5,8 @@ import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType } from '../../context/ContextTypes';
 import { Message } from '../types';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
-import Draggable from 'react-draggable';
 import { calculateLeft, calculateTop } from '../../utils';
-import ResizableComponent from './ResizableComponent';
-
+import ResizableDraggableComponent from './ResizableComponent';
 
 type IChatBoxProps = {
   messageList: Message[];
@@ -16,7 +14,7 @@ type IChatBoxProps = {
   roomName: string;
   socketId: string;
   handleBackgroundColor: () => void;
-  bgColor: string
+  bgColor: string;
 };
 
 export default function ChatBox({
@@ -27,12 +25,14 @@ export default function ChatBox({
   socketId,
   handleBackgroundColor,
 }: IChatBoxProps) {
-  const { leaveRoom } = useContext(ChatContext) as ChatContextType;
   const [position, setPosition] = useState({ top: '-1000px', left: '-1000px' });
+  const { leaveRoom } = useContext(ChatContext) as ChatContextType;
   const { getColor } = useRandomUserNameColor(socketId);
-useEffect(() => {
-  setPosition({ top: calculateTop(), left: calculateLeft() });
-}, []);
+
+  useEffect(() => {
+    setPosition({ top: calculateTop(), left: calculateLeft() });
+  }, []);
+
   const handleSendMessage = (message: string) => {
     sendMessage(roomName, message);
   };
@@ -49,54 +49,46 @@ useEffect(() => {
   useEffect(() => {
     scrollToBottom();
   }, [messageList]);
+  
 
   return (
     <>
-
-      <Draggable handle='.ChatBar'>
-        <ResizableComponent
+      <ResizableDraggableComponent
         position={position}
         data-testid='message-container'>
-        <div
-          className='MessageContainer'
-          style={{ position: 'absolute', ...position }}
-          data-testid='message-container'>
-          <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
+        <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
 
-      
         <div className='ChatWindow'>
           <div className='MessageWrapper'>
             {messageList
               .filter((messageContent) => messageContent.roomName === roomName)
               .map((messageContent, i) => (
-              <div
-                    className={`Message ${
-                      messageContent.user === socketId ? 'me' : 'other'
-                    }`}
-                    key={i}>
-                    <div
-                      className='User_Time'
-                      style={{ color: getColor(messageContent.user) }}>
-                      {messageContent.user === socketId
-                        ? 'You'
-                        : `User ${messageContent.user.substring(0, 5)}`}
-                      , {messageContent.time}
-                    </div>
-
-                    <div
-                      className='MessageContent'
-                      data-testid={`message-content-${i}`}>
-                      {messageContent.message}
-                    </div>
-                    <div ref={messagesEndRef}></div>
+                <div
+                  className={`Message ${
+                    messageContent.user === socketId ? 'me' : 'other'
+                  }`}
+                  key={i}>
+                  <div
+                    className='User_Time'
+                    style={{ color: getColor(messageContent.user) }}>
+                    {messageContent.user === socketId
+                      ? 'You'
+                      : `User ${messageContent.user.substring(0, 5)}`}
+                    , {messageContent.time}
                   </div>
-                ))}
-            </div>
+
+                  <div
+                    className='MessageContent'
+                    data-testid={`message-content-${i}`}>
+                    {messageContent.message}
+                  </div>
+                  <div ref={messagesEndRef}></div>
+                </div>
+              ))}
           </div>
-          <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
         </div>
-      </ResizableComponent>
-      </Draggable>
+        <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
+      </ResizableDraggableComponent>
     </>
   );
 }
