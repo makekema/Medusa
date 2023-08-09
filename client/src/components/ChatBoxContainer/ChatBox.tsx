@@ -4,7 +4,7 @@ import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType } from '../../context/ContextTypes';
 import useWindowMove from '../../hooks/useWindowMove';
-import useWindowResize from '../../hooks/useWindowResize';
+import { Resizable } from 're-resizable';
 import { Message } from '../types';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
 
@@ -14,9 +14,11 @@ type IChatBoxProps = {
   roomName: string;
   socketId: string;
   handleBackgroundColor: () => void;
+  bgColor: string
 };
 
 export default function ChatBox({
+  bgColor,
   messageList,
   sendMessage,
   roomName,
@@ -26,10 +28,8 @@ export default function ChatBox({
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
   const { position, handleMouseDown, handleMouseMove, handleMouseUp } =
     useWindowMove();
-  const { size, handleSizeMouseDown } = useWindowResize();
   const { getColor } = useRandomUserNameColor(socketId);
 
-  // MESSAGE FUNCTIONALITY
   const handleSendMessage = (message: string) => {
     sendMessage(roomName, message);
   };
@@ -49,14 +49,18 @@ export default function ChatBox({
 
   return (
     <>
-      <div
+      <Resizable
         className='MessageContainer'
         style={{
           position: 'absolute',
           ...position,
-          width: size.x,
-          height: size.y,
         }}
+        defaultSize={{
+          width: 250,
+          height: 300,
+        }}
+        minHeight={300}
+        minWidth={300}
         data-testid='message-container'>
         <ChatBoxHeader
           roomName={roomName}
@@ -66,7 +70,7 @@ export default function ChatBox({
           handleMouseUp={handleMouseUp}
         />
 
-        <div className='ChatWindow' style={{ width: size.x, height: size.y }}>
+        <div className='ChatWindow'>
           <div className='MessageWrapper'>
             {messageList
               .filter((messageContent) => messageContent.roomName === roomName)
@@ -95,17 +99,9 @@ export default function ChatBox({
               ))}
           </div>
 
-          <ChatBoxInput sendMessage={handleSendMessage} />
-          <div
-            className='resizeIcon'
-            onMouseDown={handleSizeMouseDown}
-            style={{
-              cursor: 'nwse-resize',
-              borderBottom: '2px solid black',
-              borderRight: '2px solid black',
-            }}></div>
+          <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
         </div>
-      </div>
+      </Resizable>
     </>
   );
 }
