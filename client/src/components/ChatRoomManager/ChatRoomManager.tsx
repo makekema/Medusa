@@ -16,10 +16,9 @@ export default function ChatroomManager({
 
   return (
     <div>
-      <div className='room-list-container'>
+      <div className='w-screen'>
         <div
-          className='RoomListMarquee'
-          style={{ background: 'rgb(182,182,182)', color: 'rgb(15,11,39)' }}>
+          className='bg-neutral-400 text-gray-900'>
           <Marquee pauseOnHover={true} speed={50}>
             <ChatRoomMarquee
               handleBackgroundColor={handleBackgroundColor}

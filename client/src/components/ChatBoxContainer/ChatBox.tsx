@@ -49,7 +49,6 @@ export default function ChatBox({
   useEffect(() => {
     scrollToBottom();
   }, [messageList]);
-  
 
   return (
     <>
@@ -57,9 +56,8 @@ export default function ChatBox({
         position={position}
         data-testid='message-container'>
         <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
-
-        <div className='ChatWindow'>
-          <div className='MessageWrapper'>
+        <div style={{ height: '90%' }}>
+          <div className='flex-col p-2 pb-[50px] max-h-full overflow-y-scroll hide-scrollbar'>
             {messageList
               .filter((messageContent) => messageContent.roomName === roomName)
               .map((messageContent, i) => (
@@ -69,7 +67,7 @@ export default function ChatBox({
                   }`}
                   key={i}>
                   <div
-                    className='User_Time'
+                    className='mb-1 text-xs'
                     style={{ color: getColor(messageContent.user) }}>
                     {messageContent.user === socketId
                       ? 'You'
@@ -78,7 +76,7 @@ export default function ChatBox({
                   </div>
 
                   <div
-                    className='MessageContent'
+                    className='text-sm mb-2 font-normal break-words'
                     data-testid={`message-content-${i}`}>
                     {messageContent.message}
                   </div>
@@ -87,7 +85,9 @@ export default function ChatBox({
               ))}
           </div>
         </div>
-        <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
+        {/* <div style={{ backgroundColor: bgColor }}> */}
+          <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
+        {/* </div> */}
       </ResizableDraggableComponent>
     </>
   );

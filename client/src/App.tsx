@@ -21,7 +21,7 @@ function App() {
 
   return (
     <>
-      <div className='App' style={{ backgroundColor: bgColor }}>
+      <div className='h-screen' style={{ backgroundColor: bgColor }}>
         <ChatroomManager handleBackgroundColor={handleBackgroundColor} />
       </div>
       <ChatBoxContainer
