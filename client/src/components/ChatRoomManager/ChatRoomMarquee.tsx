@@ -28,12 +28,12 @@ export default function ChatRoomMarquee({
 
   return (
     <>
-      <div className='RoomList'>
+      <div className='flex-col overflow-hidden'>
         <div>
           {chatrooms.map((chatroom) => {
             return (
               <button
-                className='RoomButton'
+                className='cursor-pointer text-5xl font-bold mx-10 my-1 uppercase'
                 key={chatroom.name}
                 onClick={() => handleButtonClick(chatroom.name)}>
                 {chatroom.name}

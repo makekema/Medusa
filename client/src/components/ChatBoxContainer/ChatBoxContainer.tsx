@@ -60,7 +60,7 @@ export default function ChatBoxContainer({
       <div>
         <ToastContainer />
         {userRoomList.rooms?.map((room) => (
-          <div className='ChatList' key={room.name} data-testid='chat-list'>
+          <div className='flex-col gap-2' key={room.name} data-testid='chat-list'>
             <ChatBox
               key={room.name}
               messageList={messageList}

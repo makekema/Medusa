@@ -15,17 +15,15 @@ export default function ResizableDraggableComponent({
   position,
 }: IResizableComponentProps) {
   return (
-    <Draggable handle='.ChatBar'>
+    <Draggable handle='.DRAG_HANDLE'>
       <Resizable
-        className='MessageContainer'
+        className='flex-col rounded-sm text-sm shadow-lg bg-white/[.07] backdrop-blur-md z-[10000]'
         style={{ position: 'absolute', ...position }}
-        defaultSize={{
-          width: 250,
-          height: 300,
-        }}
+        defaultSize={{width: 250, height: 300,}}
         minWidth={250}
-        minHeight={300}>
-        {children}
+        minHeight={300}
+        >
+          {children}
       </Resizable>
     </Draggable>
   );
