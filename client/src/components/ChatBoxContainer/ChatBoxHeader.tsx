@@ -1,14 +1,17 @@
-import React from 'react'
-
 type IChatBoxHeaderProps = {
-  roomName: string,
+  roomName: string;
   leaveRoom: (roomName: string) => void;
 };
 
-export default function ChatBoxHeader ({ roomName, leaveRoom }: IChatBoxHeaderProps) {
+export default function ChatBoxHeader({
+  roomName,
+  leaveRoom,
+}: IChatBoxHeaderProps) {
   return (
     <div className='ChatBar'>
-      <div className='Room' data-testid='title'>{roomName}</div>
+      <div className='Room' data-testid='title'>
+        {roomName}
+      </div>
       <button className='LeaveButton' onClick={() => leaveRoom(roomName)}>
         <svg
           xmlns='http://www.w3.org/2000/svg'

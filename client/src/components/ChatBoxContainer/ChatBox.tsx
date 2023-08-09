@@ -3,10 +3,10 @@ import { ChatContext } from '../../context/ChatContext';
 import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType } from '../../context/ContextTypes';
-import useWindowMove from '../../hooks/useWindowMove';
 import { Message } from '../types';
-import { getRandomColor } from '../../utils';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
+import Draggable from 'react-draggable';
+import { calculateLeft, calculateTop } from '../../utils';
 
 type IChatBoxProps = {
   messageList: Message[],
@@ -18,10 +18,11 @@ type IChatBoxProps = {
 
 export default function ChatBox ({ messageList, sendMessage, roomName, socketId, handleBackgroundColor }: IChatBoxProps) {
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
-  const { position, handleMouseDown, handleMouseMove, handleMouseUp } = useWindowMove();
+  const [position, setPosition] = useState({ top: '-1000px', left: '-1000px' });
   const { getColor } = useRandomUserNameColor(socketId);
-
-  // MESSAGE FUNCTIONALITY
+useEffect(() => {
+  setPosition({ top: calculateTop(), left: calculateLeft() });
+}, []);
   const handleSendMessage = (message: string) => {
     sendMessage(roomName, message);
   };
@@ -41,43 +42,48 @@ export default function ChatBox ({ messageList, sendMessage, roomName, socketId,
 
   return (
     <>
-      <div
-        className='MessageContainer'
-        style={{ position: 'absolute', ...position }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        data-testid='message-container'>
-        <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
+      <Draggable handle='.ChatBar'>
+        <div
+          className='MessageContainer'
+          style={{ position: 'absolute', ...position }}
+          data-testid='message-container'>
+          <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
 
-        <div className='ChatWindow'>
-          <div className='MessageWrapper'>
-            {messageList
-              .filter((messageContent) => messageContent.roomName === roomName)
-              .map((messageContent, i) => (
-                <div className={`Message ${messageContent.user === socketId ? 'me' : 'other'}`} key={i}>
+          <div className='ChatWindow'>
+            <div className='MessageWrapper'>
+              {messageList
+                .filter(
+                  (messageContent) => messageContent.roomName === roomName
+                )
+                .map((messageContent, i) => (
                   <div
-                    className='User_Time'
-                    style={{ color: getColor(messageContent.user) }}>
-                    {messageContent.user === socketId
-                      ? 'You'
-                      : `User ${messageContent.user.substring(0, 5)}`}
-                    , {messageContent.time}
-                  </div>
+                    className={`Message ${
+                      messageContent.user === socketId ? 'me' : 'other'
+                    }`}
+                    key={i}>
+                    <div
+                      className='User_Time'
+                      style={{ color: getColor(messageContent.user) }}>
+                      {messageContent.user === socketId
+                        ? 'You'
+                        : `User ${messageContent.user.substring(0, 5)}`}
+                      , {messageContent.time}
+                    </div>
 
-                  <div
-                    className='MessageContent'
-                    data-testid={`message-content-${i}`}>
-                    {messageContent.message}
+                    <div
+                      className='MessageContent'
+                      data-testid={`message-content-${i}`}>
+                      {messageContent.message}
+                    </div>
+                    <div ref={messagesEndRef}></div>
                   </div>
-                  <div ref={messagesEndRef}></div>
-                </div>
-              ))}
+                ))}
+            </div>
+
+            <ChatBoxInput sendMessage={handleSendMessage} />
           </div>
-
-          <ChatBoxInput sendMessage={handleSendMessage} />
         </div>
-      </div>
+      </Draggable>
     </>
   );
 }
