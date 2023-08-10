@@ -1,30 +1,32 @@
 import { ioConnect } from '../controllers/socketListeners';
+import { io, app, httpServer } from '../server';
 import { Server } from 'socket.io';
-import { Socket } from 'socket.io';
+// import { Socket } from 'socket.io';
 import { createServer } from 'http';
-import("socket.io-client").then((io) => {
-  const Socket: typeof io.Socket = io.Socket;
-});
-import { Message } from '../models/types';
+// import("socket.io-client").then((io) => {
+//   const Socket: typeof io.Socket = io.Socket;
+// });
+import { Message, ClientSocketType } from '../models/types';
 import { mockMessage } from './mocks';
 import { createMockClientSocket } from './mockSocket';
 
 
 describe('ioConnect', () => {
-  let httpServer: any;
+  // let httpServer: any;
   let ioServer: Server;
-  let clientSocket1: any;
-  let clientSocket2: any;
+  let clientSocket1: ClientSocketType;
+  let clientSocket2: ClientSocketType;
 
   beforeAll((done) => {
-    httpServer = createServer();
-    ioServer = new Server(httpServer);
-    ioConnect(ioServer);
-    const port = 3000;
-    httpServer.listen(port, () => {
-      // const port = (httpServer.address() as any).port;
-      clientSocket1 = mockClientSocket('socket1');
-      clientSocket2 = mockClientSocket('socket2');
+    // httpServer = createServer();
+    // ioServer = new Server(httpServer);
+    // ioConnect(ioServer);
+    // ioConnect(io);
+    // const port = 3000;
+    httpServer.listen(() => {
+      const port = (httpServer.address() as any).port;
+      clientSocket1 = createMockClientSocket('socket1');
+      clientSocket2 = createMockClientSocket('socket2');
       clientSocket1.on('connect', () => {
         clientSocket2.on('connect', done);
       });
@@ -32,7 +34,8 @@ describe('ioConnect', () => {
   });
 
   afterAll(() => {
-    ioServer.close();
+    // ioServer.close();
+    io.close();
     httpServer.close();
     clientSocket1.close();
     clientSocket2.close();

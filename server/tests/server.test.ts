@@ -101,6 +101,33 @@ describe('Test router endpoints', () => {
     expect(Array.isArray(response.body)).toBeTruthy();
   });
 
+  it('should handle errors when creating a chatroom', async () => {
+    const saveMock = jest.spyOn(Chatroom.prototype, 'save').mockRejectedValue(new Error('Database error'));
+    const response = await request(app)
+      .post('/chatrooms')
+      .send({ name: mockChatRoom.name })
+      .expect(500);
+    expect(response.body.success).toBe(false);
+    expect(response.body.status).toBe(500);
+    expect(response.body.message).toBe('Database error');
+    saveMock.mockRestore();
+  });
+
+  it('should handle errors when fetching chatrooms', async () => {
+    const findMock = jest.spyOn(Chatroom, 'find').mockRejectedValue(new Error('Database error'));
+    const response = await request(app)
+      .get('/chatrooms')
+      .expect(500);
+    expect(response.body.success).toBe(false);
+    expect(response.body.status).toBe(500);
+    expect(response.body.message).toBe('Database error');
+    findMock.mockRestore();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
 });
 
 
