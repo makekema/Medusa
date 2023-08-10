@@ -37,4 +37,4 @@ httpServer.listen(PORT, () => {
 });
 
 
-export { io, app, httpServer };
+export { io, app, httpServer, PORT };
