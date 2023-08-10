@@ -7,7 +7,7 @@ import("socket.io-client").then((io) => {
 });
 import { Message } from '../models/types';
 import { mockMessage } from './mocks';
-import { mockClientSocket } from './mockSocket';
+import { createMockClientSocket } from './mockSocket';
 
 
 describe('ioConnect', () => {

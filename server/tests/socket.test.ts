@@ -1,13 +1,14 @@
 import { io } from '../server';
 import { ioConnect } from '../controllers/socketListeners';
-import { mockClientSocket } from './mockSocket';
+import { ClientSocketType } from '../models/types';
+import { createMockClientSocket } from './mockSocket';
 
 
-let clientSocket: typeof mockClientSocket;
+let clientSocket: ClientSocketType;
 
 
 beforeAll((done) => {
-  clientSocket = mockClientSocket;
+  clientSocket = createMockClientSocket('test_socket');
   ioConnect(io);
   clientSocket.on('connect', done);
 });
@@ -26,8 +27,8 @@ describe('WebSocket Server Test', () => {
       done();
     });
     io.emit('hello', 'world');
-    if (mockClientSocket.listeners['hello']) {
-      mockClientSocket.listeners['hello']('world');
+    if (clientSocket.listeners['hello']) {
+      clientSocket.listeners['hello']('world');
     }
   });
 

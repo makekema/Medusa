@@ -1,35 +1,39 @@
-const mockClientSocket = {
-  
-  id: null,
-  connected: false,
-  listeners: {} as { [key: string]: Function },
-  on: function (event: string, callback: Function) {
-    if (event === 'connect') {
-      this.connected = true;
-      callback();
-    }
-    this.listeners[event] = callback;
-  },
-  emit: function (event: string, message: any) {
-    if (this.listeners[event]) {
-      this.listeners[event](message);
-    }
-  },
-  disconnect: function() {
-    if (this.connected) {
-      this.connected = false;
-      if (this.listeners['disconnect']) {
-        this.listeners['disconnect']();
+import { ClientSocketType } from '../models/types';
+
+
+const createMockClientSocket = (id: string): ClientSocketType => {
+  return {
+    id: id,
+    connected: false,
+    listeners: {},
+    on: function (event: string, callback: Function) {
+      if (event === 'connect') {
+        this.connected = true;
+        callback();
       }
+      this.listeners[event] = callback;
+    },
+    emit: function (event: string, message: any) {
+      if (this.listeners[event]) {
+        this.listeners[event](message);
+      }
+    },
+    disconnect: function () {
+      if (this.connected) {
+        this.connected = false;
+        if (this.listeners['disconnect']) {
+          this.listeners['disconnect']();
+        }
+      }
+    },
+    close: function() {
+      this.connected = false;
     }
-  },
-  close: jest.fn(function() {
-    this.connected = false;
-  }),
+  };
 };
 
+export { createMockClientSocket };
 
-export { mockClientSocket };
 
 
 // import { jest } from '@jest/globals';
