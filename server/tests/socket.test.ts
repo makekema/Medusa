@@ -1,41 +1,13 @@
 import { io } from '../server';
 import { ioConnect } from '../controllers/socketListeners';
+import { mockClientSocket } from './mockSocket';
 
 
-const mockClient = {
-  connected: false,
-  listeners: {} as { [key: string]: Function },
-  on: function (event: string, callback: Function) {
-    if (event === 'connect') {
-      this.connected = true;
-      callback();
-    }
-    this.listeners[event] = callback;
-  },
-  emit: function (event: string, message: any) {
-    if (this.listeners[event]) {
-      this.listeners[event](message);
-    }
-  },
-  disconnect: function() {
-    if (this.connected) {
-      this.connected = false;
-      if (this.listeners['disconnect']) {
-        this.listeners['disconnect']();
-      }
-    }
-  },
-  close: jest.fn(function() {
-    this.connected = false;
-  }),
-};
-
-
-let clientSocket: typeof mockClient;
+let clientSocket: typeof mockClientSocket;
 
 
 beforeAll((done) => {
-  clientSocket = mockClient;
+  clientSocket = mockClientSocket;
   ioConnect(io);
   clientSocket.on('connect', done);
 });
@@ -54,8 +26,8 @@ describe('WebSocket Server Test', () => {
       done();
     });
     io.emit('hello', 'world');
-    if (mockClient.listeners['hello']) {
-      mockClient.listeners['hello']('world');
+    if (mockClientSocket.listeners['hello']) {
+      mockClientSocket.listeners['hello']('world');
     }
   });
 
