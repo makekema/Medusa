@@ -48,17 +48,13 @@ describe('Chat Box', () => {
     );
 
     await waitFor(() => {
-      const messageContent1 = screen.getByTestId('message-content-0');
+      const messageContent = screen.getByText(mockMessageList[0].message);
 
-      expect(messageContent1).toBeInTheDocument();
+      expect(messageContent).toBeTruthy();
     });
     await waitFor(() => {
-      const messageContent2 = screen.getByTestId('message-content-1');
-      expect(messageContent2).toBeInTheDocument();
-    });
-    await waitFor(() => {
-      const messageContent1 = screen.getByTestId('message-content-0');
-      expect(messageContent1).toHaveTextContent(mockMessageList[0].message);
+      const messageContent = screen.getByText(mockMessageList[1].message);
+      expect(messageContent).toBeTruthy();
     });
   });
 
@@ -78,7 +74,7 @@ describe('Chat Box', () => {
     const user = screen.getByText(mockMessageList[0].user);
     const time = screen.getByText(mockMessageList[1].time);
 
-    expect(user).toBeInTheDocument();
-    expect(time).toBeInTheDocument();
+    expect(user).toBeTruthy();
+    expect(time).toBeTruthy();
   });
 });

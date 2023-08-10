@@ -9,6 +9,9 @@ import { render, screen } from '@testing-library/react';
 import { ChatContext } from '../context/ChatContext';
 
 const mockHandleBackgroundColor = jest.fn();
+const mockSetSelectorVisible = jest.fn();
+const mockSetSelectorClosed = jest.fn();
+
 const mockChatContext = {
   chatrooms: [
     { name: 'Fiddle Faddle' },
@@ -16,15 +19,17 @@ const mockChatContext = {
     { name: 'Pf4ffing' },
   ],
   joinRoom: jest.fn(),
-  setSelectorVisible: jest.fn(),
-  setSelectorClosed: jest.fn(),
 };
 
 describe('Room List component', () => {
   it('should render an array of chatrooms as buttons', async () => {
     render(
       <ChatContext.Provider value={mockChatContext}>
-        <RoomList handleBackgroundColor={mockHandleBackgroundColor} />
+        <RoomList
+          handleBackgroundColor={mockHandleBackgroundColor}
+          setSelectorClosed={mockSetSelectorClosed}
+          setSelectorVisible={mockSetSelectorVisible}
+        />
       </ChatContext.Provider>
     );
 
