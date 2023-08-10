@@ -52,6 +52,10 @@ describe('Test server connection', () => {
 
 describe('Test database connection', () => {
 
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
   it('should establish a connection to the MongoDB database', (done) => {
     if (mongoose.connection.readyState === 1) {
       expect(mongoose.connection.readyState).toBe(1);
@@ -66,6 +70,14 @@ describe('Test database connection', () => {
       });
     }
   });
+
+  it('should handle a MongoDB connection error', async () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(mongoose, 'connect').mockRejectedValueOnce(new Error('Mock error'));
+    await expect(connectToDatabase()).rejects.toThrow('Mock error');
+    expect(errorSpy).toHaveBeenCalledWith('MongoDB connection error:', expect.any(Error));
+  });
+
 });
 
 
