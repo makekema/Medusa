@@ -1,5 +1,6 @@
 import { Message, UserData, ChatRoom } from '../models/types';
 
+
 const mockMessage: Message = {
   user: "John Doe",
   roomName: "testRoom",
@@ -21,4 +22,15 @@ const mockChatRoom: ChatRoom = {
   creator: "Admin",
 };
 
-export { mockMessage, mockUserData, mockChatRoom };
+const mockChatRoomsArray: ChatRoom[] = [
+  mockChatRoom,
+  {
+    name: "testRoom_dsgfsölk87098708kklöö",
+    users: 3,
+    usernames: ["test_socketId_1", "Alice", "Bob", "Charlie"],
+    creator: "Admin",
+  },
+];
+
+
+export { mockMessage, mockUserData, mockChatRoom, mockChatRoomsArray };

@@ -3,7 +3,7 @@ import mongoose, { Document } from 'mongoose';
 import { io, app } from '../server';
 import { connectToDatabase } from '../models/index';
 import { Chatroom } from '../models/ChatroomSchema';
-import { mockChatRoom } from './mocks';
+import { mockChatRoom, mockChatRoomsArray } from './mocks';
 import { db } from '../models/chatroomModel';
 import { handleCreateRoom } from '../controllers/socketHandlers';
 
@@ -129,6 +129,14 @@ describe('Test chatroom model', () => {
   
 
 describe('Test database functions', () => {
+
+  it('should find chatrooms by socket id', async () => {
+    jest.spyOn(Chatroom, 'find').mockResolvedValueOnce(mockChatRoomsArray);
+    const socketId = 'test_socketId_1';
+    const foundRooms = await db.findChatroomsBySocketId(socketId);
+    expect(Chatroom.find).toHaveBeenCalledWith({ usernames: socketId });
+    expect(foundRooms).toEqual(mockChatRoomsArray);
+  });
 
   it('should create a chatroom', async () => {
     let createdRoom = null;
