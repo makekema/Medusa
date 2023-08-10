@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { ChatRoom, Message } from '../models/types';
 
 import {
@@ -10,7 +11,7 @@ import {
 
 let sockets: Socket[] = [];
 
-const ioConnect = (io: any) => {
+const ioConnect: Function = (io: Server) => {
   io.on('connection', (socket: Socket) => {
     sockets.push(socket);
 
