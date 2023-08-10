@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+import { jest } from '@jest/globals';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import RoomList from '../components/ChatRoomManager/ChatRoomMarquee';
@@ -16,8 +20,8 @@ const mockChatContext = {
   setSelectorClosed: jest.fn(),
 };
 
-describe.only('Room List component', () => {
-  it('should render an array of chatrooms as buttons', () => {
+describe('Room List component', () => {
+  it('should render an array of chatrooms as buttons', async () => {
     render(
       <ChatContext.Provider value={mockChatContext}>
         <RoomList handleBackgroundColor={mockHandleBackgroundColor} />
@@ -31,7 +35,7 @@ describe.only('Room List component', () => {
     expect(buttonsContent).toEqual(chatroomNames);
   });
 
-  it('should call the join room function with the correct name', () => {
+  it('should call the join room function with the correct name', async () => {
     render(
       <ChatContext.Provider value={mockChatContext}>
         <RoomList handleBackgroundColor={mockHandleBackgroundColor} />

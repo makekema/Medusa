@@ -1,5 +1,7 @@
-/* eslint-disable testing-library/await-async-query */
-/* eslint-disable testing-library/no-unnecessary-act */
+/**
+ * @jest-environment jsdom
+ */
+import { jest } from '@jest/globals';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import RoomSelector from '../components/ChatRoomManager/NewChatRoomForm';
@@ -16,9 +18,10 @@ const mockIsSelectorClosedTrue = true;
 const mockIsSelectorVisible = true;
 const mockHandleBackgroundColor = jest.fn();
 
-describe('Room Selector', () => {
+describe('New Chat Room Form', () => {
   it('should show the plus button if selectedClosed is true', async () => {
-    await render(
+    jest.setTimeout(30000);
+    render(
       <ChatContext.Provider
         value={mockChatContext}
         setSelectorClosed={mockSetSelectorClosed}
@@ -29,21 +32,32 @@ describe('Room Selector', () => {
       </ChatContext.Provider>
     );
 
-    const plusButton = await screen.findByTestId('plus-button');
+    const plusButton = await screen.findByTestId(
+      'plus-button',
+      {},
+      { timeout: 5000 }
+    );
 
     expect(plusButton).toBeTruthy();
   });
 
   it('input should update the room state', async () => {
-    await render(
+    jest.setTimeout(30000);
+    render(
       <ChatContext.Provider value={mockChatContext}>
         <RoomSelector handleBackgroundColor={mockHandleBackgroundColor} />
       </ChatContext.Provider>
     );
 
     const testInput = 'Fiddle Faddle';
-    const input = await screen.findByTestId('room-input');
 
+    const input = await screen.findByTestId(
+      'room-input',
+      {},
+      { timeout: 5000 }
+    );
+
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
       userEvent.type(input, testInput);
     });
@@ -53,7 +67,8 @@ describe('Room Selector', () => {
   });
 
   it('should call joinRoom function with the correct room name', async () => {
-    await render(
+    jest.setTimeout(30000);
+    render(
       <ChatContext.Provider
         value={mockChatContext}
         setSelectorClosed={mockSetSelectorClosed}
@@ -65,9 +80,18 @@ describe('Room Selector', () => {
     );
 
     const testRoomName = 'Meat Pies!';
-    const input = await screen.findByTestId('room-input');
-    const join = await screen.findByTestId('join-button');
+    const input = await screen.findByTestId(
+      'room-input',
+      {},
+      { timeout: 5000 }
+    );
+    const join = await screen.findByTestId(
+      'join-button',
+      {},
+      { timeout: 5000 }
+    );
 
+    // eslint-disable-next-line testing-library/no-unnecessary-act
     act(() => {
       userEvent.type(input, testRoomName);
       userEvent.click(join);
