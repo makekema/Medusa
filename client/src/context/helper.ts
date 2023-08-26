@@ -1,11 +1,13 @@
-import { Chatroom, UserData, UserRoomList } from "./ContextTypes";
+import { Chatroom, UserData, UserRoomList } from './ContextTypes';
 
-export const isUserAlreadyInTheRoom = (userRoomList: UserRoomList, roomName: string) => {
-  const room = userRoomList.rooms.find((room) => { if (room.name === roomName) return room; });
-  return room;
+export const isUserAlreadyInTheRoom = (
+  userRoomList: UserRoomList,
+  roomName: string
+) => {
+  return userRoomList.rooms.find((room) => room.name === roomName);
 };
 
-export function createNewRoom (roomName: string, creator: string) {
+export function createNewRoom(roomName: string, creator: string) {
   return {
     name: roomName,
     usernames: [],
@@ -14,24 +16,31 @@ export function createNewRoom (roomName: string, creator: string) {
   };
 }
 
-export const getChatroomFromChatrooms = (chatrooms: Chatroom[], roomName: string) => {
-  const room = chatrooms.find((room) => { if (room.name === roomName) return room; });
+export const getChatroomFromChatrooms = (
+  chatrooms: Chatroom[],
+  roomName: string
+) => {
+  const room = chatrooms.find((room) => {
+    if (room.name === roomName) return room;
+  });
   return room;
 };
 
-export const removeRoomFromUserRoomListState = (roomList: UserRoomList, roomName: string) => {
-  const updatedRooms = roomList.rooms.filter(
-    (r) => r.name !== roomName
-  );
+export const removeRoomFromUserRoomListState = (
+  roomList: UserRoomList,
+  roomName: string
+) => {
+  const updatedRooms = roomList.rooms.filter((r) => r.name !== roomName);
   const updatedRoomList = { ...roomList };
   updatedRoomList.rooms = [...updatedRooms];
   return updatedRoomList;
 };
 
-export const addRoomToUserRoomListState = (roomList: UserRoomList, room: Chatroom) => {
-  const updatedRooms = [
-    ...roomList.rooms, room,
-  ];
+export const addRoomToUserRoomListState = (
+  roomList: UserRoomList,
+  room: Chatroom
+) => {
+  const updatedRooms = [...roomList.rooms, room];
   const updatedRoomList = { ...roomList };
   updatedRoomList.rooms = [...updatedRooms];
   return updatedRoomList;

@@ -1,46 +1,44 @@
 import * as React from 'react';
 import { useState } from 'react';
 import Marquee from 'react-fast-marquee';
-import RoomList from './ChatRoomMarquee';
-import RoomSelector from './NewChatRoomForm';
+import ChatRoomMarquee from './ChatRoomMarquee';
+import NewChatRoomForm from './NewChatRoomForm';
 
 export interface IChatroomManagerProps {
   handleBackgroundColor: () => void;
 }
 
-export default function ChatroomManager ({ handleBackgroundColor }: IChatroomManagerProps) {
+export default function ChatroomManager({
+  handleBackgroundColor,
+}: IChatroomManagerProps) {
   const [isSelectorVisible, setSelectorVisible] = useState(true);
   const [isSelectorClosed, setSelectorClosed] = useState(false);
 
   return (
     <div>
-      <div className='room-list-container'>
+      <div className='w-screen'>
         <div
-          className='RoomListMarquee'
-          style={{ background: 'rgb(182,182,182)', color: 'rgb(15,11,39)' }}>
+          className='bg-neutral-400 text-gray-900'>
           <Marquee pauseOnHover={true} speed={50}>
-            <RoomList
+            <ChatRoomMarquee
               handleBackgroundColor={handleBackgroundColor}
               setSelectorClosed={setSelectorClosed}
-              setSelectorVisible={setSelectorVisible}
-            ></RoomList>
+              setSelectorVisible={setSelectorVisible}></ChatRoomMarquee>
           </Marquee>
           <Marquee pauseOnHover={true} speed={25}>
-            <RoomList
+            <ChatRoomMarquee
               handleBackgroundColor={handleBackgroundColor}
               setSelectorClosed={setSelectorClosed}
-              setSelectorVisible={setSelectorVisible}
-            ></RoomList>
+              setSelectorVisible={setSelectorVisible}></ChatRoomMarquee>
           </Marquee>
         </div>
       </div>
-      <RoomSelector
+      <NewChatRoomForm
         handleBackgroundColor={handleBackgroundColor}
         setSelectorClosed={setSelectorClosed}
         setSelectorVisible={setSelectorVisible}
         isSelectorClosed={isSelectorClosed}
-        isSelectorVisible={isSelectorVisible}
-      ></RoomSelector>
+        isSelectorVisible={isSelectorVisible}></NewChatRoomForm>
     </div>
   );
 }

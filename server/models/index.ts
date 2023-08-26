@@ -1,14 +1,6 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import dotenv from 'dotenv';
-import path from 'path';
 import mongoose, { ConnectOptions } from 'mongoose';
 
-
-// const __filename: string = fileURLToPath(import.meta.url);
-// const __dirname: string = dirname(__filename);
-
-// dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 dotenv.config();
 
@@ -34,13 +26,21 @@ writeConcern: {
 };
 
 
-mongoose.connect(connectionString, options)
-  .then(() => {
-    console.log('database connected');
-  })
-  .catch((error: Error) => {
-    console.error('MongoDB connection error:', error);
-  });
+async function connectToDatabase () {
+  return await mongoose.connect(connectionString, options)
+    .then(() => {
+      console.log('database connected');
+    })
+    .catch((error: Error) => {
+      console.error('MongoDB connection error:', error);
+      throw error;
+    });
+};
+
+// Check if the environment is not 'test', then connect to the database
+if (process.env.NODE_ENV !== 'test') {
+  connectToDatabase();
+}
 
 
-export { mongoose };
+export { mongoose, connectToDatabase };

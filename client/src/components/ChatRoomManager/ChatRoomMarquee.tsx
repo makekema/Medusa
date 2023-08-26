@@ -4,11 +4,11 @@ import { ChatContextType } from '../../context/ContextTypes';
 
 type IRoomListProps = {
   handleBackgroundColor: () => void;
-  setSelectorClosed: Dispatch<SetStateAction<boolean>>,
-  setSelectorVisible: Dispatch<SetStateAction<boolean>>,
+  setSelectorClosed: Dispatch<SetStateAction<boolean>>;
+  setSelectorVisible: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function RoomList ({
+export default function ChatRoomMarquee({
   handleBackgroundColor,
   setSelectorClosed,
   setSelectorVisible,
@@ -28,12 +28,12 @@ export default function RoomList ({
 
   return (
     <>
-      <div className='RoomList' >
+      <div className='flex-col overflow-hidden'>
         <div>
           {chatrooms.map((chatroom) => {
             return (
               <button
-                className='RoomButton'
+                className='cursor-pointer text-5xl font-bold mx-10 my-1 uppercase'
                 key={chatroom.name}
                 onClick={() => handleButtonClick(chatroom.name)}>
                 {chatroom.name}

@@ -3,25 +3,36 @@ import { ChatContext } from '../../context/ChatContext';
 import ChatBoxInput from './ChatBoxInput';
 import ChatBoxHeader from './ChatBoxHeader';
 import { ChatContextType } from '../../context/ContextTypes';
-import useWindowMove from '../../hooks/useWindowMove';
 import { Message } from '../types';
-import { getRandomColor } from '../../utils';
 import useRandomUserNameColor from '../../hooks/useRandomUserNameColor';
+import { calculateLeft, calculateTop } from '../../utils';
+import ResizableDraggableComponent from './ResizableComponent';
 
 type IChatBoxProps = {
-  messageList: Message[],
+  messageList: Message[];
   sendMessage: (roomName: string, message: string) => void;
-  roomName: string,
-  socketId: string,
+  roomName: string;
+  socketId: string;
   handleBackgroundColor: () => void;
+  bgColor: string;
 };
 
-export default function ChatBox ({ messageList, sendMessage, roomName, socketId, handleBackgroundColor }: IChatBoxProps) {
+export default function ChatBox({
+  bgColor,
+  messageList,
+  sendMessage,
+  roomName,
+  socketId,
+  handleBackgroundColor,
+}: IChatBoxProps) {
+  const [position, setPosition] = useState({ top: '-1000px', left: '-1000px' });
   const { leaveRoom } = useContext(ChatContext) as ChatContextType;
-  const { position, handleMouseDown, handleMouseMove, handleMouseUp } = useWindowMove();
   const { getColor } = useRandomUserNameColor(socketId);
 
-  // MESSAGE FUNCTIONALITY
+  useEffect(() => {
+    setPosition({ top: calculateTop(), left: calculateLeft() });
+  }, []);
+
   const handleSendMessage = (message: string) => {
     sendMessage(roomName, message);
   };
@@ -41,23 +52,22 @@ export default function ChatBox ({ messageList, sendMessage, roomName, socketId,
 
   return (
     <>
-      <div
-        className='MessageContainer'
-        style={{ position: 'absolute', ...position }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
+      <ResizableDraggableComponent
+        position={position}
         data-testid='message-container'>
         <ChatBoxHeader roomName={roomName} leaveRoom={handleLeaveRoom} />
-
-        <div className='ChatWindow'>
-          <div className='MessageWrapper'>
+        <div style={{ height: '90%' }}>
+          <div className='flex-col p-2 pb-[50px] max-h-full overflow-y-scroll hide-scrollbar'>
             {messageList
               .filter((messageContent) => messageContent.roomName === roomName)
               .map((messageContent, i) => (
-                <div className={`Message ${messageContent.user === socketId ? 'me' : 'other'}`} key={i}>
+                <div
+                  className={`Message ${
+                    messageContent.user === socketId ? 'me' : 'other'
+                  }`}
+                  key={i}>
                   <div
-                    className='User_Time'
+                    className='mb-1 text-xs'
                     style={{ color: getColor(messageContent.user) }}>
                     {messageContent.user === socketId
                       ? 'You'
@@ -66,18 +76,19 @@ export default function ChatBox ({ messageList, sendMessage, roomName, socketId,
                   </div>
 
                   <div
-                    className='MessageContent'
-                    data-testid={`message-content-${i}`}>
+                    className='text-sm mb-2 font-normal break-words'
+                    data-testid={`message-content`}>
                     {messageContent.message}
                   </div>
                   <div ref={messagesEndRef}></div>
                 </div>
               ))}
           </div>
-
-          <ChatBoxInput sendMessage={handleSendMessage} />
         </div>
-      </div>
+        {/* <div style={{ backgroundColor: bgColor }}> */}
+          <ChatBoxInput bgColor={bgColor} sendMessage={handleSendMessage} />
+        {/* </div> */}
+      </ResizableDraggableComponent>
     </>
   );
 }

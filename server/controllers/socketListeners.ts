@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { io } from '../server';
+import { Server } from 'socket.io';
 import { ChatRoom, Message } from '../models/types';
 
 import {
@@ -11,7 +11,7 @@ import {
 
 let sockets: Socket[] = [];
 
-const ioConnect = (io: any) => {
+const ioConnect: Function = (io: Server) => {
   io.on('connection', (socket: Socket) => {
     sockets.push(socket);
 
@@ -39,7 +39,7 @@ const ioConnect = (io: any) => {
       handleJoinRoom(roomName, socket);
     });
 
-    socket.on('leave_room', (roomName) => {
+    socket.on('leave_room', (roomName: string) => {
       handleLeaveRoom(roomName, socket);
     });
 

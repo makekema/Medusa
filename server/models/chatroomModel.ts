@@ -1,11 +1,13 @@
 import { Chatroom } from './ChatroomSchema';
 import { ChatRoom } from './types';
 
+
 const db = {
+
   getAllChatrooms: async (): Promise<ChatRoom[]> => {
     return Chatroom.find({});
   },
-
+  
   findChatroomsBySocketId: async (socketId: string): Promise<ChatRoom[]> => {
     return Chatroom.find({ usernames: socketId });
   },
@@ -28,6 +30,8 @@ const db = {
   ): Promise<void> => {
     await Chatroom.updateOne({ name }, { $set: updatedData });
   },
+
 };
+
 
 export { db };
