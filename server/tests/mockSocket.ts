@@ -13,11 +13,9 @@ const createMockClientSocket = (id: string): ClientSocketType => {
       }
       this.listeners[event] = callback;
     },
-    emit: function (event: string, message: any) {
-      if (this.listeners[event]) {
-        this.listeners[event](message);
-      }
-    },
+    emit: jest.fn(),
+    join: jest.fn(),
+    leave: jest.fn(), 
     disconnect: function () {
       if (this.connected) {
         this.connected = false;
