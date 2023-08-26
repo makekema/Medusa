@@ -1,7 +1,10 @@
 # Medusa
 
 <p align="center">
-  <img src="images/logo-readme-1.png" />
+  <img src="images/Example-1.png" />
+</p>
+<p align="center">
+  <img src="images/Example-2.png" />
 </p>
 
 Medusa is a web app aimed at generating instant, spontaneous, and anonymous discussions.
