@@ -1,11 +1,4 @@
-# Medusa
-
-<p align="center">
-  <img src="images/Example-1.png" />
-</p>
-<p align="center">
-  <img src="images/Example-2.png" />
-</p>
+<img src="images/medusa_logo_horizontal.png" alt="Medusa" width="140" />
 
 Medusa is a web app aimed at generating instant, spontaneous, and anonymous discussions.
 
@@ -34,11 +27,12 @@ Join Medusa today, and be part of the global melting pot of ideas, opinions, and
 ## Screenshots
 
 <p align="center">
-  <img src="images/screenshot-readme-1-a.png" />
-  <img src="images/screenshot-readme-1-b.png" />
+  <img src="images/Example-1.png" />
 </p>
 
-
+<p align="center">
+  <img src="images/Example-2.png" />
+</p>
 
 ## Getting started
 
