@@ -4,6 +4,12 @@ Medusa is a web app aimed at generating instant, spontaneous, and anonymous disc
 
 Embark on a journey of knowledge, discovery, and connection with Medusa, the innovative chat platform that breaks down barriers and brings people together. Here's why you should be a part of our vibrant community:
 
+
+<p align="center">
+  <img src="images/Example-1.png" />
+</p>
+
+
 **1.** **Diverse Topics:**
   Medusa caters to a wide array of interests. Whether you're a philosophy enthusiast, a political pundit, a science nerd, or just someone seeking engaging conversation, there's a chatroom for you. The world is your oyster.
   
@@ -23,12 +29,6 @@ Embark on a journey of knowledge, discovery, and connection with Medusa, the inn
   Medusa is a platform where ideas can thrive. We believe in the power of discourse and the value of differing viewpoints. Here, every voice matters.
 
 Join Medusa today, and be part of the global melting pot of ideas, opinions, and fascinating discussions.
-
-## Screenshots
-
-<p align="center">
-  <img src="images/Example-1.png" />
-</p>
 
 <p align="center">
   <img src="images/Example-2.png" />
