@@ -1,4 +1,4 @@
-<img src="images/medusa_logo_horizontal.png" alt="Medusa" width="140" />
+<img src="images/logo_medusa_hor.png" alt="Medusa" width="140" />
 
 <p align="center">
   <img src="images/Example-1.png" />
