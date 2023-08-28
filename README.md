@@ -1,14 +1,12 @@
 <img src="images/medusa_logo_horizontal.png" alt="Medusa" width="140" />
 
-Medusa is a web app aimed at generating instant, spontaneous, and anonymous discussions.
-
-Embark on a journey of knowledge, discovery, and connection with Medusa, the innovative chat platform that breaks down barriers and brings people together. Here's why you should be a part of our vibrant community:
-
-
 <p align="center">
   <img src="images/Example-1.png" />
 </p>
 
+Medusa is a web app aimed at generating instant, spontaneous, and anonymous discussions.
+
+Embark on a journey of knowledge, discovery, and connection with Medusa, the innovative chat platform that breaks down barriers and brings people together. Here's why you should be a part of our vibrant community:
 
 **1.** **Diverse Topics:**
   Medusa caters to a wide array of interests. Whether you're a philosophy enthusiast, a political pundit, a science nerd, or just someone seeking engaging conversation, there's a chatroom for you. The world is your oyster.
