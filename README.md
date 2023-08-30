@@ -1,7 +1,7 @@
-# Medusa
+<img src="images/logo_medusa_hor.png" alt="Medusa" width="140" />
 
 <p align="center">
-  <img src="images/logo-readme-1.png" />
+  <img src="images/Example-1.png" />
 </p>
 
 Medusa is a web app aimed at generating instant, spontaneous, and anonymous discussions.
@@ -28,13 +28,9 @@ Embark on a journey of knowledge, discovery, and connection with Medusa, the inn
 
 Join Medusa today, and be part of the global melting pot of ideas, opinions, and fascinating discussions.
 
-## Screenshots
-
 <p align="center">
-  <img src="images/screenshot-readme-1-a.png" />
-  <img src="images/screenshot-readme-1-b.png" />
+  <img src="images/Example-2.png" />
 </p>
-
 
 ## Installation
 
