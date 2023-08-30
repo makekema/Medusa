@@ -36,11 +36,6 @@ Join Medusa today, and be part of the global melting pot of ideas, opinions, and
 </p>
 
 
-
-## Getting started
-
-Except for the regular suspects; git, Node, npm, you need nothing more to work on Medusa. 
-
 ## Installation
 
 1. Clone this repo and enter!
@@ -54,8 +49,29 @@ Except for the regular suspects; git, Node, npm, you need nothing more to work o
    ```bash
    cd client		# ! Change into the client folder !
    npm install
-   cd ./server		# ! Change into the server folder !
+   cd ../server		# ! Change into the server folder !
    npm install
+   ```
+
+## Getting started
+
+Except for the regular suspects; git, Node, npm, you need a MongoDB running locally in order to work on Medusa. 
+
+1. Create a .env file in the `/server` directory with the following variables and populate with your local values:
+
+    ```bash
+    DB_CONNECTION_STRING = (MongoDB connection string)
+    ORIGIN = http://localhost:3000
+    PORT = (Preferred port)
+    TEST_PORT = (Preferred test port)
+    ```
+
+2. Run the application.
+
+   ```bash
+   npm run dev # ! Run the backend server !
+   cd ../client  # ! Change into the client folder and run the frontend server !
+   npm start # ! Run the frontend server !
    ```
 
 ## Tech Stack
@@ -69,7 +85,7 @@ Except for the regular suspects; git, Node, npm, you need nothing more to work o
   * [React Marquee](https://github.com/justin-chu/react-fast-marquee)
 ## Developers
 
-* Elena Banon Olalla [GitHub](https://github.com/ElenaSestraSound) - [LinkedIn](https://www.linkedin.com/in//)
-* Adam Griffiths - [GitHub](https://github.com/smudgy-g) - [LinkedIn](https://www.linkedin.com/in//)
-* Magdalena Keller - [GitHub](https://github.com/makekema) - [LinkedIn](https://www.linkedin.com/in//)
-* Konrad-Josef Singer - [GitHub](https://github.com/konradjosefsinger) - [LinkedIn](https://www.linkedin.com/in//)
+* Elena Banon Olalla [GitHub](https://github.com/ElenaSestraSound) - [LinkedIn](https://www.linkedin.com/in/elenabanon/)
+* Adam Griffiths - [GitHub](https://github.com/smudgy-g) - [LinkedIn](https://www.linkedin.com/in/adam-james-griffiths/)
+* Magdalena Keller - [GitHub](https://github.com/makekema) - [LinkedIn](https://www.linkedin.com/in/magdalena-keller/)
+* Konrad-Josef Singer - [GitHub](https://github.com/konradjosefsinger) - [LinkedIn](https://www.linkedin.com/in/konradjosefsinger/)

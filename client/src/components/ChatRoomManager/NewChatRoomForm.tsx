@@ -50,7 +50,7 @@ export default function NewChatRoomForm({
                 name='roomInput'
                 type='text'
                 autoFocus
-                placeholder='e.g. Japanese Food, Barbie, ...'
+                placeholder='e.g. Japanese Food, Persian Philosophy, ...'
                 onChange={(event) => {
                   setChatroomName(event.target.value);
                 }} />

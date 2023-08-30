@@ -27,23 +27,23 @@ export default function ChatBoxContainer({
         setMessageList((prevList: Message[]) => [...prevList, message]);
       },
     },
-    {
-      name: 'joined_empty_room',
-      handler: () => {
-        toast.success(DEFAULT_MESSAGE, {
-          position: toast.POSITION.BOTTOM_CENTER,
-        });
-      },
-    },
-    {
-      name: 'notify_user_left',
-      handler: (messageDetails: MessageDetails) => {
-        const messsage = `User ${messageDetails.user} left the chatroom ${messageDetails.room}`;
-        toast.info(messsage, {
-          position: toast.POSITION.BOTTOM_CENTER,
-        });
-      },
-    },
+    // {
+    //   name: 'joined_empty_room',
+    //   handler: () => {
+    //     toast.success(DEFAULT_MESSAGE, {
+    //       position: toast.POSITION.BOTTOM_CENTER,
+    //     });
+    //   },
+    // },
+    // {
+    //   name: 'notify_user_left',
+    //   handler: (messageDetails: MessageDetails) => {
+    //     const messsage = `User ${messageDetails.user} left the chatroom ${messageDetails.room}`;
+    //     toast.info(messsage, {
+    //       position: toast.POSITION.BOTTOM_CENTER,
+    //     });
+    //   },
+    // },
   ];
   useSocket(events);
 
