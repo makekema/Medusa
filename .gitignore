@@ -18,6 +18,7 @@ coverage
 
 # Dependency directories
 node_modules
+server/node_modules
 
 # Optional npm cache directory
 .npm
@@ -29,6 +30,7 @@ node_modules
 private
 build
 dist
+server/.env
 .env.local
 .env.development.local
 .env.test.local
