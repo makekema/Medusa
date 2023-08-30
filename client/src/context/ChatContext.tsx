@@ -74,9 +74,9 @@ function ChatProvider({ children }: IChatProviderProps) {
   const joinRoom = (roomName: string) => {
     if (roomName !== '') {
       if (isUserAlreadyInTheRoom(userRoomList, roomName)) {
-        toast.info('You are already in this room', {
-          position: toast.POSITION.BOTTOM_CENTER,
-        });
+        // toast.info('You are already in this room', {
+        //   position: toast.POSITION.BOTTOM_CENTER,
+        // });
         return;
       }
       let room = getChatroomFromChatrooms(chatrooms, roomName);
