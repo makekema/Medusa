@@ -2,7 +2,7 @@ import { Chatroom } from "./context/ContextTypes";
 
 const API = process.env.REACT_APP_API_URL
   ? process.env.REACT_APP_API_URL
-  : 'http://localhost:3001'
+  : 'https://medusa.fly.dev'
 
 // const SERVER_URL = 'http://localhost:3001';
 
