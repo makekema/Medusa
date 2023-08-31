@@ -30,6 +30,7 @@ Join Medusa today, and be part of the global melting pot of ideas, opinions, and
 
 <p align="center">
   <img src="images/Example-2.png" />
+  <img src="images/Example-4.png" />
 </p>
 
 ## Installation
