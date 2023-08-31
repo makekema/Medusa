@@ -2,11 +2,11 @@ import { ChatContext } from '../../context/ChatContext';
 import { useContext, useState } from 'react';
 import ChatBox from './ChatBox';
 import { ChatContextType } from '../../context/ContextTypes';
-import { createNewMessage, DEFAULT_MESSAGE } from '../helper';
+import { createNewMessage } from '../helper';
 import { socket } from '../../socket';
-import { Message, MessageDetails } from '../types';
+import { Message } from '../types';
 import { Event, useSocket } from '../../hooks/useSocket';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 type IChatBoxListProps = {

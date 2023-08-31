@@ -17,5 +17,5 @@ export function useSocket(events: Event[]) {
         socket.off(event.name);
       }
     };
-  }, []);
+  }, [events]);
 }

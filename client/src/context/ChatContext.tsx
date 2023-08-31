@@ -16,7 +16,6 @@ import {
 } from './helper';
 import { socket } from '../socket';
 import { Event, useSocket } from '../hooks/useSocket';
-import { toast } from 'react-toastify';
 
 type IChatProviderProps = {
   children: React.ReactNode;

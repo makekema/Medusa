@@ -20,9 +20,7 @@ export const getChatroomFromChatrooms = (
   chatrooms: Chatroom[],
   roomName: string
 ) => {
-  const room = chatrooms.find((room) => {
-    if (room.name === roomName) return room;
-  });
+  const room = chatrooms.find(room => room.name === roomName);
   return room;
 };
 
